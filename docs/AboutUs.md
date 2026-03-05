@@ -45,7 +45,7 @@ This project is for [CS2013T (Software Engineering)](https://nus-cs2103-ay2526-s
 * Role: Developer
 * Responsibilities: Dev Ops + Threading
 
-### Justin
+### Justin Lee
 
 <img src="images/nitsujeel.png" width="200px">
 

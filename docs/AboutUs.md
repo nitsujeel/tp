@@ -27,14 +27,14 @@ This project is for [CS2013T (Software Engineering)](https://nus-cs2103-ay2526-s
 * Role: Team Lead
 * Responsibilities: UI
 
-### Colin
+### Hein Htet Zaw (Colin)
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/sr-71-black-bird.png" width="200px">
 
-[[github](http://github.com/johndoe)] [[portfolio](team/johndoe.md)]
+[[github](http://github.com/sr-71-black-bird)] 
 
-* Role: Developer
-* Responsibilities: Data
+* Role: Developer and Trusty Teammate
+* Responsibilities: Data, Overview
 
 ### Jiaqi
 

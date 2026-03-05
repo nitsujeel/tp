@@ -14,7 +14,8 @@ This project is for [CS2013T (Software Engineering)](https://nus-cs2103-ay2526-s
 
 [[github](https://github.com/cedarglass)]
 
-* Role: Project Advisor
+* Role: Trusty Teammate
+* Responsibilities: Expert for Logic and Model components
 
 ### Zhihan
 

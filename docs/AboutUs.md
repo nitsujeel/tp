@@ -38,12 +38,12 @@ This project is for [CS2013T (Software Engineering)](https://nus-cs2103-ay2526-s
 
 ### Jiaqi
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/nana-6381.png" width="200px">
 
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[github](http://github.com/nana-6381)]
+[[portfolio](team/nana-6381.md)]
 
-* Role: Developer
+* Role: Teammate </3
 * Responsibilities: Dev Ops + Threading
 
 ### Justin Lee

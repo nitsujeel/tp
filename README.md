@@ -4,6 +4,8 @@
 
 ![Ui](docs/images/Ui.png)
 
+This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org).
+
 **PetLog** is a desktop application built for **independent pet day care and boarding managers** who juggle many
 **owners** and **pets** every day, and need to access information **fast**.
 

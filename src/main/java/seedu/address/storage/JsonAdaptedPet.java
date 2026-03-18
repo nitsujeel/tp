@@ -13,7 +13,7 @@ import seedu.address.model.pet.Species;
 /**
  * Jackson-friendly version of {@link Pet}.
  */
-class JsonAdaptedPet {
+public class JsonAdaptedPet {
 
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Pet's %s field is missing!";
 

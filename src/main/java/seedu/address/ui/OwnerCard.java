@@ -9,6 +9,8 @@ import javafx.scene.layout.VBox;
 import seedu.address.model.person.Person;
 import seedu.address.model.pet.Pet;
 
+import java.util.Comparator;
+
 /**
  * An UI component that displays information of a {@code Person}.
  */

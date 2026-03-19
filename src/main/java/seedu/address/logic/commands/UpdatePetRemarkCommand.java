@@ -7,13 +7,11 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PET_REMARK;
 
 import java.util.List;
 
-
+import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
-import seedu.address.model.pet.Pet;
-
 
 /**
  * Updates the pet's remark attribute
@@ -34,16 +32,16 @@ public class UpdatePetRemarkCommand extends Command {
 
     public static final String MESSAGE_SUCCESS = "You have updated the remark of the pet!";
 
-    private final int ownerIndex;
+    private final Index ownerIndex;
 
-    private final int petIndex;
+    private final Index petIndex;
 
     private final String newRemark;
 
     /**
      * Creates an UpdatePetRemarkCommand to add the specified {@code Pet}
      */
-    public UpdatePetRemarkCommand(int ownerIndex, int petIndex, String newRemark) {
+    public UpdatePetRemarkCommand(Index ownerIndex, Index petIndex, String newRemark) {
         requireNonNull(newRemark);
         this.ownerIndex = ownerIndex;
         this.petIndex = petIndex;
@@ -55,15 +53,15 @@ public class UpdatePetRemarkCommand extends Command {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
         //This ownerIndex is zero based
-        if (ownerIndex < 0 || ownerIndex >= lastShownList.size()) {
+        if (ownerIndex.getZeroBased() < 0 || ownerIndex.getZeroBased() >= lastShownList.size()) {
             throw new CommandException("The owner index provided is invalid.");
         }
-        Person owner = lastShownList.get(ownerIndex);
+        Person owner = lastShownList.get(ownerIndex.getZeroBased());
         //This petIndex is zero based as well
-        if (petIndex < 0 || petIndex >= owner.getPetCount()) {
+        if (petIndex.getZeroBased() < 0 || petIndex.getZeroBased() >= owner.getPetCount()) {
             throw new CommandException("The pet index provided is invalid.");
         }
-        owner.updatePetRemark(petIndex, newRemark);
+        owner.updatePetRemark(petIndex.getZeroBased(), newRemark);
         return new CommandResult(String.format(MESSAGE_SUCCESS));
     }
 

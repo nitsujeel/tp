@@ -10,14 +10,21 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
+import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
+import seedu.address.model.pet.Pet;
+import seedu.address.model.util.SampleDataUtil;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
@@ -80,9 +87,38 @@ public class DeleteCommandTest {
     }
 
     @Test
+    public void execute_validPetIndexUnfilteredList_success() {
+        Model modelWithPets = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Person owner = modelWithPets.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        List<Pet> ownerPets = owner.getPetList();
+        Pet petToDelete = ownerPets.get(INDEX_FIRST_PERSON.getZeroBased());
+
+        DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON);
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PET_SUCCESS, petToDelete);
+
+        Model expectedModel = new ModelManager(new AddressBook(modelWithPets.getAddressBook()), new UserPrefs());
+        Set<Pet> updatedPets = new LinkedHashSet<>(owner.getPets());
+        updatedPets.remove(petToDelete);
+        Person editedOwner = new Person(owner.getName(), owner.getPhone(), owner.getEmail(),
+                owner.getAddress(), owner.getTags(), updatedPets);
+        expectedModel.setPerson(owner, editedOwner);
+
+        assertCommandSuccess(deleteCommand, modelWithPets, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_invalidPetIndexUnfilteredList_throwsCommandException() {
+        Model modelWithPets = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON);
+
+        assertCommandFailure(deleteCommand, modelWithPets, DeleteCommand.MESSAGE_INVALID_PET_DISPLAYED_INDEX);
+    }
+
+    @Test
     public void equals() {
         DeleteCommand deleteFirstCommand = new DeleteCommand(INDEX_FIRST_PERSON);
         DeleteCommand deleteSecondCommand = new DeleteCommand(INDEX_SECOND_PERSON);
+        DeleteCommand deleteFirstPetCommand = new DeleteCommand(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON);
 
         // same object -> returns true
         assertTrue(deleteFirstCommand.equals(deleteFirstCommand));
@@ -99,13 +135,17 @@ public class DeleteCommandTest {
 
         // different person -> returns false
         assertFalse(deleteFirstCommand.equals(deleteSecondCommand));
+
+        // different pet index state -> returns false
+        assertFalse(deleteFirstCommand.equals(deleteFirstPetCommand));
     }
 
     @Test
     public void toStringMethod() {
         Index targetIndex = Index.fromOneBased(1);
         DeleteCommand deleteCommand = new DeleteCommand(targetIndex);
-        String expected = DeleteCommand.class.getCanonicalName() + "{targetIndex=" + targetIndex + "}";
+        String expected = DeleteCommand.class.getCanonicalName()
+                + "{targetIndex=" + targetIndex + ", petIndex=Optional.empty}";
         assertEquals(expected, deleteCommand.toString());
     }
 

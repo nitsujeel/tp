@@ -2,9 +2,11 @@ package seedu.address.model.person;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -70,6 +72,13 @@ public class Person {
      */
     public Set<Pet> getPets() {
         return Collections.unmodifiableSet(pets);
+    }
+
+    /**
+     * Returns an immutable pet list in insertion order.
+     */
+    public List<Pet> getPetList() {
+        return Collections.unmodifiableList(new ArrayList<>(pets));
     }
 
     /**

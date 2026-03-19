@@ -5,6 +5,7 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
@@ -79,6 +80,9 @@ public class Person {
      */
     public List<Pet> getPetList() {
         return Collections.unmodifiableList(new ArrayList<>(pets));
+    }
+
+    /**
      * Returns the number of pets the person has
      */
     public int getPetCount() {

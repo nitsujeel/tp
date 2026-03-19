@@ -4,8 +4,10 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_OWNER_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PET_INDEX;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -13,6 +15,7 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
+import seedu.address.model.pet.Pet;
 
 /**
  * Deletes a person identified using it's displayed index from the address book.
@@ -29,7 +32,8 @@ public class DeleteCommand extends Command {
             + PREFIX_PET_INDEX + "1";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
-    public static final String MESSAGE_PET_DELETE_NOT_IMPLEMENTED = "Deleting pets is not implemented yet.";
+    public static final String MESSAGE_DELETE_PET_SUCCESS = "Deleted Pet: %1$s";
+    public static final String MESSAGE_INVALID_PET_DISPLAYED_INDEX = "The pet index provided is invalid";
 
     private final Index targetIndex;
     private final Optional<Index> petIndex;
@@ -47,20 +51,38 @@ public class DeleteCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+        List<Person> lastShownList = model.getFilteredPersonList();
+        validateOwnerIndex(lastShownList);
 
-        if (petIndex.isPresent()) {
-            throw new CommandException(MESSAGE_PET_DELETE_NOT_IMPLEMENTED);
+        Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
+        if (petIndex.isEmpty()) {
+            model.deletePerson(personToDelete);
+            return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
         }
 
-        List<Person> lastShownList = model.getFilteredPersonList();
+        List<Pet> petList = personToDelete.getPetList();
+        validatePetIndex(petList);
 
+        Pet petToDelete = petList.get(petIndex.get().getZeroBased());
+        Set<Pet> updatedPets = new LinkedHashSet<>(personToDelete.getPets());
+        updatedPets.remove(petToDelete);
+
+        Person editedPerson = new Person(personToDelete.getName(), personToDelete.getPhone(), personToDelete.getEmail(),
+                personToDelete.getAddress(), personToDelete.getTags(), updatedPets);
+        model.setPerson(personToDelete, editedPerson);
+        return new CommandResult(String.format(MESSAGE_DELETE_PET_SUCCESS, petToDelete));
+    }
+
+    private void validateOwnerIndex(List<Person> lastShownList) throws CommandException {
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
+    }
 
-        Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
-        model.deletePerson(personToDelete);
-        return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
+    private void validatePetIndex(List<Pet> petList) throws CommandException {
+        if (petIndex.get().getZeroBased() >= petList.size()) {
+            throw new CommandException(MESSAGE_INVALID_PET_DISPLAYED_INDEX);
+        }
     }
 
     @Override

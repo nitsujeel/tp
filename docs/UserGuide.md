@@ -87,6 +87,28 @@ Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
 
+### Adding a pet under an owner: `addpet`
+
+Format: `addpet oi/OWNER_INDEX pn/PET_NAME ps/SPECIES [pr/REMARKS]`
+
+* Adds the pet with specified `NAME` and `SPECIES` (and optional remark) under the owner specified by `OWNER_INDEX`
+
+Examples:
+
+* `addpet oi/2 pn/Molly ps/Golden Retriever pr/cuddly` Adds a cuddly golden retriever called Molly under the second
+    owner in the list of owners; Molly will have a remark that she is cuddly.
+* `addpet oi/1 pn/Dave ps/Great Dane` Adds a great dane called Dave under the first owner on the list of owners.
+
+### Update a remark of a pet: `update`
+
+Format: `update oi/OWNER_INDEX pi/PET_INDEX pr/REMARKS`
+
+* Sets the remark of the pet specified by `PET_INDEX` under the owner specified by `OWNER_INDEX`.
+
+Examples:
+
+* `update oi/1 pi/3 pr/aggressive` Updates the remark of the third pet listed under the first owner to be "aggressive". 
+
 ### Listing all persons : `list`
 
 Shows a list of all persons in the address book.

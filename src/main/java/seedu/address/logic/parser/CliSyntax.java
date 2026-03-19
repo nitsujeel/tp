@@ -15,5 +15,6 @@ public class CliSyntax {
     public static final Prefix PREFIX_PET_NAME = new Prefix("pn/");
     public static final Prefix PREFIX_SPECIES = new Prefix("ps/");
     public static final Prefix PREFIX_PET_REMARK = new Prefix("pr/");
+    public static final Prefix PREFIX_PET_INDEX = new Prefix("pi/");
 
 }

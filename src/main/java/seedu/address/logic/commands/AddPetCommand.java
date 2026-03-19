@@ -6,7 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PET_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PET_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SPECIES;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -66,7 +66,7 @@ public class AddPetCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_PET);
         }
 
-        Set<Pet> updatedPets = new HashSet<>(owner.getPets());
+        Set<Pet> updatedPets = new LinkedHashSet<>(owner.getPets());
         updatedPets.add(toAdd);
         Person updatedOwner = new Person(owner.getName(), owner.getPhone(), owner.getEmail(),
                 owner.getAddress(), owner.getTags(), updatedPets);

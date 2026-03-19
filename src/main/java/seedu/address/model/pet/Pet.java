@@ -18,7 +18,7 @@ public class Pet {
     private final OwnerIndex ownerIndex;
 
     // Data fields
-    private final PetRemark remark;
+    private PetRemark remark;
 
     /**
      * Every field must be present and not null.
@@ -60,6 +60,14 @@ public class Pet {
                 && otherPet.getName().equals(getName())
                 && otherPet.getSpecies().equals(getSpecies())
                 && otherPet.getOwnerIndex().equals(getOwnerIndex());
+    }
+
+    /**
+     * Updates the pet's remark with the specified value
+     * @param remark the value of the new {@code Remark}
+     */
+    public void updateRemark(String remark) {
+        this.remark = new PetRemark(remark);
     }
 
     /**

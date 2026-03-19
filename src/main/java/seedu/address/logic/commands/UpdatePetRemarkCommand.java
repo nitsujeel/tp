@@ -62,6 +62,7 @@ public class UpdatePetRemarkCommand extends Command {
             throw new CommandException("The pet index provided is invalid.");
         }
         owner.updatePetRemark(petIndex.getZeroBased(), newRemark);
+        model.setPerson(owner, owner);
         return new CommandResult(String.format(MESSAGE_SUCCESS));
     }
 

@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.image.Image?>
@@ -45,6 +46,19 @@
             <Insets top="5" right="10" bottom="5" left="10" />
           </padding>
         </StackPane>
+
+        <VBox styleClass="pane-with-border" VBox.vgrow="NEVER">
+          <padding>
+            <Insets top="5" right="10" bottom="5" left="10" />
+          </padding>
+          <Label text="Available Commands:" styleClass="cell_small_label" />
+          <Label text="• addowner on/NAME ph/PHONE em/EMAIL ad/ADDRESS [ot/TAG]..." styleClass="cell_small_label" />
+          <Label text="• addpet oi/OWNER_INDEX pn/NAME ps/SPECIES [pr/REMARKS]" styleClass="cell_small_label" />
+          <Label text="• update oi/OWNER_INDEX pi/PET_INDEX pr/REMARKS" styleClass="cell_small_label" />
+          <Label text="• delete oi/OWNER_INDEX [pi/PET_INDEX]" styleClass="cell_small_label" />
+          <Label text="• find [on/NAME] [ph/PHONE] [em/EMAIL] [ad/ADDRESS] [ot/TAG] [pn/NAME] [ps/SPECIES] [pr/REMARKS]" styleClass="cell_small_label" />
+          <Label text="• list" styleClass="cell_small_label" />
+        </VBox>
 
         <VBox fx:id="personList" styleClass="pane-with-border" minWidth="340" prefWidth="340" VBox.vgrow="ALWAYS">
           <padding>

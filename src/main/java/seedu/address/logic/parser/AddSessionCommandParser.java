@@ -12,8 +12,18 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.AddSessionCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
+/**
+ * Parses input arguments and creates a new AddSessionCommand object.
+ */
 public class AddSessionCommandParser implements Parser<AddSessionCommand> {
 
+    /**
+     * Parses the given {@code String} of arguments and returns an AddSessionCommand.
+     *
+     * @param args User input arguments
+     * @return AddSessionCommand object
+     * @throws ParseException If the input does not conform to the expected format
+     */
     public AddSessionCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_OWNER_INDEX, PREFIX_PET_INDEX,

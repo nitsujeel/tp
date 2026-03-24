@@ -11,6 +11,9 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 
+/**
+ * Adds a session for a specific owner and pet with a start and end time.
+ */
 public class AddSessionCommand extends Command {
 
     public static final String COMMAND_WORD = "addsessions";
@@ -34,6 +37,14 @@ public class AddSessionCommand extends Command {
     private final String startTime;
     private final String endTime;
 
+    /**
+     * Creates an AddSessionCommand.
+     *
+     * @param ownerIndex Index of the owner in the list
+     * @param petIndex Index of the pet in the list
+     * @param startTime Start time of the session
+     * @param endTime End time of the session
+     */
     public AddSessionCommand(Index ownerIndex, Index petIndex, String startTime, String endTime) {
         requireNonNull(ownerIndex);
         requireNonNull(petIndex);
@@ -45,6 +56,13 @@ public class AddSessionCommand extends Command {
         this.endTime = endTime;
     }
 
+    /**
+     * Executes the command to add a session.
+     *
+     * @param model Model used to access and modify data
+     * @return Result of the command execution
+     * @throws CommandException If execution fails
+     */
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);

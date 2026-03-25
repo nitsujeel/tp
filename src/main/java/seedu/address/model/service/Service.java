@@ -42,6 +42,10 @@ public class Service {
         return this.serviceName;
     }
 
+    public double getCost() {
+        return this.servicePrice;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {

@@ -57,6 +57,7 @@
           <Label text="• update oi/OWNER_INDEX pi/PET_INDEX pr/REMARKS" styleClass="cell_small_label" />
           <Label text="• delete oi/OWNER_INDEX [pi/PET_INDEX]" styleClass="cell_small_label" />
           <Label text="• find [on/NAME] [ph/PHONE] [em/EMAIL] [ad/ADDRESS] [ot/TAG] [pn/NAME] [ps/SPECIES] [pr/REMARKS]" styleClass="cell_small_label" />
+          <Label text="• addsessions oi/OWNER_INDEX pi/PET_INDEX start/START_TIME end/END_TIME" styleClass="cell_small_label"/>
           <Label text="• list" styleClass="cell_small_label" />
         </VBox>
 

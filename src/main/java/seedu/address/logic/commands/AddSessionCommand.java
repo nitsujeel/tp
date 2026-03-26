@@ -10,6 +10,7 @@ import java.util.List;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -21,7 +22,7 @@ import seedu.address.model.session.Session;
  */
 public class AddSessionCommand extends Command {
 
-    public static final String COMMAND_WORD = "addsessions";
+    public static final String COMMAND_WORD = "addsession";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a session. "
             + "Parameters: "
@@ -36,6 +37,7 @@ public class AddSessionCommand extends Command {
             + PREFIX_END_TIME + "2026-03-25 11:00";
 
     public static final String MESSAGE_SUCCESS = "Session added for %s's pet %s from %s to %s";
+    public static final String SESSION_PANEL_TITLE_FORMAT = "%s's %s — Sessions";
 
     private final Index ownerIndex;
     private final Index petIndex;
@@ -67,18 +69,19 @@ public class AddSessionCommand extends Command {
 
         List<Person> lastShownList = model.getFilteredPersonList();
         if (ownerIndex.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException("The owner index provided is invalid.");
+            throw new CommandException(Messages.MESSAGE_INVALID_OWNER_DISPLAYED_INDEX);
         }
 
         Person owner = lastShownList.get(ownerIndex.getZeroBased());
 
         if (petIndex.getZeroBased() >= owner.getPetCount()) {
-            throw new CommandException("The pet index provided is invalid.");
+            throw new CommandException(Messages.MESSAGE_INVALID_PET_DISPLAYED_INDEX);
         }
 
         Pet pet = owner.getPetList().get(petIndex.getZeroBased());
         pet.addSession(new Session(startTime, endTime));
-        model.setDisplayedPet(pet, owner.getName().fullName + "'s " + pet.getName().value + " — Sessions");
+        model.setDisplayedPet(pet,
+                String.format(SESSION_PANEL_TITLE_FORMAT, owner.getName().fullName, pet.getName().value));
 
         return new CommandResult(String.format(MESSAGE_SUCCESS,
                 owner.getName(), pet.getName(), startTime, endTime));

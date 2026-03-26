@@ -9,6 +9,7 @@ import java.util.List;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -56,12 +57,12 @@ public class UpdatePetRemarkCommand extends Command {
         List<Person> lastShownList = model.getFilteredPersonList();
         //This ownerIndex is zero based
         if (ownerIndex.getZeroBased() < 0 || ownerIndex.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException("The owner index provided is invalid.");
+            throw new CommandException(Messages.MESSAGE_INVALID_OWNER_DISPLAYED_INDEX);
         }
         Person owner = lastShownList.get(ownerIndex.getZeroBased());
         //This petIndex is zero based as well
         if (petIndex.getZeroBased() < 0 || petIndex.getZeroBased() >= owner.getPetCount()) {
-            throw new CommandException("The pet index provided is invalid.");
+            throw new CommandException(Messages.MESSAGE_INVALID_PET_DISPLAYED_INDEX);
         }
         owner.updatePetRemark(petIndex.getZeroBased(), newRemark);
         model.setPerson(owner, owner);

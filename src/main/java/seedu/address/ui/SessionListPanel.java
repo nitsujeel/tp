@@ -33,7 +33,7 @@ public class SessionListPanel extends UiPart<Region> {
         super(FXML);
         sessionListView.setItems(sessionList);
         sessionListView.setCellFactory(listView -> new SessionListViewCell());
-        Label placeholder = new Label("No sessions to display.\nUse addsessions to add a session.");
+        Label placeholder = new Label("No sessions to display.\nUse addsession to add a session.");
         placeholder.getStyleClass().add("cell_small_label");
         sessionListView.setPlaceholder(placeholder);
     }

@@ -73,7 +73,7 @@ public class UpdatePetRemarkCommand extends Command {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof AddOwnerCommand)) {
+        if (!(other instanceof UpdatePetRemarkCommand)) {
             return false;
         }
 

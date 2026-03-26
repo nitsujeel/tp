@@ -123,13 +123,13 @@
 .cell_big_label {
     -fx-font-family: "Segoe UI Semibold";
     -fx-font-size: 16px;
-    -fx-text-fill: #010504;
+    -fx-text-fill: white;
 }
 
 .cell_small_label {
     -fx-font-family: "Segoe UI";
     -fx-font-size: 13px;
-    -fx-text-fill: #010504;
+    -fx-text-fill: white;
 }
 
 .stack-pane {
@@ -310,6 +310,17 @@
 #cardPane {
     -fx-background-color: transparent;
     -fx-border-width: 0;
+}
+
+.pet-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: derive(#1d1d1d, 60%);
+    -fx-border-width: 0 0 0 1;
+}
+
+.pet-scroll-pane > .viewport {
+    -fx-background-color: transparent;
 }
 
 #commandTypeLabel {

@@ -6,9 +6,14 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PET_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PET_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SPECIES;
 
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.person.Person;
 import seedu.address.model.pet.Pet;
 
 /**
@@ -47,7 +52,26 @@ public class AddPetCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        // Parser/model wiring for pets is not implemented yet.
+        List<Person> lastShownList = model.getFilteredPersonList();
+        int ownerIndex = Integer.parseInt(toAdd.getOwnerIndex().value) - 1;
+
+        if (ownerIndex < 0 || ownerIndex >= lastShownList.size()) {
+            throw new CommandException("The owner index provided is invalid.");
+        }
+
+        Person owner = lastShownList.get(ownerIndex);
+
+        boolean isDuplicate = owner.getPets().stream().anyMatch(p -> p.isSamePet(toAdd));
+        if (isDuplicate) {
+            throw new CommandException(MESSAGE_DUPLICATE_PET);
+        }
+
+        Set<Pet> updatedPets = new LinkedHashSet<>(owner.getPets());
+        updatedPets.add(toAdd);
+        Person updatedOwner = new Person(owner.getName(), owner.getPhone(), owner.getEmail(),
+                owner.getAddress(), owner.getTags(), updatedPets);
+
+        model.setPerson(owner, updatedOwner);
         return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
     }
 

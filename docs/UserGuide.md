@@ -87,6 +87,28 @@ Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
 
+### Adding a pet under an owner: `addpet`
+
+Format: `addpet oi/OWNER_INDEX pn/PET_NAME ps/SPECIES [pr/REMARKS]`
+
+* Adds the pet with specified `NAME` and `SPECIES` (and optional remark) under the owner specified by `OWNER_INDEX`
+
+Examples:
+
+* `addpet oi/2 pn/Molly ps/Golden Retriever pr/cuddly` Adds a cuddly golden retriever called Molly under the second
+    owner in the list of owners; Molly will have a remark that she is cuddly.
+* `addpet oi/1 pn/Dave ps/Great Dane` Adds a great dane called Dave under the first owner on the list of owners.
+
+### Update a remark of a pet: `update`
+
+Format: `update oi/OWNER_INDEX pi/PET_INDEX pr/REMARKS`
+
+* Sets the remark of the pet specified by `PET_INDEX` under the owner specified by `OWNER_INDEX`.
+
+Examples:
+
+* `update oi/1 pi/3 pr/aggressive` Updates the remark of the third pet listed under the first owner to be "aggressive". 
+
 ### Listing all persons : `list`
 
 Shows a list of all persons in the address book.
@@ -160,7 +182,7 @@ AddressBook data are saved in the hard disk automatically after any command that
 
 ### Editing the data file
 
-AddressBook data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+AddressBook data are saved automatically as a JSON file `[JAR file location]/data/petlog.json`. Advanced users are welcome to update data directly by editing that data file.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
 If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>

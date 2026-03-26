@@ -1,0 +1,13 @@
+{
+  "persons": [],
+  "services": [
+    {
+      "name": "Shampoo",
+      "cost": 30.0
+    },
+    {
+      "name": "Shampoo",
+      "cost": 35.0
+    }
+  ]
+}

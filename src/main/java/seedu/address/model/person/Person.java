@@ -2,8 +2,12 @@ package seedu.address.model.person;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -25,8 +29,7 @@ public class Person {
     // Data fields
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
-    private final Set<Pet> pets = new HashSet<>();
-
+    private final Set<Pet> pets = new LinkedHashSet<>();
     /**
      * Every field must be present and not null.
      */
@@ -70,6 +73,41 @@ public class Person {
      */
     public Set<Pet> getPets() {
         return Collections.unmodifiableSet(pets);
+    }
+
+    /**
+     * Returns an immutable pet list in insertion order.
+     */
+    public List<Pet> getPetList() {
+        return Collections.unmodifiableList(new ArrayList<>(pets));
+    }
+
+    /**
+     * Returns the number of pets the person has
+     */
+    public int getPetCount() {
+        return pets.size();
+    }
+
+    /**
+     * Updates the remark of a pet at specified index
+     * @param petIndex a 0 based petIndex
+     * @param newRemark value of the updated remark
+     */
+    public void updatePetRemark(int petIndex, String newRemark) {
+        Iterator<Pet> it = pets.iterator();
+        int currIndex = 0;
+        Pet currentPet;
+
+        while (it.hasNext()) {
+            currentPet = it.next();
+
+            if (currIndex == petIndex) {
+                currentPet.updateRemark(newRemark);
+                break;
+            }
+            currIndex++;
+        }
     }
 
     /**

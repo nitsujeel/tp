@@ -1,0 +1,14 @@
+{
+  "_comment": "AddressBook save file which contains only valid services",
+  "persons": [],
+  "services": [
+    {
+      "name": "Shampoo",
+      "cost": 30.0
+    },
+    {
+      "name": "Walk",
+      "cost": 15.0
+    }
+  ]
+}

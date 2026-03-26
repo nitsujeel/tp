@@ -17,6 +17,7 @@ import seedu.address.model.pet.OwnerIndex;
 import seedu.address.model.pet.PetName;
 import seedu.address.model.pet.PetRemark;
 import seedu.address.model.pet.Species;
+import seedu.address.model.service.Service;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -185,5 +186,35 @@ public class ParserUtil {
             throw new ParseException(PetRemark.MESSAGE_CONSTRAINTS);
         }
         return new PetRemark(trimmedPetRemark);
+    }
+
+    /**
+     * Parses a {@code String serviceName} into a service name string.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code serviceName} is invalid.
+     */
+    public static String parseServiceName(String serviceName) throws ParseException {
+        requireNonNull(serviceName);
+        String trimmedServiceName = serviceName.trim();
+        if (!Service.isValidServiceName(trimmedServiceName)) {
+            throw new ParseException(Service.MESSAGE_CONSTRAINTS);
+        }
+        return trimmedServiceName;
+    }
+
+    /**
+     * Parses a {@code String servicePrice} into a service price.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code servicePrice} is invalid.
+     */
+    public static double parseServicePrice(String servicePrice) throws ParseException {
+        requireNonNull(servicePrice);
+        String trimmedServicePrice = servicePrice.trim();
+        if (!Service.isValidServicePrice(trimmedServicePrice)) {
+            throw new ParseException(Service.MESSAGE_PRICE_CONSTRAINTS);
+        }
+        return Double.parseDouble(trimmedServicePrice);
     }
 }

@@ -7,7 +7,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_OWNER_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -22,7 +22,7 @@ import seedu.address.model.pet.Pet;
 import seedu.address.model.tag.Tag;
 
 /**
- * Parses input arguments and creates a new AddCommand object
+ * Parses input arguments and creates a new AddOwnerCommand object
  */
 public class AddOwnerCommandParser implements Parser<AddOwnerCommand> {
 
@@ -47,7 +47,7 @@ public class AddOwnerCommandParser implements Parser<AddOwnerCommand> {
         Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
         Address address = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get());
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
-        Set<Pet> petList = new HashSet<>();
+        Set<Pet> petList = new LinkedHashSet<>();
 
         Person person = new Person(name, phone, email, address, tagList, petList);
 

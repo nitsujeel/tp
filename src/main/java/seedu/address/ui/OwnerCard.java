@@ -7,7 +7,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import seedu.address.model.person.Person;
+import seedu.address.model.pet.Pet;
 
 /**
  * An UI component that displays information of a {@code Person}.
@@ -40,6 +42,8 @@ public class OwnerCard extends UiPart<Region> {
     private Label email;
     @FXML
     private FlowPane tags;
+    @FXML
+    private VBox petsContainer;
 
     /**
      * Creates a {@code OwnerCard} with the given {@code Person} and index to display.
@@ -55,5 +59,15 @@ public class OwnerCard extends UiPart<Region> {
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+        person.getPets().stream()
+                .forEach(pet -> petsContainer.getChildren().add(createPetLabel(pet)));
+    }
+
+    private Label createPetLabel(Pet pet) {
+        Label label = new Label(pet.getName().value + " (" + pet.getSpecies().value + ")"
+                + (pet.getRemark().value.isEmpty() ? "" : " — " + pet.getRemark().value));
+        label.setWrapText(true);
+        label.getStyleClass().add("cell_small_label");
+        return label;
     }
 }

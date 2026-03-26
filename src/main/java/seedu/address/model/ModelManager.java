@@ -6,12 +6,17 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import java.nio.file.Path;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.person.Person;
+import seedu.address.model.pet.Pet;
+import seedu.address.model.service.Service;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -22,6 +27,8 @@ public class ModelManager implements Model {
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
+    private final ObservableList<Pet> allPets = FXCollections.observableArrayList();
+    private final FilteredList<Pet> filteredPets;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -34,10 +41,22 @@ public class ModelManager implements Model {
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        rebuildPetList();
+        filteredPets = new FilteredList<>(allPets);
+        filteredPersons.addListener((ListChangeListener<Person>) c -> rebuildPetList());
     }
 
+    /**
+     * Initializes an empty ModelManager.
+     */
     public ModelManager() {
         this(new AddressBook(), new UserPrefs());
+    }
+
+    private void rebuildPetList() {
+        allPets.setAll(filteredPersons.stream()
+                .flatMap(person -> person.getPets().stream())
+                .collect(Collectors.toList()));
     }
 
     //=========== UserPrefs ==================================================================================
@@ -111,6 +130,27 @@ public class ModelManager implements Model {
         addressBook.setPerson(target, editedPerson);
     }
 
+    @Override
+    public boolean hasService(Service service) {
+        requireNonNull(service);
+        return addressBook.hasService(service);
+    }
+
+    @Override
+    public void deleteService(Service target) {
+        addressBook.removeService(target);
+    }
+
+    @Override
+    public void addService(Service service) {
+        addressBook.addService(service);
+    }
+
+    @Override
+    public ObservableList<Service> getServiceList() {
+        return addressBook.getServiceList();
+    }
+
     //=========== Filtered Person List Accessors =============================================================
 
     /**
@@ -123,9 +163,20 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public ObservableList<Pet> getFilteredPetList() {
+        return filteredPets;
+    }
+
+    @Override
     public void updateFilteredPersonList(Predicate<Person> predicate) {
         requireNonNull(predicate);
         filteredPersons.setPredicate(predicate);
+    }
+
+    @Override
+    public void updateFilteredPetList(Predicate<Pet> predicate) {
+        requireNonNull(predicate);
+        filteredPets.setPredicate(predicate);
     }
 
     @Override

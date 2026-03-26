@@ -20,6 +20,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
+import seedu.address.model.service.Service;
+import seedu.address.model.service.exceptions.DuplicateServiceException;
 import seedu.address.testutil.PersonBuilder;
 
 public class AddressBookTest {
@@ -29,6 +31,7 @@ public class AddressBookTest {
     @Test
     public void constructor() {
         assertEquals(Collections.emptyList(), addressBook.getPersonList());
+        assertEquals(Collections.emptyList(), addressBook.getServiceList());
     }
 
     @Test
@@ -52,6 +55,17 @@ public class AddressBookTest {
         AddressBookStub newData = new AddressBookStub(newPersons);
 
         assertThrows(DuplicatePersonException.class, () -> addressBook.resetData(newData));
+    }
+
+    @Test
+    public void resetData_withDuplicateServices_throwsDuplicateServiceException() {
+        List<Person> persons = Collections.emptyList();
+        Service shampoo = new Service("Shampoo", 30.00);
+        Service duplicateShampoo = new Service("Shampoo", 35.00);
+        List<Service> newServices = Arrays.asList(shampoo, duplicateShampoo);
+        AddressBookStub newData = new AddressBookStub(persons, newServices);
+
+        assertThrows(DuplicateServiceException.class, () -> addressBook.resetData(newData));
     }
 
     @Test
@@ -79,13 +93,44 @@ public class AddressBookTest {
     }
 
     @Test
+    public void hasService_nullService_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> addressBook.hasService(null));
+    }
+
+    @Test
+    public void hasService_serviceNotInAddressBook_returnsFalse() {
+        assertFalse(addressBook.hasService(new Service("Shampoo", 30.00)));
+    }
+
+    @Test
+    public void hasService_serviceInAddressBook_returnsTrue() {
+        Service shampoo = new Service("Shampoo", 30.00);
+        addressBook.addService(shampoo);
+        assertTrue(addressBook.hasService(shampoo));
+    }
+
+    @Test
+    public void hasService_serviceWithSameIdentityFieldsInAddressBook_returnsTrue() {
+        Service shampoo = new Service("Shampoo", 30.00);
+        addressBook.addService(shampoo);
+        Service editedShampoo = new Service("Shampoo", 35.00);
+        assertTrue(addressBook.hasService(editedShampoo));
+    }
+
+    @Test
     public void getPersonList_modifyList_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> addressBook.getPersonList().remove(0));
     }
 
     @Test
+    public void getServiceList_modifyList_throwsUnsupportedOperationException() {
+        assertThrows(UnsupportedOperationException.class, () -> addressBook.getServiceList().remove(0));
+    }
+
+    @Test
     public void toStringMethod() {
-        String expected = AddressBook.class.getCanonicalName() + "{persons=" + addressBook.getPersonList() + "}";
+        String expected = AddressBook.class.getCanonicalName()
+                + "{persons=" + addressBook.getPersonList() + ", services=" + addressBook.getServiceList() + "}";
         assertEquals(expected, addressBook.toString());
     }
 
@@ -94,14 +139,25 @@ public class AddressBookTest {
      */
     private static class AddressBookStub implements ReadOnlyAddressBook {
         private final ObservableList<Person> persons = FXCollections.observableArrayList();
+        private final ObservableList<Service> services = FXCollections.observableArrayList();
 
         AddressBookStub(Collection<Person> persons) {
             this.persons.setAll(persons);
         }
 
+        AddressBookStub(Collection<Person> persons, Collection<Service> services) {
+            this.persons.setAll(persons);
+            this.services.setAll(services);
+        }
+
         @Override
         public ObservableList<Person> getPersonList() {
             return persons;
+        }
+
+        @Override
+        public ObservableList<Service> getServiceList() {
+            return services;
         }
     }
 

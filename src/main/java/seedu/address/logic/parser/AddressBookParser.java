@@ -8,7 +8,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.logic.commands.*;
+import seedu.address.logic.commands.AddOwnerCommand;
+import seedu.address.logic.commands.AddPetCommand;
+import seedu.address.logic.commands.AddServiceCommand;
+import seedu.address.logic.commands.AddSessionCommand;
+import seedu.address.logic.commands.ClearCommand;
+import seedu.address.logic.commands.Command;
+import seedu.address.logic.commands.DeleteCommand;
+import seedu.address.logic.commands.DeleteServiceCommand;
+import seedu.address.logic.commands.EditCommand;
+import seedu.address.logic.commands.ExitCommand;
+import seedu.address.logic.commands.FindCommand;
+import seedu.address.logic.commands.HelpCommand;
+import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.UpdatePetRemarkCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
@@ -61,7 +74,7 @@ public class AddressBookParser {
             return new FindCommandParser().parse(arguments);
 
         case ListCommand.COMMAND_WORD:
-            return new ListCommand();
+            return new ListCommandParser().parse(arguments);
 
         case ExitCommand.COMMAND_WORD:
             return new ExitCommand();
@@ -71,6 +84,19 @@ public class AddressBookParser {
 
         case AddPetCommand.COMMAND_WORD:
             return new AddPetCommandParser().parse(arguments);
+
+        case UpdatePetRemarkCommand.COMMAND_WORD:
+            return new UpdatePetRemarkCommandParser().parse(arguments);
+
+        case AddServiceCommand.COMMAND_WORD:
+            return new AddServiceCommandParser().parse(arguments);
+
+        case DeleteServiceCommand.COMMAND_WORD:
+            return new DeleteServiceCommandParser().parse(arguments);
+
+        case AddSessionCommand.COMMAND_WORD:
+            return new AddSessionCommandParser().parse(arguments);
+
         default:
             logger.finer("This user input caused a ParseException: " + userInput);
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);

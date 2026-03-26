@@ -18,6 +18,7 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.service.Service;
 import seedu.address.model.tag.Tag;
 
 public class ParserUtilTest {
@@ -26,6 +27,9 @@ public class ParserUtilTest {
     private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_TAG = "#friend";
+    private static final String INVALID_SERVICE_NAME = "@wash";
+    private static final String INVALID_SERVICE_PRICE = "-5.00";
+    private static final String INVALID_SERVICE_PRICE_MORE_THAN_TWO_DP = "20.123";
 
     private static final String VALID_NAME = "Rachel Walker";
     private static final String VALID_PHONE = "123456";
@@ -33,6 +37,8 @@ public class ParserUtilTest {
     private static final String VALID_EMAIL = "rachel@example.com";
     private static final String VALID_TAG_1 = "friend";
     private static final String VALID_TAG_2 = "neighbour";
+    private static final String VALID_SERVICE_NAME = "Fur trim";
+    private static final String VALID_SERVICE_PRICE = "25.50";
 
     private static final String WHITESPACE = " \t\r\n";
 
@@ -192,5 +198,44 @@ public class ParserUtilTest {
         Set<Tag> expectedTagSet = new HashSet<Tag>(Arrays.asList(new Tag(VALID_TAG_1), new Tag(VALID_TAG_2)));
 
         assertEquals(expectedTagSet, actualTagSet);
+    }
+
+    @Test
+    public void parseServiceName_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseServiceName(null));
+    }
+
+    @Test
+    public void parseServiceName_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseServiceName(INVALID_SERVICE_NAME));
+    }
+
+    @Test
+    public void parseServiceName_validValueWithWhitespace_returnsTrimmedServiceName() throws Exception {
+        String serviceNameWithWhitespace = WHITESPACE + VALID_SERVICE_NAME + WHITESPACE;
+        assertEquals(VALID_SERVICE_NAME, ParserUtil.parseServiceName(serviceNameWithWhitespace));
+    }
+
+    @Test
+    public void parseServicePrice_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseServicePrice(null));
+    }
+
+    @Test
+    public void parseServicePrice_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, Service.MESSAGE_PRICE_CONSTRAINTS, ()
+                -> ParserUtil.parseServicePrice(INVALID_SERVICE_PRICE));
+    }
+
+    @Test
+    public void parseServicePrice_moreThanTwoDp_throwsParseException() {
+        assertThrows(ParseException.class, Service.MESSAGE_PRICE_CONSTRAINTS, ()
+                -> ParserUtil.parseServicePrice(INVALID_SERVICE_PRICE_MORE_THAN_TWO_DP));
+    }
+
+    @Test
+    public void parseServicePrice_validValueWithWhitespace_returnsServicePrice() throws Exception {
+        String servicePriceWithWhitespace = WHITESPACE + VALID_SERVICE_PRICE + WHITESPACE;
+        assertEquals(25.50, ParserUtil.parseServicePrice(servicePriceWithWhitespace), 1e-9);
     }
 }

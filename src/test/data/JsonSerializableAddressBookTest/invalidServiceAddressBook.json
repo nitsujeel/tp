@@ -1,0 +1,9 @@
+{
+  "persons": [],
+  "services": [
+    {
+      "name": "@wash",
+      "cost": 30.0
+    }
+  ]
+}

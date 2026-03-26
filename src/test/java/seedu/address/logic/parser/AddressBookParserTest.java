@@ -7,15 +7,16 @@ import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.AddOwnerCommand;
+import seedu.address.logic.commands.AddServiceCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteCommand;
+import seedu.address.logic.commands.DeleteServiceCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
@@ -23,8 +24,9 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.FieldContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
+import seedu.address.model.service.Service;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.PersonUtil;
@@ -49,8 +51,15 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_delete() throws Exception {
         DeleteCommand command = (DeleteCommand) parser.parseCommand(
-                DeleteCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
+                DeleteCommand.COMMAND_WORD + " oi/" + INDEX_FIRST_PERSON.getOneBased());
         assertEquals(new DeleteCommand(INDEX_FIRST_PERSON), command);
+    }
+
+    @Test
+    public void parseCommand_deleteService() throws Exception {
+        DeleteServiceCommand command = (DeleteServiceCommand) parser.parseCommand(
+                DeleteServiceCommand.COMMAND_WORD + " si/" + INDEX_FIRST_PERSON.getOneBased());
+        assertEquals(new DeleteServiceCommand(INDEX_FIRST_PERSON), command);
     }
 
     @Test
@@ -63,6 +72,14 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommand_addService() throws Exception {
+        Service service = new Service("Fur trim", 25.00);
+        AddServiceCommand command = (AddServiceCommand) parser.parseCommand(
+                AddServiceCommand.COMMAND_WORD + " sn/Fur trim sp/25.00");
+        assertEquals(new AddServiceCommand(service), command);
+    }
+
+    @Test
     public void parseCommand_exit() throws Exception {
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD) instanceof ExitCommand);
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD + " 3") instanceof ExitCommand);
@@ -70,10 +87,11 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_find() throws Exception {
-        List<String> keywords = Arrays.asList("foo", "bar", "baz");
+        List<String> tagKeywords = List.of("bar", "baz");
         FindCommand command = (FindCommand) parser.parseCommand(
-                FindCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
-        assertEquals(new FindCommand(new NameContainsKeywordsPredicate(keywords)), command);
+                FindCommand.COMMAND_WORD + " on/foo ot/bar ot/baz");
+        assertEquals(new FindCommand(new FieldContainsKeywordsPredicate(
+                Optional.of("foo"), Optional.empty(), Optional.empty(), Optional.empty(), tagKeywords)), command);
     }
 
     @Test
@@ -85,7 +103,8 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_list() throws Exception {
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD) instanceof ListCommand);
-        assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD + " 3") instanceof ListCommand);
+        assertThrows(ParseException.class,
+                ListCommand.MESSAGE_EXTRA_ARGS, () -> parser.parseCommand(ListCommand.COMMAND_WORD + " 3"));
     }
 
     @Test

@@ -12,6 +12,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.person.Person;
+import seedu.address.model.service.Service;
 
 /**
  * An Immutable AddressBook that is serializable to JSON format.
@@ -20,15 +21,23 @@ import seedu.address.model.person.Person;
 class JsonSerializableAddressBook {
 
     public static final String MESSAGE_DUPLICATE_PERSON = "Persons list contains duplicate person(s).";
+    public static final String MESSAGE_DUPLICATE_SERVICE = "Services list contains duplicate service(s).";
 
     private final List<JsonAdaptedPerson> persons = new ArrayList<>();
+    private final List<JsonAdaptedService> services = new ArrayList<>();
 
     /**
-     * Constructs a {@code JsonSerializableAddressBook} with the given persons.
+     * Constructs a {@code JsonSerializableAddressBook} with the given persons and services.
      */
     @JsonCreator
-    public JsonSerializableAddressBook(@JsonProperty("persons") List<JsonAdaptedPerson> persons) {
-        this.persons.addAll(persons);
+    public JsonSerializableAddressBook(@JsonProperty("persons") List<JsonAdaptedPerson> persons,
+                                       @JsonProperty("services") List<JsonAdaptedService> services) {
+        if (persons != null) {
+            this.persons.addAll(persons);
+        }
+        if (services != null) {
+            this.services.addAll(services);
+        }
     }
 
     /**
@@ -38,6 +47,7 @@ class JsonSerializableAddressBook {
      */
     public JsonSerializableAddressBook(ReadOnlyAddressBook source) {
         persons.addAll(source.getPersonList().stream().map(JsonAdaptedPerson::new).collect(Collectors.toList()));
+        services.addAll(source.getServiceList().stream().map(JsonAdaptedService::new).collect(Collectors.toList()));
     }
 
     /**
@@ -53,6 +63,13 @@ class JsonSerializableAddressBook {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_PERSON);
             }
             addressBook.addPerson(person);
+        }
+        for (JsonAdaptedService jsonAdaptedService : services) {
+            Service service = jsonAdaptedService.toModelType();
+            if (addressBook.hasService(service)) {
+                throw new IllegalValueException(MESSAGE_DUPLICATE_SERVICE);
+            }
+            addressBook.addService(service);
         }
         return addressBook;
     }

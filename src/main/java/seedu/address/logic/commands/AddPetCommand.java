@@ -10,6 +10,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
@@ -38,13 +39,16 @@ public class AddPetCommand extends Command {
     public static final String MESSAGE_SUCCESS = "New pet added: %1$s";
     public static final String MESSAGE_DUPLICATE_PET = "This pet already exists in the address book";
 
+    private final Index ownerIndex;
     private final Pet toAdd;
 
     /**
      * Creates an AddPetCommand to add the specified {@code Pet}
      */
-    public AddPetCommand(Pet pet) {
+    public AddPetCommand(Index ownerIndex, Pet pet) {
+        requireNonNull(ownerIndex);
         requireNonNull(pet);
+        this.ownerIndex = ownerIndex;
         toAdd = pet;
     }
 
@@ -53,16 +57,13 @@ public class AddPetCommand extends Command {
         requireNonNull(model);
 
         List<Person> lastShownList = model.getFilteredPersonList();
-        int ownerIndex = Integer.parseInt(toAdd.getOwnerIndex().value) - 1;
-
-        if (ownerIndex < 0 || ownerIndex >= lastShownList.size()) {
+        if (ownerIndex.getZeroBased() >= lastShownList.size()) {
             throw new CommandException("The owner index provided is invalid.");
         }
 
-        Person owner = lastShownList.get(ownerIndex);
+        Person owner = lastShownList.get(ownerIndex.getZeroBased());
 
-        boolean isDuplicate = owner.getPets().stream().anyMatch(p -> p.isSamePet(toAdd));
-        if (isDuplicate) {
+        if (owner.hasPet(toAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_PET);
         }
 
@@ -87,12 +88,14 @@ public class AddPetCommand extends Command {
         }
 
         AddPetCommand otherAddPetCommand = (AddPetCommand) other;
-        return toAdd.equals(otherAddPetCommand.toAdd);
+        return ownerIndex.equals(otherAddPetCommand.ownerIndex)
+                && toAdd.equals(otherAddPetCommand.toAdd);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
+                .add("ownerIndex", ownerIndex)
                 .add("toAdd", toAdd)
                 .toString();
     }

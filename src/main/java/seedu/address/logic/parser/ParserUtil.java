@@ -13,7 +13,6 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
-import seedu.address.model.pet.OwnerIndex;
 import seedu.address.model.pet.PetName;
 import seedu.address.model.pet.PetRemark;
 import seedu.address.model.pet.Species;
@@ -125,22 +124,6 @@ public class ParserUtil {
             tagSet.add(parseTag(tagName));
         }
         return tagSet;
-    }
-
-    /**
-     * Parses a {@code String ownerIndex} into a {@code OwnerIndex}.
-     * Leading and trailing whitespaces will be trimmed.
-     *
-     * @throws ParseException if the given {@code ownerIndex} is invalid.
-     */
-    public static OwnerIndex parseOwnerIndex(String ownerIndex) throws ParseException {
-        requireNonNull(ownerIndex);
-        String trimmedOwnerIndex = ownerIndex.trim();
-        //Index's range is to be checked (1 to n), should be done in execute when we have access to model
-        if (!OwnerIndex.isValidOwnerIndex(trimmedOwnerIndex)) {
-            throw new ParseException(OwnerIndex.MESSAGE_CONSTRAINTS);
-        }
-        return new OwnerIndex(trimmedOwnerIndex);
     }
 
     /**

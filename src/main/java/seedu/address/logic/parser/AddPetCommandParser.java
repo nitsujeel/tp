@@ -8,9 +8,9 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_SPECIES;
 
 import java.util.stream.Stream;
 
+import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.AddPetCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.pet.OwnerIndex;
 import seedu.address.model.pet.Pet;
 import seedu.address.model.pet.PetName;
 import seedu.address.model.pet.PetRemark;
@@ -38,15 +38,15 @@ public class AddPetCommandParser implements Parser<AddPetCommand> {
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_OWNER_INDEX, PREFIX_PET_NAME,
                 PREFIX_SPECIES, PREFIX_PET_REMARK);
-        OwnerIndex ownerIndex = ParserUtil.parseOwnerIndex(argMultimap.getValue(PREFIX_OWNER_INDEX).get());
+        Index ownerIndex = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_OWNER_INDEX).get());
         PetName petName = ParserUtil.parsePetName(argMultimap.getValue(PREFIX_PET_NAME).get());
         Species species = ParserUtil.parseSpecies(argMultimap.getValue(PREFIX_SPECIES).get());
         PetRemark petRemark = new PetRemark("");
         if (arePrefixesPresent(argMultimap, PREFIX_PET_REMARK)) {
             petRemark = ParserUtil.parsePetRemark(argMultimap.getValue(PREFIX_PET_REMARK).get());
         }
-        Pet newPet = new Pet(petName, species, ownerIndex, petRemark);
-        return new AddPetCommand(newPet);
+        Pet newPet = new Pet(petName, species, petRemark);
+        return new AddPetCommand(ownerIndex, newPet);
     }
 
     /**

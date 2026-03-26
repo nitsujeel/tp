@@ -2,6 +2,7 @@ package seedu.address.testutil;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import seedu.address.model.person.Address;
@@ -74,7 +75,7 @@ public class PersonBuilder {
      * Sets the {@code Pets} of the {@code Person} that we are building.
      */
     public PersonBuilder withPets(Pet ... pets) {
-        this.pets = new HashSet<>(Arrays.asList(pets));
+        this.pets = new LinkedHashSet<>(Arrays.asList(pets));
         return this;
     }
 

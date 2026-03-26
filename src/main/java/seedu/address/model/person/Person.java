@@ -90,6 +90,14 @@ public class Person {
     }
 
     /**
+     * Returns true if this person already has an equivalent pet.
+     */
+    public boolean hasPet(Pet pet) {
+        requireAllNonNull(pet);
+        return pets.stream().anyMatch(pet::isSamePet);
+    }
+
+    /**
      * Updates the remark of a pet at specified index
      * @param petIndex a 0 based petIndex
      * @param newRemark value of the updated remark

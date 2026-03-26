@@ -10,7 +10,6 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.address.model.pet.OwnerIndex;
 import seedu.address.model.pet.Pet;
 import seedu.address.model.pet.PetName;
 import seedu.address.model.pet.PetRemark;
@@ -83,7 +82,6 @@ public class FieldContainsKeywordsPredicateTest {
                 new Pet(
                         new PetName("Buddy"),
                         new Species("Dog"),
-                        new OwnerIndex("1"),
                         new PetRemark("Very friendly"))).build()));
     }
 
@@ -96,12 +94,10 @@ public class FieldContainsKeywordsPredicateTest {
                 new Pet(
                         new PetName("Buddy"),
                         new Species("Dog"),
-                        new OwnerIndex("1"),
                         new PetRemark("Active")),
                 new Pet(
                         new PetName("Mittens"),
                         new Species("Cat"),
-                        new OwnerIndex("1"),
                         new PetRemark("Calm"))).build()));
     }
 

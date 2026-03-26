@@ -13,7 +13,6 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
-import seedu.address.model.pet.OwnerIndex;
 import seedu.address.model.pet.Pet;
 import seedu.address.model.pet.PetName;
 import seedu.address.model.pet.PetRemark;
@@ -30,12 +29,12 @@ public class SampleDataUtil {
             new Person(new Name("Alex Yeoh"), new Phone("87438807"), new Email("alexyeoh@example.com"),
                 new Address("Blk 30 Geylang Street 29, #06-40"),
                 getTagSet("friends"),
-                new LinkedHashSet<>(List.of(new Pet(new PetName("Buddy"), new Species("Dog"), new OwnerIndex("1"),
+                new LinkedHashSet<>(List.of(new Pet(new PetName("Buddy"), new Species("Dog"),
                         new PetRemark("Loyal and friendly"))))),
             new Person(new Name("Bernice Yu"), new Phone("99272758"), new Email("berniceyu@example.com"),
                 new Address("Blk 30 Lorong 3 Serangoon Gardens, #07-18"),
                 getTagSet("colleagues", "friends"),
-                new LinkedHashSet<>(List.of(new Pet(new PetName("Mittens"), new Species("Cat"), new OwnerIndex("2"),
+                new LinkedHashSet<>(List.of(new Pet(new PetName("Mittens"), new Species("Cat"),
                         new PetRemark("Likes to scratch furniture"))))),
             new Person(new Name("Charlotte Oliveiro"), new Phone("93210283"), new Email("charlotte@example.com"),
                 new Address("Blk 11 Ang Mo Kio Street 74, #11-04"),

@@ -59,7 +59,7 @@
           <Label text="• find [on/NAME] [ph/PHONE] [em/EMAIL] [ad/ADDRESS] [ot/TAG]... [oi/OWNER_INDEX] [pn/NAME] [ps/SPECIES] [pr/REMARKS]"
                  styleClass="cell_small_label" />
           <Label text="• addservice sn/SERVICE_NAME sf/SERVICE_FEE" styleClass="cell_small_label" />
-          <Label text="• deleteservice sn/SERVICE_NAME sf/SERVICE_FEE" styleClass="cell_small_label" />
+          <Label text="• deleteservice sn/SERVICE_NAME" styleClass="cell_small_label" />
           <Label text="• addsession oi/OWNER_INDEX pi/PET_INDEX start/START_TIME end/END_TIME [sn/SERVICE_NAME]..."
                  styleClass="cell_small_label" />
           <Label text="• list" styleClass="cell_small_label" />

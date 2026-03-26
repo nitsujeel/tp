@@ -92,4 +92,8 @@ public class UpdatePetRemarkCommand extends Command {
                 .add("New Remark", newRemark)
                 .toString();
     }
+
+    public String getNewRemark() {
+        return this.newRemark;
+    }
 }

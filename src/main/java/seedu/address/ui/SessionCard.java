@@ -23,6 +23,8 @@ public class SessionCard extends UiPart<Region> {
     private Label startTime;
     @FXML
     private Label endTime;
+    @FXML
+    private Label fee;
 
     /**
      * Creates a {@code SessionCard} with the given {@code Session} and index to display.
@@ -33,5 +35,6 @@ public class SessionCard extends UiPart<Region> {
         id.setText(displayedIndex + ". ");
         startTime.setText("Start: " + session.getStartTime());
         endTime.setText("End:   " + session.getEndTime());
+        fee.setText(String.format("Fee:   $%.2f", session.getFee()));
     }
 }

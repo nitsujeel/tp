@@ -10,6 +10,7 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <fx:root type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
@@ -47,19 +48,26 @@
           </padding>
         </StackPane>
 
-        <VBox styleClass="pane-with-border" VBox.vgrow="NEVER">
-          <padding>
-            <Insets top="5" right="10" bottom="5" left="10" />
-          </padding>
-          <Label text="Available Commands:" styleClass="cell_small_label" />
-          <Label text="• addowner on/NAME ph/PHONE em/EMAIL ad/ADDRESS [ot/TAG]..." styleClass="cell_small_label" />
-          <Label text="• addpet oi/OWNER_INDEX pn/NAME ps/SPECIES [pr/REMARKS]" styleClass="cell_small_label" />
-          <Label text="• update oi/OWNER_INDEX pi/PET_INDEX pr/REMARKS" styleClass="cell_small_label" />
-          <Label text="• delete oi/OWNER_INDEX [pi/PET_INDEX]" styleClass="cell_small_label" />
-<Label text="• find [on/NAME] [ph/PHONE] [em/EMAIL] [ad/ADDRESS] [ot/TAG]... [oi/OWNER_INDEX] [pn/NAME] [ps/SPECIES] [pr/REMARKS]" styleClass="cell_small_label" />
-<Label text="• addsession oi/OWNER_INDEX pi/PET_INDEX start/START_TIME end/END_TIME" styleClass="cell_small_label"/>
-          <Label text="• list" styleClass="cell_small_label" />
-        </VBox>
+        <HBox styleClass="pane-with-border" VBox.vgrow="NEVER">
+          <VBox HBox.hgrow="ALWAYS">
+            <padding>
+              <Insets top="5" right="10" bottom="5" left="10" />
+            </padding>
+            <Label text="Available Commands:" styleClass="cell_small_label" />
+            <Label text="• addowner on/NAME ph/PHONE em/EMAIL ad/ADDRESS [ot/TAG]..." styleClass="cell_small_label" />
+            <Label text="• addpet oi/OWNER_INDEX pn/NAME ps/SPECIES [pr/REMARKS]" styleClass="cell_small_label" />
+            <Label text="• update oi/OWNER_INDEX pi/PET_INDEX pr/REMARKS" styleClass="cell_small_label" />
+            <Label text="• delete oi/OWNER_INDEX [pi/PET_INDEX]" styleClass="cell_small_label" />
+            <Label text="• find [on/NAME] [ph/PHONE] [em/EMAIL] [ad/ADDRESS] [ot/TAG]... [oi/OWNER_INDEX] [pn/NAME] [ps/SPECIES] [pr/REMARKS]"
+                   styleClass="cell_small_label" />
+            <Label text="• addservice sn/SERVICE_NAME sp/SERVICE_PRICE" styleClass="cell_small_label" />
+            <Label text="• deleteservice sn/SERVICE_NAME" styleClass="cell_small_label" />
+            <Label text="• addsession oi/OWNER_INDEX pi/PET_INDEX st/START_TIME et/END_TIME [sn/SERVICE_NAME]..."
+                   styleClass="cell_small_label" />
+            <Label text="• list" styleClass="cell_small_label" />
+          </VBox>
+          <StackPane fx:id="serviceListPanelPlaceholder" minWidth="200" />
+        </HBox>
 
         <SplitPane VBox.vgrow="ALWAYS" dividerPositions="0.55">
           <VBox styleClass="pane-with-border" minWidth="340" SplitPane.resizableWithParent="true">

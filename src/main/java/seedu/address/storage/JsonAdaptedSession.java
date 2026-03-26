@@ -15,15 +15,18 @@ public class JsonAdaptedSession {
 
     private final String startTime;
     private final String endTime;
+    private final double fee;
 
     /**
      * Constructs a {@code JsonAdaptedSession} with the given session details.
      */
     @JsonCreator
     public JsonAdaptedSession(@JsonProperty("startTime") String startTime,
-                              @JsonProperty("endTime") String endTime) {
+                              @JsonProperty("endTime") String endTime,
+                              @JsonProperty("fee") double fee) {
         this.startTime = startTime;
         this.endTime = endTime;
+        this.fee = fee;
     }
 
     /**
@@ -32,6 +35,7 @@ public class JsonAdaptedSession {
     public JsonAdaptedSession(Session source) {
         this.startTime = source.getStartTime();
         this.endTime = source.getEndTime();
+        this.fee = source.getFee();
     }
 
     /**
@@ -46,6 +50,6 @@ public class JsonAdaptedSession {
         if (endTime == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, "endTime"));
         }
-        return new Session(startTime, endTime);
+        return new Session(startTime, endTime, fee);
     }
 }

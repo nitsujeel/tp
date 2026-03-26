@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
-import seedu.address.model.pet.OwnerIndex;
 import seedu.address.model.pet.Pet;
 import seedu.address.model.pet.PetName;
 import seedu.address.model.pet.PetRemark;
@@ -24,7 +23,6 @@ public class JsonAdaptedPet {
 
     private final String name;
     private final String species;
-    private final String ownerIndex;
     private final String remark;
     private final List<JsonAdaptedSession> sessions = new ArrayList<>();
 
@@ -37,7 +35,6 @@ public class JsonAdaptedPet {
             @JsonProperty("sessions") List<JsonAdaptedSession> sessions) {
         this.name = name;
         this.species = species;
-        this.ownerIndex = ownerIndex;
         this.remark = remark;
         if (sessions != null) {
             this.sessions.addAll(sessions);
@@ -50,7 +47,6 @@ public class JsonAdaptedPet {
     public JsonAdaptedPet(Pet source) {
         name = source.getName().value;
         species = source.getSpecies().value;
-        ownerIndex = source.getOwnerIndex().value;
         remark = source.getRemark().value;
         sessions.addAll(source.getSessions().stream()
                 .map(JsonAdaptedSession::new)
@@ -81,12 +77,6 @@ public class JsonAdaptedPet {
         }
         final Species modelSpecies = new Species(species);
 
-        if (ownerIndex == null) {
-            throw new IllegalValueException(
-                    String.format(MISSING_FIELD_MESSAGE_FORMAT, OwnerIndex.class.getSimpleName()));
-        }
-        final OwnerIndex modelOwnerIndex = new OwnerIndex(ownerIndex);
-
         if (remark == null) {
             throw new IllegalValueException(
                     String.format(MISSING_FIELD_MESSAGE_FORMAT, PetRemark.class.getSimpleName()));
@@ -96,7 +86,7 @@ public class JsonAdaptedPet {
         }
         final PetRemark modelRemark = new PetRemark(remark);
 
-        Pet pet = new Pet(modelName, modelSpecies, modelOwnerIndex, modelRemark);
+        Pet pet = new Pet(modelName, modelSpecies, modelRemark);
 
         for (JsonAdaptedSession adaptedSession : sessions) {
             Session session = adaptedSession.toModelType();

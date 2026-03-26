@@ -24,5 +24,10 @@
         <Insets left="20" />
       </padding>
     </Label>
+    <Label fx:id="fee" styleClass="cell_small_label">
+      <padding>
+        <Insets left="20" />
+      </padding>
+    </Label>
   </VBox>
 </HBox>

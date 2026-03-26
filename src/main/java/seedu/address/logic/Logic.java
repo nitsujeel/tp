@@ -10,6 +10,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.person.Person;
 import seedu.address.model.pet.Pet;
+import seedu.address.model.service.Service;
 import seedu.address.model.session.Session;
 
 /**
@@ -37,6 +38,9 @@ public interface Logic {
 
     /** Returns an unmodifiable view of the flat pet list derived from all persons */
     ObservableList<Pet> getFilteredPetList();
+
+    /** Returns an unmodifiable view of the service list. */
+    ObservableList<Service> getServiceList();
 
     /** Returns an unmodifiable observable view of the currently displayed pet's sessions. */
     ObservableList<Session> getSessionList();

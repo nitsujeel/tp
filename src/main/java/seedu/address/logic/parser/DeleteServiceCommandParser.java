@@ -1,9 +1,8 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_SERVICE_INDEX;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SERVICE_NAME;
 
-import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.DeleteServiceCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -20,17 +19,17 @@ public class DeleteServiceCommandParser implements Parser<DeleteServiceCommand> 
      */
     @Override
     public DeleteServiceCommand parse(String args) throws ParseException {
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_SERVICE_INDEX);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_SERVICE_NAME);
 
         try {
-            if (argMultimap.getValue(PREFIX_SERVICE_INDEX).isEmpty() || !argMultimap.getPreamble().isEmpty()) {
+            if (argMultimap.getValue(PREFIX_SERVICE_NAME).isEmpty() || !argMultimap.getPreamble().isEmpty()) {
                 throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                         DeleteServiceCommand.MESSAGE_USAGE));
             }
 
-            argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_SERVICE_INDEX);
-            Index serviceIndex = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_SERVICE_INDEX).get());
-            return new DeleteServiceCommand(serviceIndex);
+            argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_SERVICE_NAME);
+            String serviceName = ParserUtil.parseServiceName(argMultimap.getValue(PREFIX_SERVICE_NAME).get());
+            return new DeleteServiceCommand(serviceName);
         } catch (ParseException pe) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     DeleteServiceCommand.MESSAGE_USAGE), pe);

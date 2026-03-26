@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(./gradlew compileJava)"
+      "Bash(./gradlew compileJava)",
+      "Bash(./gradlew test:*)",
+      "Bash(./gradlew processResources --info)",
+      "Bash(./gradlew clean:*)",
+      "Bash(taskkill /F /IM java.exe)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(taskkill //F //IM java.exe)"
     ]
   }
 }

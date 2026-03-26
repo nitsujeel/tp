@@ -18,7 +18,6 @@ public class CliSyntax {
     public static final Prefix PREFIX_PET_REMARK = new Prefix("pr/");
     public static final Prefix PREFIX_SERVICE_NAME = new Prefix("sn/");
     public static final Prefix PREFIX_SERVICE_PRICE = new Prefix("sp/");
-    public static final Prefix PREFIX_SERVICE_INDEX = new Prefix("si/");
-    public static final Prefix PREFIX_START_TIME = new Prefix("start/");
-    public static final Prefix PREFIX_END_TIME = new Prefix("end/");
+    public static final Prefix PREFIX_START_TIME = new Prefix("st/");
+    public static final Prefix PREFIX_END_TIME = new Prefix("et/");
 }

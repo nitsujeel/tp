@@ -58,8 +58,8 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_deleteService() throws Exception {
         DeleteServiceCommand command = (DeleteServiceCommand) parser.parseCommand(
-                DeleteServiceCommand.COMMAND_WORD + " si/" + INDEX_FIRST_PERSON.getOneBased());
-        assertEquals(new DeleteServiceCommand(INDEX_FIRST_PERSON), command);
+                DeleteServiceCommand.COMMAND_WORD + " sn/Fur trim");
+        assertEquals(new DeleteServiceCommand("Fur trim"), command);
     }
 
     @Test

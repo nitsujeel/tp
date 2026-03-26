@@ -5,12 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
-import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.address.commons.core.index.Index;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -22,12 +19,19 @@ import seedu.address.model.util.SampleDataUtil;
  */
 public class DeleteServiceCommandTest {
 
+    private static final String EXISTING_SERVICE_NAME = "Base service charge";
+    private static final String ANOTHER_EXISTING_SERVICE_NAME = "Shampoo";
+    private static final String NON_EXISTENT_SERVICE_NAME = "Non existent service";
+
     private final Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
 
     @Test
-    public void execute_validIndexUnfilteredList_success() {
-        Service serviceToDelete = model.getServiceList().get(INDEX_FIRST_PERSON.getZeroBased());
-        DeleteServiceCommand deleteServiceCommand = new DeleteServiceCommand(INDEX_FIRST_PERSON);
+    public void execute_validServiceName_success() {
+        Service serviceToDelete = model.getServiceList().stream()
+                .filter(service -> service.getName().equals(EXISTING_SERVICE_NAME))
+                .findFirst()
+                .get();
+        DeleteServiceCommand deleteServiceCommand = new DeleteServiceCommand(EXISTING_SERVICE_NAME);
 
         String expectedMessage = String.format(DeleteServiceCommand.MESSAGE_DELETE_SERVICE_SUCCESS, serviceToDelete);
 
@@ -38,24 +42,23 @@ public class DeleteServiceCommandTest {
     }
 
     @Test
-    public void execute_invalidIndexUnfilteredList_throwsCommandException() {
-        Index outOfBoundsIndex = Index.fromOneBased(model.getServiceList().size() + 1);
-        DeleteServiceCommand deleteServiceCommand = new DeleteServiceCommand(outOfBoundsIndex);
+    public void execute_invalidServiceName_throwsCommandException() {
+        DeleteServiceCommand deleteServiceCommand = new DeleteServiceCommand(NON_EXISTENT_SERVICE_NAME);
 
         assertCommandFailure(deleteServiceCommand, model,
-                DeleteServiceCommand.MESSAGE_INVALID_SERVICE_DISPLAYED_INDEX);
+                DeleteServiceCommand.MESSAGE_INVALID_SERVICE_NAME);
     }
 
     @Test
     public void equals() {
-        DeleteServiceCommand deleteFirstCommand = new DeleteServiceCommand(INDEX_FIRST_PERSON);
-        DeleteServiceCommand deleteSecondCommand = new DeleteServiceCommand(INDEX_SECOND_PERSON);
+        DeleteServiceCommand deleteFirstCommand = new DeleteServiceCommand(EXISTING_SERVICE_NAME);
+        DeleteServiceCommand deleteSecondCommand = new DeleteServiceCommand(ANOTHER_EXISTING_SERVICE_NAME);
 
         // same object -> returns true
         assertTrue(deleteFirstCommand.equals(deleteFirstCommand));
 
         // same values -> returns true
-        DeleteServiceCommand deleteFirstCommandCopy = new DeleteServiceCommand(INDEX_FIRST_PERSON);
+        DeleteServiceCommand deleteFirstCommandCopy = new DeleteServiceCommand(EXISTING_SERVICE_NAME);
         assertTrue(deleteFirstCommand.equals(deleteFirstCommandCopy));
 
         // different types -> returns false
@@ -64,15 +67,15 @@ public class DeleteServiceCommandTest {
         // null -> returns false
         assertFalse(deleteFirstCommand.equals(null));
 
-        // different index -> returns false
+        // different service name -> returns false
         assertFalse(deleteFirstCommand.equals(deleteSecondCommand));
     }
 
     @Test
     public void toStringMethod() {
-        Index targetIndex = Index.fromOneBased(1);
-        DeleteServiceCommand deleteServiceCommand = new DeleteServiceCommand(targetIndex);
-        String expected = DeleteServiceCommand.class.getCanonicalName() + "{targetIndex=" + targetIndex + "}";
+        DeleteServiceCommand deleteServiceCommand = new DeleteServiceCommand(EXISTING_SERVICE_NAME);
+        String expected = DeleteServiceCommand.class.getCanonicalName()
+                + "{targetServiceName=" + EXISTING_SERVICE_NAME + "}";
         assertEquals(expected, deleteServiceCommand.toString());
     }
 }

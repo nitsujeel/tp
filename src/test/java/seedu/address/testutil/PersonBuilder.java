@@ -2,7 +2,9 @@ package seedu.address.testutil;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
@@ -51,7 +53,9 @@ public class PersonBuilder {
         email = personToCopy.getEmail();
         address = personToCopy.getAddress();
         tags = new HashSet<>(personToCopy.getTags());
-        pets = new HashSet<>(personToCopy.getPets());
+        pets = personToCopy.getPets().stream()
+                .map(p -> new PetBuilder(p).build())
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     /**
@@ -74,7 +78,7 @@ public class PersonBuilder {
      * Sets the {@code Pets} of the {@code Person} that we are building.
      */
     public PersonBuilder withPets(Pet ... pets) {
-        this.pets = new HashSet<>(Arrays.asList(pets));
+        this.pets = new LinkedHashSet<>(Arrays.asList(pets));
         return this;
     }
 

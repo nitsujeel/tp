@@ -33,7 +33,6 @@ public class DeleteCommand extends Command {
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_DELETE_PET_SUCCESS = "Deleted Pet: %1$s";
-    public static final String MESSAGE_INVALID_PET_DISPLAYED_INDEX = "The pet index provided is invalid";
 
     private final Index targetIndex;
     private final Optional<Index> petIndex;
@@ -81,13 +80,13 @@ public class DeleteCommand extends Command {
 
     private void validateOwnerIndex(List<Person> lastShownList) throws CommandException {
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            throw new CommandException(Messages.MESSAGE_INVALID_OWNER_DISPLAYED_INDEX);
         }
     }
 
     private void validatePetIndex(List<Pet> petList) throws CommandException {
         if (petIndex.get().getZeroBased() >= petList.size()) {
-            throw new CommandException(MESSAGE_INVALID_PET_DISPLAYED_INDEX);
+            throw new CommandException(Messages.MESSAGE_INVALID_PET_DISPLAYED_INDEX);
         }
     }
 

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -56,7 +57,7 @@ public class AddPetCommand extends Command {
         int ownerIndex = Integer.parseInt(toAdd.getOwnerIndex().value) - 1;
 
         if (ownerIndex < 0 || ownerIndex >= lastShownList.size()) {
-            throw new CommandException("The owner index provided is invalid.");
+            throw new CommandException(Messages.MESSAGE_INVALID_OWNER_DISPLAYED_INDEX);
         }
 
         Person owner = lastShownList.get(ownerIndex);

@@ -1,6 +1,5 @@
 package seedu.address.testutil;
 
-import seedu.address.model.pet.OwnerIndex;
 import seedu.address.model.pet.Pet;
 import seedu.address.model.pet.PetName;
 import seedu.address.model.pet.PetRemark;
@@ -12,12 +11,10 @@ import seedu.address.model.pet.Species;
 public class PetBuilder {
 
     public static final String DEFAULT_PET_NAME = "Buddy";
-    public static final String DEFAULT_OWNER_INDEX = "85355255";
-    public static final String DEFAULT_PET_REMARK = "amy@gmail.com";
-    public static final String DEFAULT_SPECIES = "123, Jurong West Ave 6, #08-111";
+    public static final String DEFAULT_PET_REMARK = "Friendly";
+    public static final String DEFAULT_SPECIES = "Dog";
 
     private PetName petName;
-    private OwnerIndex ownerIndex;
     private PetRemark petRemark;
     private Species species;
 
@@ -26,7 +23,6 @@ public class PetBuilder {
      */
     public PetBuilder() {
         petName = new PetName(DEFAULT_PET_NAME);
-        ownerIndex = new OwnerIndex(DEFAULT_OWNER_INDEX);
         petRemark = new PetRemark(DEFAULT_PET_REMARK);
         species = new Species(DEFAULT_SPECIES);
     }
@@ -36,7 +32,6 @@ public class PetBuilder {
      */
     public PetBuilder(Pet petToCopy) {
         petName = petToCopy.getName();
-        ownerIndex = petToCopy.getOwnerIndex();
         petRemark = petToCopy.getRemark();
         species = petToCopy.getSpecies();
     }
@@ -46,14 +41,6 @@ public class PetBuilder {
      */
     public PetBuilder withName(String petName) {
         this.petName = new PetName(petName);
-        return this;
-    }
-
-    /**
-     * Sets the {@code OwnerIndex} of the {@code Pet} that we are building.
-     */
-    public PetBuilder withOwnerIndex(String ownerIndex) {
-        this.ownerIndex = new OwnerIndex(ownerIndex);
         return this;
     }
 
@@ -74,7 +61,7 @@ public class PetBuilder {
     }
 
     public Pet build() {
-        return new Pet(petName, species, ownerIndex, petRemark);
+        return new Pet(petName, species, petRemark);
     }
 
 }

@@ -86,6 +86,7 @@ public class DeleteCommand extends Command {
     }
 
     private void validatePetIndex(List<Pet> petList) throws CommandException {
+        assert petIndex.isPresent();
         if (petIndex.get().getZeroBased() >= petList.size()) {
             throw new CommandException(MESSAGE_INVALID_PET_DISPLAYED_INDEX);
         }

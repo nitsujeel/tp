@@ -20,7 +20,7 @@ import seedu.address.model.service.Service;
  */
 public class AddSessionCommand extends Command {
 
-    public static final String COMMAND_WORD = "addsessions";
+    public static final String COMMAND_WORD = "addsession";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a session. "
             + "Parameters: "
@@ -34,8 +34,8 @@ public class AddSessionCommand extends Command {
             + PREFIX_PET_INDEX + "1 "
             + PREFIX_START_TIME + "2026-03-25 10:00 "
             + PREFIX_END_TIME + "2026-03-25 11:00 "
-            + PREFIX_SERVICE_NAME + "Washing "
-            + PREFIX_SERVICE_NAME + "Grooming";
+            + PREFIX_SERVICE_NAME + "Shampoo "
+            + PREFIX_SERVICE_NAME + "Fur trim";
 
     public static final String MESSAGE_INVALID_OWNER_INDEX = "Invalid owner index";
     public static final String MESSAGE_INVALID_PET_INDEX = "Invalid pet index";

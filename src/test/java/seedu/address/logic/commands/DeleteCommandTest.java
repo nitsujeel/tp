@@ -133,7 +133,8 @@ public class DeleteCommandTest {
         DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON, lastPetIndex);
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PET_SUCCESS, petToDelete);
 
-        Model expectedModel = new ModelManager(new AddressBook(modelWithMultiplePets.getAddressBook()), new UserPrefs());
+        Model expectedModel = new ModelManager(new AddressBook(modelWithMultiplePets.getAddressBook()),
+                new UserPrefs());
         Set<Pet> updatedPets = new LinkedHashSet<>(owner.getPets());
         updatedPets.remove(petToDelete);
         Person editedOwner = new Person(owner.getName(), owner.getPhone(), owner.getEmail(),

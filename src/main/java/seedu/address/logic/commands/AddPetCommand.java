@@ -69,8 +69,7 @@ public class AddPetCommand extends Command {
 
         Person owner = lastShownList.get(ownerIndex.getZeroBased());
         requireNonNull(owner);
-        requireNonNull(owner.getPets()); 
-
+        requireNonNull(owner.getPets());
         if (owner.hasPet(toAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_PET);
         }

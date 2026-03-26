@@ -86,7 +86,7 @@ public class JsonAdaptedPet {
         }
         final PetRemark modelRemark = new PetRemark(remark);
 
-        Pet pet = new Pet(modelName, modelSpecies, modelOwnerIndex, modelRemark);
+        Pet pet = new Pet(modelName, modelSpecies, modelRemark);
 
         for (JsonAdaptedSession adaptedSession : sessions) {
             Session session = adaptedSession.toModelType();

@@ -98,14 +98,14 @@ public class AddSessionCommand extends Command {
 
         Pet pet = owner.getPetList().get(petIndex.getZeroBased());
 
-        validateServices(model.getServiceList());
+        double totalFee = calculateTotalFee(model.getServiceList());
 
         pet.addSession(new Session(startTime, endTime, totalFee));
         model.setDisplayedPet(pet,
                 String.format(SESSION_PANEL_TITLE_FORMAT, owner.getName().fullName, pet.getName().value));
 
-        return new CommandResult(String.format(MESSAGE_SUCCESS,
-                owner.getName(), pet.getName(), startTime, endTime));
+        String baseMessage = String.format(MESSAGE_SUCCESS, owner.getName(), pet.getName(), startTime, endTime);
+        return new CommandResult(baseMessage + String.format(". Total fee: $%.2f", totalFee));
     }
 
     /**
@@ -126,13 +126,12 @@ public class AddSessionCommand extends Command {
     /**
      * Calculates the total fee for all services in this session.
      *
-     * @param availServices Services currently stored in the model   the reference object with which to compare.
+     * @param availServices Services currently stored in the model
      * @return Total fee for the selected services
      * @throws CommandException If any requested service does not exist
      */
     private double calculateTotalFee(List<Service> availServices) throws CommandException {
         double totalFee = 0;
-
         for (String serviceName : serviceNames) {
             Service matchedService = findServiceByName(availServices, serviceName);
             if (matchedService == null) {

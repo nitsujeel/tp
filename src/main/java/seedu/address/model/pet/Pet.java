@@ -1,10 +1,15 @@
 package seedu.address.model.pet;
 
+import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.session.Session;
 
 /**
  * Represents a Pet in the address book.
@@ -19,6 +24,9 @@ public class Pet {
 
     // Data fields
     private PetRemark remark;
+
+    // Session list — mutable, excluded from equals/hashCode to preserve Set membership stability
+    private final List<Session> sessions = new ArrayList<>();
 
     /**
      * Every field must be present and not null.
@@ -45,6 +53,21 @@ public class Pet {
 
     public PetRemark getRemark() {
         return remark;
+    }
+
+    /**
+     * Returns an unmodifiable view of this pet's sessions.
+     */
+    public List<Session> getSessions() {
+        return Collections.unmodifiableList(sessions);
+    }
+
+    /**
+     * Adds a session to this pet's session list.
+     */
+    public void addSession(Session session) {
+        requireNonNull(session);
+        sessions.add(session);
     }
 
     /**

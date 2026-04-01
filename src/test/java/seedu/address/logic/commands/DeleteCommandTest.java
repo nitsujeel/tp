@@ -189,7 +189,8 @@ public class DeleteCommandTest {
         Model modelWithOwnerWithoutPets = getModelWithNoPetsForThirdOwner();
         DeleteCommand deleteCommand = new DeleteCommand(Index.fromOneBased(3), INDEX_FIRST_PERSON);
 
-        assertCommandFailure(deleteCommand, modelWithOwnerWithoutPets, DeleteCommand.MESSAGE_INVALID_PET_DISPLAYED_INDEX);
+        assertCommandFailure(deleteCommand, modelWithOwnerWithoutPets,
+                DeleteCommand.MESSAGE_INVALID_PET_DISPLAYED_INDEX);
     }
 
     @Test
@@ -240,7 +241,8 @@ public class DeleteCommandTest {
         Model baseModel = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         Person owner = baseModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Set<Pet> updatedPets = new LinkedHashSet<>(owner.getPets());
-        updatedPets.add(new PetBuilder().withName("Nova").withSpecies("Cat").withPetRemark("Playful").build());
+        updatedPets.add(new PetBuilder().withName("Nova").withSpecies("Cat").
+                withPetRemark("Playful").build());
 
         Person editedOwner = new Person(owner.getName(), owner.getPhone(), owner.getEmail(),
                 owner.getAddress(), owner.getTags(), updatedPets);

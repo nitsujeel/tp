@@ -8,7 +8,8 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
-import static seedu.address.testutil.TypicalIndexes.INDEX_THIRD_PERSON;
+
+import java.util.LinkedHashSet;
 
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +19,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
-import seedu.address.model.util.SampleDataUtil;
+import seedu.address.testutil.TypicalAddressBooks;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
@@ -28,7 +29,7 @@ public class UpdatePetRemarkCommandTest {
 
     @Test
     public void execute_validOwnerAndPetIndex_success() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         String newRemark = "Very friendly and loves to play fetch";
 
         UpdatePetRemarkCommand command = new UpdatePetRemarkCommand(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON,
@@ -41,7 +42,7 @@ public class UpdatePetRemarkCommandTest {
 
     @Test
     public void execute_secondOwnerSecondPet_success() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         Person secondOwner = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
 
         // Only test if second owner has at least one pet
@@ -58,7 +59,7 @@ public class UpdatePetRemarkCommandTest {
 
     @Test
     public void execute_invalidOwnerIndexTooLarge_throwsCommandException() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         int outOfBoundsOwnerIndex = model.getFilteredPersonList().size() + 1;
         Index invalidOwnerIndex = Index.fromOneBased(outOfBoundsOwnerIndex);
 
@@ -70,7 +71,7 @@ public class UpdatePetRemarkCommandTest {
 
     @Test
     public void execute_invalidPetIndexTooLarge_throwsCommandException() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         Person owner = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         int outOfBoundsPetIndex = owner.getPetCount() + 1;
         Index invalidPetIndex = Index.fromOneBased(outOfBoundsPetIndex);
@@ -83,21 +84,16 @@ public class UpdatePetRemarkCommandTest {
 
     @Test
     public void execute_ownerWithNoPets_throwsCommandException() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
-        // INDEX_THIRD_PERSON is Charlotte Oliveiro who has no pets
-        Person thirdOwner = model.getFilteredPersonList().get(INDEX_THIRD_PERSON.getZeroBased());
+        Model model = getModelWithNoPetsForThirdOwner();
+        UpdatePetRemarkCommand command = new UpdatePetRemarkCommand(Index.fromOneBased(3), INDEX_FIRST_PERSON,
+                "Some remark");
 
-        if (thirdOwner.getPetCount() == 0) {
-            UpdatePetRemarkCommand command = new UpdatePetRemarkCommand(INDEX_THIRD_PERSON, INDEX_FIRST_PERSON,
-                    "Some remark");
-
-            assertCommandFailure(command, model, "The pet index provided is invalid.");
-        }
+        assertCommandFailure(command, model, "The pet index provided is invalid.");
     }
 
     @Test
     public void execute_emptyRemark_success() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         String emptyRemark = "";
 
         UpdatePetRemarkCommand command = new UpdatePetRemarkCommand(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON,
@@ -110,7 +106,7 @@ public class UpdatePetRemarkCommandTest {
 
     @Test
     public void execute_longRemark_success() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         String longRemark = "This is a very long remark about the pet. It includes detailed information "
                 + "about the pet's health, behavior, and special needs. The pet is friendly with other dogs "
                 + "and cats. It needs special nutrition for joint health. It should be exercised for at "
@@ -126,7 +122,7 @@ public class UpdatePetRemarkCommandTest {
 
     @Test
     public void execute_remarkWithSpecialCharacters_success() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         String specialRemark = "Pet needs: @home, #vaccination, $medicine";
 
         UpdatePetRemarkCommand command = new UpdatePetRemarkCommand(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON,
@@ -139,7 +135,7 @@ public class UpdatePetRemarkCommandTest {
 
     @Test
     public void execute_updateRemarkMultipleTimes_success() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
 
         // First update
         String remark1 = "Initial remark";
@@ -284,7 +280,7 @@ public class UpdatePetRemarkCommandTest {
 
     @Test
     public void execute_validIndicesWithWhitespaceRemark_success() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         String remarkWithWhitespace = "   Remark with spaces   ";
 
         UpdatePetRemarkCommand command = new UpdatePetRemarkCommand(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON,
@@ -297,7 +293,7 @@ public class UpdatePetRemarkCommandTest {
 
     @Test
     public void execute_validIndicesWithNumericRemark_success() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         String numericRemark = "Age: 5, Weight: 25kg";
 
         UpdatePetRemarkCommand command = new UpdatePetRemarkCommand(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON,
@@ -306,5 +302,16 @@ public class UpdatePetRemarkCommandTest {
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
 
         assertCommandSuccess(command, model, UpdatePetRemarkCommand.MESSAGE_SUCCESS, expectedModel);
+    }
+
+    private Model getModelWithNoPetsForThirdOwner() {
+        Model baseModel = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
+        Person owner = baseModel.getFilteredPersonList().get(2);
+        Person editedOwner = new Person(owner.getName(), owner.getPhone(), owner.getEmail(),
+                owner.getAddress(), owner.getTags(), new LinkedHashSet<>());
+        Model modelWithOwnerWithoutPets = new ModelManager(
+                new AddressBook(baseModel.getAddressBook()), new UserPrefs());
+        modelWithOwnerWithoutPets.setPerson(owner, editedOwner);
+        return modelWithOwnerWithoutPets;
     }
 }

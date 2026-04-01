@@ -24,7 +24,7 @@ public class UpdatePetRemarkCommand extends Command {
             + "Parameters: "
             + PREFIX_OWNER_INDEX + "OWNER_INDEX "
             + PREFIX_PET_INDEX + "PET_INDEX "
-            + PREFIX_PET_REMARK + "PET_REMARK\n "
+            + PREFIX_PET_REMARK + "PET_REMARK\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_OWNER_INDEX + "1 "
             + PREFIX_PET_INDEX + "1 "

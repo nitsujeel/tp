@@ -12,7 +12,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.service.Service;
-import seedu.address.model.util.SampleDataUtil;
+import seedu.address.testutil.TypicalAddressBooks;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for {@code DeleteServiceCommand}.
@@ -23,7 +23,7 @@ public class DeleteServiceCommandTest {
     private static final String ANOTHER_EXISTING_SERVICE_NAME = "Shampoo";
     private static final String NON_EXISTENT_SERVICE_NAME = "Non existent service";
 
-    private final Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+    private final Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
 
     @Test
     public void execute_validServiceName_success() {

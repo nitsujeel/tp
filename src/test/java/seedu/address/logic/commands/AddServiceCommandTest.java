@@ -14,7 +14,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.service.Service;
-import seedu.address.model.util.SampleDataUtil;
+import seedu.address.testutil.TypicalAddressBooks;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for {@code AddServiceCommand}.
@@ -42,7 +42,7 @@ public class AddServiceCommandTest {
 
     @Test
     public void execute_duplicateService_throwsCommandException() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         Service duplicateService = model.getServiceList().get(0);
         AddServiceCommand addServiceCommand = new AddServiceCommand(duplicateService);
 

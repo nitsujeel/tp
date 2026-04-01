@@ -8,7 +8,6 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
-import static seedu.address.testutil.TypicalIndexes.INDEX_THIRD_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.LinkedHashSet;
@@ -25,8 +24,8 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
 import seedu.address.model.pet.Pet;
-import seedu.address.model.util.SampleDataUtil;
 import seedu.address.testutil.PetBuilder;
+import seedu.address.testutil.TypicalAddressBooks;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
@@ -105,7 +104,7 @@ public class DeleteCommandTest {
 
     @Test
     public void execute_validPetIndexUnfilteredList_success() {
-        Model modelWithPets = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model modelWithPets = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         Person owner = modelWithPets.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         List<Pet> ownerPets = owner.getPetList();
         Pet petToDelete = ownerPets.get(INDEX_FIRST_PERSON.getZeroBased());
@@ -146,7 +145,7 @@ public class DeleteCommandTest {
 
     @Test
     public void execute_validPetIndexFilteredList_success() {
-        Model modelWithPets = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model modelWithPets = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         showPersonAtIndex(modelWithPets, INDEX_FIRST_PERSON);
 
         Person owner = modelWithPets.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
@@ -168,15 +167,17 @@ public class DeleteCommandTest {
 
     @Test
     public void execute_invalidPetIndexUnfilteredList_throwsCommandException() {
-        Model modelWithPets = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
-        DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON);
+        Model modelWithPets = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
+        Person owner = modelWithPets.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Index outOfBoundsPetIndex = Index.fromOneBased(owner.getPetCount() + 1);
+        DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON, outOfBoundsPetIndex);
 
         assertCommandFailure(deleteCommand, modelWithPets, DeleteCommand.MESSAGE_INVALID_PET_DISPLAYED_INDEX);
     }
 
     @Test
     public void execute_invalidOwnerIndexPetDeletion_throwsCommandException() {
-        Model modelWithPets = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model modelWithPets = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         Index outOfBoundOwnerIndex = Index.fromOneBased(modelWithPets.getFilteredPersonList().size() + 1);
         DeleteCommand deleteCommand = new DeleteCommand(outOfBoundOwnerIndex, INDEX_FIRST_PERSON);
 
@@ -185,10 +186,10 @@ public class DeleteCommandTest {
 
     @Test
     public void execute_petDeletionForOwnerWithNoPets_throwsCommandException() {
-        Model modelWithPets = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
-        DeleteCommand deleteCommand = new DeleteCommand(INDEX_THIRD_PERSON, INDEX_FIRST_PERSON);
+        Model modelWithOwnerWithoutPets = getModelWithNoPetsForThirdOwner();
+        DeleteCommand deleteCommand = new DeleteCommand(Index.fromOneBased(3), INDEX_FIRST_PERSON);
 
-        assertCommandFailure(deleteCommand, modelWithPets, DeleteCommand.MESSAGE_INVALID_PET_DISPLAYED_INDEX);
+        assertCommandFailure(deleteCommand, modelWithOwnerWithoutPets, DeleteCommand.MESSAGE_INVALID_PET_DISPLAYED_INDEX);
     }
 
     @Test
@@ -236,7 +237,7 @@ public class DeleteCommandTest {
     }
 
     private Model getModelWithMultiplePetsForFirstOwner() {
-        Model baseModel = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model baseModel = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         Person owner = baseModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Set<Pet> updatedPets = new LinkedHashSet<>(owner.getPets());
         updatedPets.add(new PetBuilder().withName("Nova").withSpecies("Cat").withPetRemark("Playful").build());
@@ -246,5 +247,15 @@ public class DeleteCommandTest {
         Model modelWithMultiplePets = new ModelManager(new AddressBook(baseModel.getAddressBook()), new UserPrefs());
         modelWithMultiplePets.setPerson(owner, editedOwner);
         return modelWithMultiplePets;
+    }
+
+    private Model getModelWithNoPetsForThirdOwner() {
+        Model baseModel = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
+        Person owner = baseModel.getFilteredPersonList().get(2);
+        Person editedOwner = new Person(owner.getName(), owner.getPhone(), owner.getEmail(),
+                owner.getAddress(), owner.getTags(), new LinkedHashSet<>());
+        Model modelWithOwnerWithoutPets = new ModelManager(new AddressBook(baseModel.getAddressBook()), new UserPrefs());
+        modelWithOwnerWithoutPets.setPerson(owner, editedOwner);
+        return modelWithOwnerWithoutPets;
     }
 }

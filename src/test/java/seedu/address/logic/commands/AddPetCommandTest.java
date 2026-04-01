@@ -21,8 +21,8 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
 import seedu.address.model.pet.Pet;
-import seedu.address.model.util.SampleDataUtil;
 import seedu.address.testutil.PetBuilder;
+import seedu.address.testutil.TypicalAddressBooks;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
@@ -32,7 +32,7 @@ public class AddPetCommandTest {
 
     @Test
     public void execute_newPet_success() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         Pet petToAdd = new PetBuilder().withName("Nova").withSpecies("Dog").withPetRemark("Energetic").build();
         AddPetCommand command = new AddPetCommand(INDEX_FIRST_PERSON, petToAdd);
 
@@ -50,7 +50,7 @@ public class AddPetCommandTest {
 
     @Test
     public void execute_duplicatePetForSameOwner_throwsCommandException() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         Person owner = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Pet duplicatePet = owner.getPetList().get(0);
 
@@ -62,7 +62,7 @@ public class AddPetCommandTest {
 
     @Test
     public void execute_duplicatePetForDifferentOwner_success() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         Person firstOwner = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Pet petToAdd = firstOwner.getPetList().get(0);
 
@@ -83,7 +83,7 @@ public class AddPetCommandTest {
 
     @Test
     public void execute_invalidOwnerIndex_throwsCommandException() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         Pet petToAdd = new PetBuilder().build();
         Index outOfBoundsOwnerIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
 
@@ -131,7 +131,7 @@ public class AddPetCommandTest {
 
     @Test
     public void execute_addPetToLastOwner_success() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         int lastOwnerIndex = model.getFilteredPersonList().size();
         Index lastIndex = Index.fromOneBased(lastOwnerIndex);
 
@@ -152,7 +152,7 @@ public class AddPetCommandTest {
 
     @Test
     public void execute_addMultiplePetsToSameOwner_success() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         Person owner = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
 
         // Add first new pet
@@ -185,7 +185,7 @@ public class AddPetCommandTest {
     /*
     @Test
     public void execute_invalidOwnerIndexZero_throwsCommandException() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         Pet petToAdd = new PetBuilder().build();
         Index zeroIndex = Index.fromZeroBased(0);
 
@@ -200,7 +200,7 @@ public class AddPetCommandTest {
 
     @Test
     public void execute_petWithEmptySpecies_success() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         Pet petToAdd = new PetBuilder().withSpecies("").build();
         AddPetCommand command = new AddPetCommand(INDEX_FIRST_PERSON, petToAdd);
 
@@ -218,7 +218,7 @@ public class AddPetCommandTest {
 
     @Test
     public void execute_petWithEmptyRemark_success() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         Pet petToAdd = new PetBuilder().withPetRemark("").build();
         AddPetCommand command = new AddPetCommand(INDEX_FIRST_PERSON, petToAdd);
 
@@ -236,7 +236,7 @@ public class AddPetCommandTest {
 
     @Test
     public void execute_invalidOwnerIndexNegative_throwsCommandException() {
-        Model model = new ModelManager(SampleDataUtil.getSampleAddressBook(), new UserPrefs());
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         Pet petToAdd = new PetBuilder().build();
         Index negativeIndex = Index.fromZeroBased(-1);
 

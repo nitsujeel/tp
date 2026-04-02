@@ -590,6 +590,18 @@ testers are expected to do more *exploratory* testing.
    1. Test case: `addowner on/Jane Tan ph/81234567 em/jane.tan@gmail.com`<br>
       Expected: Command fails due to invalid format (missing required `ad/` prefix).
 
+### Editing an owner
+
+1. Editing the fields of an existing owner
+
+   1. Prerequisites: Use sample data (contains owner `Alex Yeoh` at index 1).
+
+   1. Test case: `edit oi/1 em/yeohalex@example.com` <br>
+      Expected: `Alex Yeoh`'s email updates to `yeohalex@example.com`.
+
+   1. Test case: `edit oi/1 oi/` <br>
+      Expected: `Alex Yeoh`'s existing `friends` tag is removed.
+
 ### Finding an owner
 
 1. Finding owners using owner fields

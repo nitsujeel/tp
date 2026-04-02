@@ -54,8 +54,9 @@
               <Insets top="5" right="10" bottom="5" left="10" />
             </padding>
             <Label text="Available Commands:" styleClass="cell_small_label" />
-            <Label text="• help" styleClass="cell_small_label" /><Label text="• addowner on/NAME ph/PHONE em/EMAIL ad/ADDRESS [ot/TAG]..." styleClass="cell_small_label" />
-            <Label text="• addowner on/NAME ph/PHONE em/EMAIL ad/ADDRESS [ot/TAG]..." styleClass="cell_small_label" /><Label text="• addowner on/NAME ph/PHONE em/EMAIL ad/ADDRESS [ot/TAG]..." styleClass="cell_small_label" />
+            <Label text="• help" styleClass="cell_small_label" />
+            <Label text="• addowner on/NAME ph/PHONE em/EMAIL ad/ADDRESS [ot/TAG]..." styleClass="cell_small_label" />
+            <Label text="• editowner oi/OWNER_INDEX [on/NAME] [ph/PHONE] [em/EMAIL] [ad/ADDRESS] [ot/TAG]..." styleClass="cell_small_label" />
             <Label text="• addpet oi/OWNER_INDEX pn/NAME ps/SPECIES [pr/REMARKS]" styleClass="cell_small_label" />
             <Label text="• update oi/OWNER_INDEX pi/PET_INDEX pr/REMARKS" styleClass="cell_small_label" />
             <Label text="• delete oi/OWNER_INDEX [pi/PET_INDEX]" styleClass="cell_small_label" />

@@ -13,8 +13,8 @@ Package " "<<Rectangle>>{
     Class Commons LOGIC_COLOR_T2
 }
 
-Class "<$user>" as User MODEL_COLOR_T2
-Class "<$documents>" as File UI_COLOR_T1
+Class "<$user>\nuser" as User MODEL_COLOR_T2
+Class "<$documents>\nlocal file" as File UI_COLOR_T1
 
 
 UI -[#green]> Logic

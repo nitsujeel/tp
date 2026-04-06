@@ -62,7 +62,8 @@
             <Label text="• addservice sn/SERVICE_NAME sp/SERVICE_PRICE" styleClass="cell_small_label" />
             <Label text="• addsession oi/OWNER_INDEX pi/PET_INDEX st/START_TIME et/END_TIME [sn/SERVICE_NAME]..."
                    styleClass="cell_small_label" />
-            <Label text="• delete oi/OWNER_INDEX [pi/PET_INDEX [si/SESSION_INDEX]] OR delete sn/SERVICE_NAME" styleClass="cell_small_label" />
+            <Label text="• delete oi/OWNER_INDEX [pi/PET_INDEX [si/SESSION_INDEX]]" styleClass="cell_small_label" />
+            <Label text="• delete sn/SERVICE_NAME" styleClass="cell_small_label" />
             <Label text="• find [on/NAME] [ph/PHONE] [em/EMAIL] [ad/ADDRESS] [ot/TAG]... [oi/OWNER_INDEX] [pn/NAME] [ps/SPECIES] [pr/REMARKS]"
                    styleClass="cell_small_label" />
             <Label text="• list" styleClass="cell_small_label" />

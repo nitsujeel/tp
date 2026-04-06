@@ -50,6 +50,10 @@ public class JsonAdaptedSession {
         if (endTime == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, "endTime"));
         }
-        return new Session(startTime, endTime, fee);
+        try {
+            return new Session(startTime, endTime, fee);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalValueException(e.getMessage(), e);
+        }
     }
 }

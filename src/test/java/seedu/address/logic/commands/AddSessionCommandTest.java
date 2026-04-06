@@ -31,6 +31,10 @@ public class AddSessionCommandTest {
     private static final String VALID_END = "2026-03-25 11:00";
     private static final String VALID_START_2 = "2026-03-26 14:00";
     private static final String VALID_END_2 = "2026-03-26 15:00";
+    private static final String OVERLAPPING_START = "2026-03-25 10:30";
+    private static final String OVERLAPPING_END = "2026-03-25 11:30";
+    private static final String ADJACENT_START = "2026-03-25 11:00";
+    private static final String ADJACENT_END = "2026-03-25 12:00";
 
     private Model model;
 
@@ -119,6 +123,45 @@ public class AddSessionCommandTest {
                 INDEX_FIRST_PERSON, outOfBound, VALID_START, VALID_END);
 
         assertCommandFailure(command, model, Messages.MESSAGE_INVALID_PET_DISPLAYED_INDEX);
+    }
+
+    @Test
+    public void execute_endBeforeStart_throwsCommandException() {
+        AddSessionCommand command = new AddSessionCommand(
+                INDEX_FIRST_PERSON, INDEX_FIRST_PERSON, VALID_END, VALID_START);
+
+        assertCommandFailure(command, model, Session.MESSAGE_INVALID_TIME_RANGE);
+    }
+
+    @Test
+    public void execute_overlappingSession_throwsCommandException() throws Exception {
+        AddSessionCommand first = new AddSessionCommand(
+                INDEX_FIRST_PERSON, INDEX_FIRST_PERSON, VALID_START, VALID_END);
+        first.execute(model);
+
+        AddSessionCommand overlapping = new AddSessionCommand(
+                INDEX_FIRST_PERSON, INDEX_FIRST_PERSON, OVERLAPPING_START, OVERLAPPING_END);
+
+        assertCommandFailure(overlapping, model, AddSessionCommand.MESSAGE_OVERLAPPING_SESSION);
+    }
+
+    @Test
+    public void execute_adjacentSession_success() throws Exception {
+        AddSessionCommand first = new AddSessionCommand(
+                INDEX_FIRST_PERSON, INDEX_FIRST_PERSON, VALID_START, VALID_END);
+        AddSessionCommand adjacent = new AddSessionCommand(
+                INDEX_FIRST_PERSON, INDEX_FIRST_PERSON, ADJACENT_START, ADJACENT_END);
+
+        first.execute(model);
+        adjacent.execute(model);
+
+        Pet pet = model.getFilteredPersonList()
+                .get(INDEX_FIRST_PERSON.getZeroBased())
+                .getPetList()
+                .get(INDEX_FIRST_PERSON.getZeroBased());
+
+        assertEquals(2, pet.getSessions().size());
+        assertEquals(new Session(ADJACENT_START, ADJACENT_END), pet.getSessions().get(1));
     }
 
     @Test

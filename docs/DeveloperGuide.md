@@ -9,7 +9,8 @@ title: Developer Guide
 
 ## **Acknowledgements**
 
-* This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org).
+* This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org). We used the codebase as a starting point for our implementation of Owners.
+* The Sessions feature was inspired by NUS CS2103/T Project Duke's [Level 7](https://nus-cs2103-ay2526-s2.github.io/website/se-book-adapted/projectDuke/index.html#level-7-save) and [Level 8](https://nus-cs2103-ay2526-s2.github.io/website/se-book-adapted/projectDuke/index.html#level-8-dates-and-times). A similar implementation was used in understanding user inputs as dates and times for our Sessions.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -265,16 +266,15 @@ _{Explain here how the data archiving feature will be implemented}_
 **Target user profile**:
 
 * is an independent pet day care and/or boarding service manager
-* has a need to manage multiple pet owners and their pets daily
-* prefers desktop apps over other types
-* can type fast
-* prefers typing to mouse interactions
-* is reasonably comfortable using CLI apps
+* has to manage multiple owners, pets, service offerings, and care sessions daily
+* prefers desktop apps over mobile/web apps for operational work
+* can type fast and is comfortable with keyboard-driven workflows and prefixed command formats
 
 **Value proposition**: 
 
-* manage pet owners and their pets faster than a typical mouse/GUI driven app
-* optimised for pet day care and boarding service managers who prefer CLI
+* manage owners, pets, services, and sessions faster than typical mouse-driven workflows
+* schedule care sessions with optional services and automatically computed total fees
+* keep all operational data in a local JSON file with automatic persistence and no internet dependency
 
 ### User stories
 
@@ -499,13 +499,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Performance and Responsiveness**
 * PetLog should start and show the main window within 2.5 s on a baseline machine (8 GB RAM, SSD).
 * Commands should complete and update UI within 500 ms for a dataset size of up to 1000 owners + 5000 pets.
-* Opening an existing data file of up to 1000 owners + 5000 pets should complete within 5.0 s.
+* Opening an existing data file of up to 1000 owners + 2000 pets + 50 services + 2000 sessions should complete within 5.0 s.
 
 **Usability and Learnability**
-* A user with typing speed above 40 words per minute for regular English text (i.e. not code, not system admin commands) should be able to accomplish their tasks faster using commands than using the mouse.
+* A user with typing speed above 50 words per minute for regular English text (i.e. not code, not system admin commands) should be able to accomplish their tasks faster using commands than using the mouse.
 * Command error messages should be understandable to the user, by displaying the field/prefix at fault or the constraint violated.
 * Success and error messages should be consistent to the user, by following a consistent template across commands.
-* New users should be able to add an owner, add a pet, update a pet’s remarks, find an owner/pet, and delete an owner/pet in <= 10 minutes after reading the quickstart guide.
+* New users should be able to add an owner, add a pet, add a service and add a session in <= 10 minutes after reading the quickstart guide.
 
 **Reliability and Data Integrity**
 * When exiting PetLog via the exit command, 100% of data should persist across the app restarts.
@@ -539,13 +539,19 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * **Pet** - An animal registered under an owner in PetLog.
 * **Species** - The type of animal (e.g., Cat, Dog, Guinea Pig).
 * **Remarks** - Optional free-text notes attached to a pet or owner record (e.g., special care instructions, dietary needs).
-* **Index** - A 1-based integer used to refer to a specific owner or pet in the displayed list.
+* **Owner index (`oi/`)** - A 1-based index into the currently displayed owner list.
+* **Pet index (`pi/`)** - A 1-based index into the selected owner's pet list.
+* **Service** - A globally defined care item (e.g., shampoo, nail trim) with a non-negative price.
+* **Service catalogue** - The full list of services stored in PetLog and reused by sessions.
+* **Session** - A care booking/event attached to one pet, with start/end times and a computed total fee.
+* **Fee** - The monetary total for a session, computed from selected services at session creation.
 * **CLI** - Command Line Interface; a text-based interface where users interact by typing commands.
 * **GUI** - Graphical User Interface; the visual interface displayed to the user.
 * **Mainstream OS** - Windows, Linux, Unix, MacOS.
 * **Care Session** - A period during which a pet is checked in to the boarding/day care service.
 * **Tag** - A short label attached to an owner record for categorisation (e.g., regular, VIP).
 * **Prefix** - A short keyword followed by `/` used to identify a parameter in a command (e.g., `n/`, `ph/`).
+* **Home folder** - The directory where the JAR runs and where PetLog stores `data/petlog.json`.
 
 --------------------------------------------------------------------------------------------------------------------
 

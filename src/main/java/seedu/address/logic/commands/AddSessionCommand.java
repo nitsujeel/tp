@@ -30,8 +30,8 @@ public class AddSessionCommand extends Command {
             + "Parameters: "
             + PREFIX_OWNER_INDEX + "OWNER_INDEX "
             + PREFIX_PET_INDEX + "PET_INDEX "
-            + PREFIX_START_TIME + "START_TIME "
-            + PREFIX_END_TIME + "END_TIME "
+            + PREFIX_START_TIME + "START_TIME (yyyy-MM-dd HH:mm) "
+            + PREFIX_END_TIME + "END_TIME (yyyy-MM-dd HH:mm) "
             + "[" + PREFIX_SERVICE_NAME + "SERVICE_NAME]...\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_OWNER_INDEX + "1 "
@@ -43,7 +43,8 @@ public class AddSessionCommand extends Command {
 
     public static final String MESSAGE_SUCCESS = "Session added for %s's pet %s from %s to %s";
     public static final String MESSAGE_UNKNOWN_SERVICE = "Unknown service: %1$s";
-    public static final String SESSION_PANEL_TITLE_FORMAT = "%s's %s — Sessions";
+    public static final String MESSAGE_OVERLAPPING_SESSION =
+            "This session overlaps with an existing session for the selected pet.";
 
     private final Index ownerIndex;
     private final Index petIndex;
@@ -99,8 +100,18 @@ public class AddSessionCommand extends Command {
         Pet pet = owner.getPetList().get(petIndex.getZeroBased());
 
         double totalFee = calculateTotalFee(model.getServiceList());
+        Session newSession;
+        try {
+            newSession = new Session(startTime, endTime, totalFee);
+        } catch (IllegalArgumentException e) {
+            throw new CommandException(e.getMessage(), e);
+        }
 
-        pet.addSession(new Session(startTime, endTime, totalFee));
+        if (pet.hasOverlappingSession(newSession)) {
+            throw new CommandException(MESSAGE_OVERLAPPING_SESSION);
+        }
+
+        pet.addSession(newSession);
         model.updateDisplayedSessions(model.getFilteredPersonList());
 
         String baseMessage = String.format(MESSAGE_SUCCESS, owner.getName(), pet.getName(), startTime, endTime);

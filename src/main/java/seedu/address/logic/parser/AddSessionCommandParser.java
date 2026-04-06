@@ -45,8 +45,8 @@ public class AddSessionCommandParser implements Parser<AddSessionCommand> {
 
         Index ownerIndex = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_OWNER_INDEX).get());
         Index petIndex = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_PET_INDEX).get());
-        String startTime = argMultimap.getValue(PREFIX_START_TIME).get();
-        String endTime = argMultimap.getValue(PREFIX_END_TIME).get();
+        String startTime = ParserUtil.parseDateTime(argMultimap.getValue(PREFIX_START_TIME).get());
+        String endTime = ParserUtil.parseDateTime(argMultimap.getValue(PREFIX_END_TIME).get());
 
         List<String> serviceNames = argMultimap.getAllValues(PREFIX_SERVICE_NAME);
         return new AddSessionCommand(ownerIndex, petIndex, startTime, endTime, serviceNames);

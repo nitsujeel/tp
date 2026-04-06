@@ -14,18 +14,17 @@ This project is for [CS2013T (Software Engineering)](https://nus-cs2103-ay2526-s
 
 [[github](https://github.com/cedarglass)]
 
-* Role: Trusty Teammate
-* Responsibilities: Expert for Logic and Model components
+* Role: Model & Domain Engineer
+* Responsibilities: Handled core entities and invariants, relationship rules, equality/hashcode correctness, and domain-level defensive programming.
 
 ### Zhihan
 
 <img src="images/aurorazurary.png" width="200px">
 
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[github](http://github.com/aurorazurary)]
 
-* Role: Team Lead
-* Responsibilities: UI
+* Role: UI Engineer
+* Responsibilities: Designed application front-end, command feedback display, and UX consistency for features, including edge-case rendering.
 
 ### Hein Htet Zaw (Colin)
 
@@ -33,18 +32,17 @@ This project is for [CS2013T (Software Engineering)](https://nus-cs2103-ay2526-s
 
 [[github](http://github.com/sr-71-black-bird)] 
 
-* Role: Developer and Trusty Teammate
-* Responsibilities: Data, Overview
+* Role: Logic & Parser Engineer
+* Responsibilities: Implemented command parsing/validation, command error/success messages, and parser test coverage.
 
 ### Jiaqi
 
 <img src="images/nana-6381.png" width="200px">
 
 [[github](http://github.com/nana-6381)]
-[[portfolio](team/nana-6381.md)]
 
-* Role: Teammate </3
-* Responsibilities: Dev Ops + Threading
+* Role: Storage & Data Engineer
+* Responsibilities: Operated JSON adaptation, save/load integrity, migration/default seeding behavior, and corruption/invalid-data handling paths.
 
 ### Justin Lee
 
@@ -52,5 +50,5 @@ This project is for [CS2013T (Software Engineering)](https://nus-cs2103-ay2526-s
 
 [[github](http://github.com/nitsujeel)]
 
-* Role: Developer
-* Responsibilities: UI
+* Role: QA / Release / Docs Engineer
+* Responsibilities: Managed integration/regression test plans, CI health, release notes, DG/UG updates, and manual test appendix maintenance.

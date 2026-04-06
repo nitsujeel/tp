@@ -14,6 +14,10 @@ import static seedu.address.testutil.TypicalPersons.BOB;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.model.pet.Pet;
+import seedu.address.model.pet.PetName;
+import seedu.address.model.pet.PetRemark;
+import seedu.address.model.pet.Species;
 import seedu.address.testutil.PersonBuilder;
 
 public class PersonTest {
@@ -32,8 +36,12 @@ public class PersonTest {
         // null -> returns false
         assertFalse(ALICE.isSamePerson(null));
 
-        // same name, all other attributes different -> returns true
+        // same name and phone, all other attributes different -> returns true
         Person editedAlice = new PersonBuilder(ALICE).withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB)
+                .withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_HUSBAND).build();
+        assertFalse(ALICE.isSamePerson(editedAlice));
+
+        editedAlice = new PersonBuilder(ALICE).withEmail(VALID_EMAIL_BOB)
                 .withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_HUSBAND).build();
         assertTrue(ALICE.isSamePerson(editedAlice));
 
@@ -41,13 +49,18 @@ public class PersonTest {
         editedAlice = new PersonBuilder(ALICE).withName(VALID_NAME_BOB).build();
         assertFalse(ALICE.isSamePerson(editedAlice));
 
-        // name differs in case, all other attributes same -> returns false
+        // name differs in case, phone same -> returns true
         Person editedBob = new PersonBuilder(BOB).withName(VALID_NAME_BOB.toLowerCase()).build();
-        assertFalse(BOB.isSamePerson(editedBob));
+        assertTrue(BOB.isSamePerson(editedBob));
 
-        // name has trailing spaces, all other attributes same -> returns false
+        // name has trailing spaces, phone same -> returns true
         String nameWithTrailingSpaces = VALID_NAME_BOB + " ";
         editedBob = new PersonBuilder(BOB).withName(nameWithTrailingSpaces).build();
+        assertTrue(BOB.isSamePerson(editedBob));
+
+        // same name ignoring case, different phone -> returns false
+        editedBob = new PersonBuilder(BOB).withName(VALID_NAME_BOB.toLowerCase()).withPhone("33333333")
+                .build();
         assertFalse(BOB.isSamePerson(editedBob));
     }
 
@@ -88,6 +101,19 @@ public class PersonTest {
         // different tags -> returns false
         editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_HUSBAND).build();
         assertFalse(ALICE.equals(editedAlice));
+    }
+
+    @Test
+    public void hasPet() {
+        Pet existingPet = new Pet(new PetName("Buddy"), new Species("Dog"), new PetRemark("Friendly"));
+        Person person = new PersonBuilder().withPets(existingPet).build();
+        Pet sameIdentityPet = new Pet(new PetName("Buddy"), new Species("Dog"), new PetRemark("Needs medication"));
+        Pet normalizedIdentityPet = new Pet(new PetName("buddy"), new Species("dog"), new PetRemark("Shy"));
+        Pet differentPet = new Pet(new PetName("Buddy"), new Species("Cat"), new PetRemark("Friendly"));
+
+        assertTrue(person.hasPet(sameIdentityPet));
+        assertTrue(person.hasPet(normalizedIdentityPet));
+        assertFalse(person.hasPet(differentPet));
     }
 
     @Test

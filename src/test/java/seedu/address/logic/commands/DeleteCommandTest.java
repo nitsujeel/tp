@@ -24,6 +24,7 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
 import seedu.address.model.pet.Pet;
+import seedu.address.model.session.Session;
 import seedu.address.testutil.PetBuilder;
 import seedu.address.testutil.TypicalAddressBooks;
 
@@ -194,10 +195,43 @@ public class DeleteCommandTest {
     }
 
     @Test
+    public void execute_validSessionIndexUnfilteredList_success() throws Exception {
+        Model modelWithSessions = getModelWithTwoSessionsForFirstPet();
+        Person owner = modelWithSessions.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Pet pet = owner.getPetList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Session sessionToDelete = pet.getSessions().get(INDEX_FIRST_PERSON.getZeroBased());
+        Session sessionToKeep = pet.getSessions().get(INDEX_SECOND_PERSON.getZeroBased());
+
+        DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON, INDEX_FIRST_PERSON);
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_SESSION_SUCCESS, sessionToDelete);
+
+        CommandResult result = deleteCommand.execute(modelWithSessions);
+        assertEquals(expectedMessage, result.getFeedbackToUser());
+
+        Pet updatedPet = modelWithSessions.getFilteredPersonList()
+                .get(INDEX_FIRST_PERSON.getZeroBased())
+                .getPetList()
+                .get(INDEX_FIRST_PERSON.getZeroBased());
+        assertEquals(1, updatedPet.getSessions().size());
+        assertEquals(sessionToKeep, updatedPet.getSessions().get(INDEX_FIRST_PERSON.getZeroBased()));
+    }
+
+    @Test
+    public void execute_invalidSessionIndexUnfilteredList_throwsCommandException() {
+        Model modelWithSessions = getModelWithTwoSessionsForFirstPet();
+        DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON,
+                Index.fromOneBased(3));
+
+        assertCommandFailure(deleteCommand, modelWithSessions, DeleteCommand.MESSAGE_INVALID_SESSION_DISPLAYED_INDEX);
+    }
+
+    @Test
     public void equals() {
         DeleteCommand deleteFirstCommand = new DeleteCommand(INDEX_FIRST_PERSON);
         DeleteCommand deleteSecondCommand = new DeleteCommand(INDEX_SECOND_PERSON);
         DeleteCommand deleteFirstPetCommand = new DeleteCommand(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON);
+        DeleteCommand deleteFirstSessionCommand = new DeleteCommand(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON,
+                INDEX_FIRST_PERSON);
 
         // same object -> returns true
         assertTrue(deleteFirstCommand.equals(deleteFirstCommand));
@@ -205,6 +239,9 @@ public class DeleteCommandTest {
         // same values -> returns true
         DeleteCommand deleteFirstCommandCopy = new DeleteCommand(INDEX_FIRST_PERSON);
         assertTrue(deleteFirstCommand.equals(deleteFirstCommandCopy));
+        DeleteCommand deleteFirstSessionCommandCopy = new DeleteCommand(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON,
+                INDEX_FIRST_PERSON);
+        assertTrue(deleteFirstSessionCommand.equals(deleteFirstSessionCommandCopy));
 
         // different types -> returns false
         assertFalse(deleteFirstCommand.equals(1));
@@ -217,6 +254,7 @@ public class DeleteCommandTest {
 
         // different pet index state -> returns false
         assertFalse(deleteFirstCommand.equals(deleteFirstPetCommand));
+        assertFalse(deleteFirstPetCommand.equals(deleteFirstSessionCommand));
     }
 
     @Test
@@ -224,7 +262,7 @@ public class DeleteCommandTest {
         Index targetIndex = Index.fromOneBased(1);
         DeleteCommand deleteCommand = new DeleteCommand(targetIndex);
         String expected = DeleteCommand.class.getCanonicalName()
-                + "{targetIndex=" + targetIndex + ", petIndex=Optional.empty}";
+                + "{targetIndex=" + targetIndex + ", petIndex=Optional.empty, sessionIndex=Optional.empty}";
         assertEquals(expected, deleteCommand.toString());
     }
 
@@ -260,5 +298,18 @@ public class DeleteCommandTest {
                 new UserPrefs());
         modelWithOwnerWithoutPets.setPerson(owner, editedOwner);
         return modelWithOwnerWithoutPets;
+    }
+
+    private Model getModelWithTwoSessionsForFirstPet() {
+        Model modelWithSessions = new ModelManager(new AddressBook(TypicalAddressBooks.getTypicalPetLog()),
+                new UserPrefs());
+        Pet firstPet = modelWithSessions.getFilteredPersonList()
+                .get(INDEX_FIRST_PERSON.getZeroBased())
+                .getPetList()
+                .get(INDEX_FIRST_PERSON.getZeroBased());
+        firstPet.addSession(new Session("2026-04-01 10:00", "2026-04-01 11:00", 20.0));
+        firstPet.addSession(new Session("2026-04-01 11:00", "2026-04-01 12:00", 15.0));
+        modelWithSessions.updateDisplayedSessions(modelWithSessions.getFilteredPersonList());
+        return modelWithSessions;
     }
 }

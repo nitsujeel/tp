@@ -14,9 +14,9 @@ public class Messages {
 
     public static final String MESSAGE_UNKNOWN_COMMAND = "Unknown command.";
     public static final String MESSAGE_INVALID_COMMAND_FORMAT = "Invalid command format.\n%1$s";
-    public static final String MESSAGE_INVALID_PERSON_DISPLAYED_INDEX = "Person index is invalid.";
     public static final String MESSAGE_INVALID_OWNER_DISPLAYED_INDEX = "Owner index is invalid.";
     public static final String MESSAGE_INVALID_PET_DISPLAYED_INDEX = "Pet index is invalid.";
+    public static final String MESSAGE_INVALID_SESSION_DISPLAYED_INDEX = "Session index is invalid.";
     public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "Listed %1$d owner(s).";
     public static final String MESSAGE_DUPLICATE_FIELDS =
                 "Duplicate values provided for single-valued field(s): ";

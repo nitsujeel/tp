@@ -65,6 +65,13 @@ public class Pet {
     }
 
     /**
+     * Removes the session at the given 0-based index from this pet's session list.
+     */
+    public void removeSession(int sessionIndex) {
+        sessions.remove(sessionIndex);
+    }
+
+    /**
      * Returns true if the given session overlaps with any existing session for this pet.
      */
     public boolean hasOverlappingSession(Session session) {

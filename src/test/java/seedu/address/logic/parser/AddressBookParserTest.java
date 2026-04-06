@@ -17,7 +17,6 @@ import seedu.address.logic.commands.AddOwnerCommand;
 import seedu.address.logic.commands.AddServiceCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteCommand;
-import seedu.address.logic.commands.DeleteServiceCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
@@ -57,10 +56,10 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommand_deleteService() throws Exception {
-        DeleteServiceCommand command = (DeleteServiceCommand) parser.parseCommand(
-                DeleteServiceCommand.COMMAND_WORD + " sn/Fur trim");
-        assertEquals(new DeleteServiceCommand("Fur trim"), command);
+    public void parseCommand_deleteServiceViaDelete() throws Exception {
+        DeleteCommand command = (DeleteCommand) parser.parseCommand(
+                DeleteCommand.COMMAND_WORD + " sn/Fur trim");
+        assertEquals(new DeleteCommand("Fur trim"), command);
     }
 
     @Test

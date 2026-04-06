@@ -152,19 +152,24 @@ Format: `list`
 Use `list` after using `find` to go back to displaying all owners and pets.
 </div>
 
-### Deleting an owner or pet : `delete`
+### Deleting an owner, pet or session : `delete`
 
-Deletes the specified person from the address book.
+Deletes the specified owner, pet or session from PetLog.
 
-Format: `delete INDEX`
+Format: `delete oi/OWNER_INDEX [pi/PET_INDEX [si/SESSION_INDEX]]`
 
-* Deletes the person at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
-* The index **must be a positive integer** 1, 2, 3, …​
+* Using `delete` with just the `oi/` prefix deletes the owner at `OWNER_INDEX`.
+* Using `delete` with the `oi/` and `pi/` prefixes deletes the pet at `PET_INDEX` of that owner.
+* Using `delete` with just `oi/`, `pi/` and `si/` prefixes deletes the session at `SESSION_INDEX` of that pet.
+* The index refers to the index number shown in the displayed lists.
+* The indexes **must be a positive integer** 1, 2, 3, …​
 
 Examples:
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* `delete oi/4` deletes the 4th owner listed.
+* `delete oi/4 pi/2` deletes the 2nd pet listed of the 4th owner.
+* `delete oi/4 pi/2 si/3` deletes the 3rd session listed of the 2nd pet of the 4th owner.
+* `list` followed by `delete oi/2` deletes the 2nd owner listed.
+* `find Betsy` followed by `delete oi/1 pi/2` deletes the 2nd pet of the 1st owner in the results of the `find` command.
 
 ### Adding a service : `addservice`
 
@@ -178,16 +183,16 @@ Format: `addservice sn/SERVICE_NAME sp/SERVICE_PRICE`
 Examples:
 * `addservice sn/Ear Cleaning sp/12.50` adds Ear Cleaning as a service to the list with the price of 12.50.
 
-### Deleting a service : `deleteservice`
+### Deleting a service : `delete`
 
-Deletes a service from the list of services.
+Deletes a service from the service catalogue.
 
-Format: `deleteservice sn/SERVICE_NAME`
+Format: `delete sn/SERVICE_NAME`
 
 * The service name must match that of an existing service in the list (case-insensitive).
 
 Examples:
-* `deleteservice sn/Ear Cleaning` deletes Ear Cleaning as a service from the list (if it exists).
+* `delete sn/Ear Cleaning` deletes Ear Cleaning as a service from the list (if it exists).
 
 ### Clearing all owners, pets, services and sessions : `clear`
 
@@ -270,6 +275,6 @@ Action | Format, Examples
 **List All Owners and Pets** | `list`
 **Delete Owner or Pet** | `delete INDEX`<br> e.g., `delete 3`
 **Add Service** | `addservice sn/SERVICE_NAME sp/SERVICE_PRICE` <br> e.g., `addservice sn/Ear Cleaning sp/12.50`
-**Delete Service** | `deleteservice sn/SERVICE_NAME` <br> e.g., `deleteservice sn/Ear Cleaning`
+**Delete Service** | `delete sn/SERVICE_NAME` <br> e.g., `delete sn/Ear Cleaning`
 **Clear All Entries** | `clear`
 **Exit Application** | `exit`

@@ -658,13 +658,13 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: Service `Ear cleaning` exists (add it first if needed).
 
-   1. Test case: `deleteservice sn/Ear cleaning`<br>
+   1. Test case: `delete sn/Ear cleaning`<br>
       Expected: Service is removed from the service panel.
 
-   1. Test case: `deleteservice sn/Nonexistent Service`<br>
+   1. Test case: `delete sn/Nonexistent Service`<br>
       Expected: Command fails with `Service name not found.`
 
-   1. Test case: `deleteservice`<br>
+   1. Test case: `delete`<br>
       Expected: Command fails due to invalid format (missing required `sn/` prefix).
 
 ### Deleting an owner

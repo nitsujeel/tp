@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
-import seedu.address.model.session.Session;
+import seedu.address.model.session.SessionEntry;
 
 /**
  * An UI component that displays information of a {@code Session}.
@@ -13,12 +13,14 @@ public class SessionCard extends UiPart<Region> {
 
     private static final String FXML = "SessionCard.fxml";
 
-    public final Session session;
+    public final SessionEntry entry;
 
     @FXML
     private HBox cardPane;
     @FXML
     private Label id;
+    @FXML
+    private Label ownerPet;
     @FXML
     private Label startTime;
     @FXML
@@ -27,14 +29,15 @@ public class SessionCard extends UiPart<Region> {
     private Label fee;
 
     /**
-     * Creates a {@code SessionCard} with the given {@code Session} and index to display.
+     * Creates a {@code SessionCard} with the given {@code SessionEntry} and index to display.
      */
-    public SessionCard(Session session, int displayedIndex) {
+    public SessionCard(SessionEntry entry, int displayedIndex) {
         super(FXML);
-        this.session = session;
+        this.entry = entry;
         id.setText(displayedIndex + ". ");
-        startTime.setText("Start: " + session.getStartTime());
-        endTime.setText("End:   " + session.getEndTime());
-        fee.setText(String.format("Fee:   $%.2f", session.getFee()));
+        ownerPet.setText(entry.ownerName() + " — " + entry.petName());
+        startTime.setText("Start: " + entry.session().getStartTime());
+        endTime.setText("End:   " + entry.session().getEndTime());
+        fee.setText(String.format("Fee:   $%.2f", entry.session().getFee()));
     }
 }

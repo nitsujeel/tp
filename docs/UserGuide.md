@@ -3,7 +3,9 @@ layout: page
 title: User Guide
 ---
 
-AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
+PetLog is a **desktop app for managing pet care operations**, optimised for use via a **Command Line Interface** (CLI)
+while keeping the benefits of a **Graphical User Interface** (GUI).
+It helps you manage owners, pets, services, and sessions quickly with structured commands.
 
 * Table of Contents
 {:toc}
@@ -15,24 +17,28 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 1. Ensure you have Java `17` or above installed in your Computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+1. Download the latest `petlog.jar` file from the [releases page](https://github.com/AY2526S2-CS2103T-W14-1/tp/releases).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+1. Copy the file to the folder you want to use as the _home folder_ for PetLog.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
+1. Open a command terminal, `cd` into the folder you put the jar file in, and run `java -jar petlog.jar`.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
 1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
-   * `list` : Lists all contacts.
+   * `list` : Lists all owners and pets.
 
-   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+   * `addowner on/John Doe ph/98765432 em/johnd@example.com ad/John street, block 123, #01-01` : Adds an owner.
 
-   * `delete 3` : Deletes the 3rd contact shown in the current list.
+   * `addpet oi/1 pn/Molly ps/Golden Retriever pr/cuddly` : Adds a pet under owner index `1`.
 
-   * `clear` : Deletes all contacts.
+   * `addservice sn/Nail trim sp/10.00` : Adds a new available service.
+
+   * `addsession oi/1 pi/1 st/2026-04-06 10:00 et/2026-04-06 11:00 sn/Nail trim` : Adds a session for a pet.
+
+   * `clear` : Clears all owners, pets, services, and sessions.
 
    * `exit` : Exits the app.
 
@@ -47,16 +53,16 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 **:information_source: Notes about the command format:**<br>
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
-  e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
+  e.g. in `addowner on/NAME`, `NAME` is a parameter which can be used as `addowner on/John Doe`.
 
 * Items in square brackets are optional.<br>
-  e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
+  e.g. `on/NAME [ot/TAG]` can be used as `on/John Doe ot/priority` or as `on/John Doe`.
 
 * Items with `…`​ after them can be used multiple times including zero times.<br>
-  e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
+  e.g. `[ot/TAG]…​` can be used as ` ` (i.e. 0 times), `ot/friend`, `ot/friend ot/family` etc.
 
 * Parameters can be in any order.<br>
-  e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
+  e.g. if the command specifies `on/NAME ph/PHONE_NUMBER`, `ph/PHONE_NUMBER on/NAME` is also acceptable.
 
 * Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
@@ -66,12 +72,11 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
 ### Viewing help : `help`
 
-Shows a message explaining how to access the help page.
+Shows a message explaining how to access the help page:
 
 ![help message](images/helpMessage.png)
 
 Format: `help`
-
 
 ### Adding an owner: `addowner`
 
@@ -79,39 +84,11 @@ Adds an owner to PetLog.
 
 Format: `addowner on/NAME ph/PHONE_NUMBER em/EMAIL ad/ADDRESS [ot/TAG]…​`
 
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-A person can have any number of tags (including 0)
-</div>
+* An owner can have any number of tags (including 0)
 
 Examples:
 * `addowner on/John Doe ph/98765432 em/johnd@example.com ad/John street, block 123, #01-01`
 * `addowner on/Betsy Crowe ot/friend em/betsycrowe@example.com ad/Newgate Prison ph/1234567 ot/criminal`
-
-### Adding a pet under an owner: `addpet`
-
-Format: `addpet oi/OWNER_INDEX pn/PET_NAME ps/SPECIES [pr/REMARKS]`
-
-* Adds the pet with specified `NAME` and `SPECIES` (and optional remark) under the owner specified by `OWNER_INDEX`
-
-Examples:
-* `addpet oi/2 pn/Molly ps/Golden Retriever pr/cuddly` Adds a cuddly golden retriever called Molly under the second
-    owner in the list of owners; Molly will have a remark that she is cuddly.
-* `addpet oi/1 pn/Dave ps/Great Dane` Adds a great dane called Dave under the first owner on the list of owners.
-
-### Update a remark of a pet: `update`
-
-Format: `update oi/OWNER_INDEX pi/PET_INDEX pr/REMARKS`
-
-* Sets the remark of the pet specified by `PET_INDEX` under the owner specified by `OWNER_INDEX`.
-
-Examples:
-* `update oi/1 pi/3 pr/aggressive` Updates the remark of the third pet listed under the first owner to be "aggressive". 
-
-### Listing all persons : `list`
-
-Shows a list of all owners and pets in PetLog.
-
-Format: `list`
 
 ### Editing an owner : `editowner`
 
@@ -129,7 +106,27 @@ Examples:
 *  `editowner oi/1 ph/91234567 em/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `editowner oi/2 on/Betsy Crower ot/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
-### Locating persons by name: `find`
+### Adding a pet under an owner: `addpet`
+
+Format: `addpet oi/OWNER_INDEX pn/PET_NAME ps/SPECIES [pr/REMARKS]`
+
+* Adds the pet with specified `NAME` and `SPECIES` (and optional remark) under the owner specified by `OWNER_INDEX`
+
+Examples:
+* `addpet oi/2 pn/Molly ps/Golden Retriever pr/cuddly` Adds a cuddly golden retriever called Molly under the second
+    owner in the list of owners; Molly will have a remark that she is cuddly.
+* `addpet oi/1 pn/Dave ps/Great Dane` Adds a great dane called Dave under the first owner on the list of owners.
+
+### Updating the remarks of a pet: `update`
+
+Format: `update oi/OWNER_INDEX pi/PET_INDEX pr/REMARKS`
+
+* Sets the remark of the pet specified by `PET_INDEX` under the owner specified by `OWNER_INDEX`.
+
+Examples:
+* `update oi/1 pi/3 pr/aggressive` updates the remark of the third pet listed under the first owner to be "aggressive".
+
+### Locating an owner or pet: `find`
 
 Finds owners or pets whose details match all the given keywords.
 
@@ -142,10 +139,20 @@ Format: `find [on/OWNER_NAME] [ph/PHONE] [em/EMAIL] [ad/ADDRESS] [ot/OWNER_TAG]�
 
 Examples:
 * `find on/Hans ps/Dog` returns pets that are `Dogs` whose owner's name contains `Hans`.
-* `find ad/Serangoon` returns owners whose address contains `Serangoon`.
-  ![[result for 'find ad/Toa Payoh']](images/findAdToaPayohResult.png)
+* `find ad/Serangoon` returns owners whose address contains `Serangoon` _(screenshot cropped to show relevant UI elements)_:
+  ![[result for 'find ad/Serangoon']](images/findAdSerangoon.png)
 
-### Deleting a person : `delete`
+### Listing all persons : `list`
+
+Shows a list of all owners and pets in PetLog.
+
+Format: `list`
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Use `list` after using `find` to go back to displaying all owners and pets.
+</div>
+
+### Deleting an owner or pet : `delete`
 
 Deletes the specified person from the address book.
 
@@ -182,11 +189,15 @@ Format: `deleteservice sn/SERVICE_NAME`
 Examples:
 * `deleteservice sn/Ear Cleaning` deletes Ear Cleaning as a service from the list (if it exists).
 
-### Clearing all entries : `clear`
+### Clearing all owners, pets, services and sessions : `clear`
 
-Clears all entries from the address book.
+Clears all owners, pets, services and sessions from PetLog.
 
 Format: `clear`
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Use `clear` to remove the sample data when you first run PetLog so you can start putting in your own! 
+</div>
 
 ### Exiting the program : `exit`
 
@@ -196,18 +207,18 @@ Format: `exit`
 
 ### Saving the data
 
-AddressBook data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
+PetLog data is saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
 
 ### Editing the data file
 
-AddressBook data are saved automatically as a JSON file `[JAR file location]/data/petlog.json`. Advanced users are welcome to update data directly by editing that data file.
+PetLog data is saved automatically as a JSON file `[JAR file location]/data/petlog.json`. Advanced users are welcome to update data directly by editing that data file.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
-Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+If your changes to the data file makes its format invalid, PetLog will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
+Furthermore, certain edits can cause the PetLog to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
 
-### Archiving data files `[coming in v2.0]`
+### Archiving data files `[Coming Soon]`
 
 _Details coming soon ..._
 
@@ -215,15 +226,34 @@ _Details coming soon ..._
 
 ## FAQ
 
-**Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder.
+**Q**: How do I transfer my PetLog data to another computer?<br>
+**A**: Install PetLog in the other computer, and overwrite the empty data file it creates with the file that contains the data of your previous PetLog home folder.
+
+**Q**: Why do indexes become invalid after I run `find`?
+**A**: Indexes always refer to the current displayed list. After filtering, either use the new filtered indexes or run `list` to reset the indexes, before deleting/updating.
+
+**Q**: How do I clear a pet’s remark?
+**A**: Use an empty remark value: `update oi/OWNER_INDEX pi/PET_INDEX pr/`.
+
+**Q**: Can I create a session without services?
+**A**: Yes. `sn/` is optional in `addsession`. If no services are provided, the session fee is `0.00`.
+
+**Q**: How is a session’s total fee calculated?
+**A**: It is the sum of all services provided in the `addsession` command, using the current service prices in PetLog.
+
+**Q**: Why does `addsession` fail with “Unknown service”?
+**A**: At least one `sn/SERVICE_NAME` does not exist in your current service list. Add it first with `addservice`, or correct the name.
+
+**Q**: Where is my data stored, and how do I reset to sample data?
+**A**: Data is stored at `[JAR location]/data/petlog.json`. Back up that file to migrate data. To reset to sample data, delete `petlog.json` and restart the app.
 
 --------------------------------------------------------------------------------------------------------------------
 
 ## Known issues
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
-2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
+
+1. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -231,13 +261,15 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add Owner** | `addowner on/NAME ph/PHONE_NUMBER em/EMAIL ad/ADDRESS [ot/TAG]…​` <br> e.g., `addowner on/John Doe ph/98765432 em/johnd@example.com ad/John street, block 123, #01-01`
-**Add Pet** | `addpet oi/OWNER_INDEX pn/PET_NAME ps/SPECIES [pr/REMARKS]` <br> e.g., `addpet oi/2 pn/Molly ps/Golden Retriever pr/cuddly`
-**Add Service** | `addservice sn/SERVICE_NAME sp/SERVICE_PRICE` <br> e.g., `addservice sn/Ear Cleaning sp/12.50`
-**Clear** | `clear`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Delete Service** | `deleteservice sn/SERVICE_NAME` <br> e.g., `deleteservice sn/Ear Cleaning`
-**Edit Owner** | `editowner oi/OWNER_INDEX [on/NAME] [ph/PHONE] [em/EMAIL] [ad/ADDRESS] [t/TAG]…​`<br> e.g., `editowner oi/1 ph/91234567 em/johndoe@example.com`
-**Find** | `find [on/OWNER_NAME] [ph/PHONE] [em/EMAIL] [ad/ADDRESS] [ot/OWNER_TAG]…​ [oi/OWNER_INDEX] [pn/PET_NAME] [ps/SPECIES] [pr/REMARKS]`<br> e.g., `find on/Hans ps/Dog`
-**List** | `list`
 **Help** | `help`
+**Add Owner** | `addowner on/NAME ph/PHONE_NUMBER em/EMAIL ad/ADDRESS [ot/TAG]…​` <br> e.g., `addowner on/John Doe ph/98765432 em/johnd@example.com ad/John street, block 123, #01-01`
+**Edit Owner** | `editowner oi/OWNER_INDEX [on/NAME] [ph/PHONE] [em/EMAIL] [ad/ADDRESS] [t/TAG]…​`<br> e.g., `editowner oi/1 ph/91234567 em/johndoe@example.com`
+**Add Pet** | `addpet oi/OWNER_INDEX pn/PET_NAME ps/SPECIES [pr/REMARKS]` <br> e.g., `addpet oi/2 pn/Molly ps/Golden Retriever pr/cuddly`
+**Update Pet Remarks** | `update oi/OWNER_INDEX pi/PET_INDEX pr/REMARKS` <br> e.g., `update oi/1 pi/3 pr/aggressive`
+**Find Owner or Pet** | `find [on/OWNER_NAME] [ph/PHONE] [em/EMAIL] [ad/ADDRESS] [ot/OWNER_TAG]…​ [oi/OWNER_INDEX] [pn/PET_NAME] [ps/SPECIES] [pr/REMARKS]`<br> e.g., `find on/Hans ps/Dog`
+**List All Owners and Pets** | `list`
+**Delete Owner or Pet** | `delete INDEX`<br> e.g., `delete 3`
+**Add Service** | `addservice sn/SERVICE_NAME sp/SERVICE_PRICE` <br> e.g., `addservice sn/Ear Cleaning sp/12.50`
+**Delete Service** | `deleteservice sn/SERVICE_NAME` <br> e.g., `deleteservice sn/Ear Cleaning`
+**Clear All Entries** | `clear`
+**Exit Application** | `exit`

@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -17,7 +18,7 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.person.Person;
 import seedu.address.model.pet.Pet;
 import seedu.address.model.service.Service;
-import seedu.address.model.session.Session;
+import seedu.address.model.session.SessionEntry;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -30,10 +31,9 @@ public class ModelManager implements Model {
     private final FilteredList<Person> filteredPersons;
     private final ObservableList<Pet> allPets = FXCollections.observableArrayList();
     private final FilteredList<Pet> filteredPets;
-    private final ObservableList<Session> displayedSessions = FXCollections.observableArrayList();
-    private final ObservableList<Session> unmodifiableDisplayedSessions =
+    private final ObservableList<SessionEntry> displayedSessions = FXCollections.observableArrayList();
+    private final ObservableList<SessionEntry> unmodifiableDisplayedSessions =
             FXCollections.unmodifiableObservableList(displayedSessions);
-    private String sessionPanelTitle = "Sessions";
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -49,6 +49,7 @@ public class ModelManager implements Model {
         rebuildPetList();
         filteredPets = new FilteredList<>(allPets);
         filteredPersons.addListener((ListChangeListener<Person>) c -> rebuildPetList());
+        updateDisplayedSessions(this.addressBook.getPersonList());
     }
 
     /**
@@ -159,21 +160,20 @@ public class ModelManager implements Model {
     //=========== Session Display =============================================================
 
     @Override
-    public void setDisplayedPet(Pet pet, String title) {
-        requireNonNull(pet);
-        requireNonNull(title);
-        displayedSessions.setAll(pet.getSessions());
-        sessionPanelTitle = title;
+    public void updateDisplayedSessions(List<Person> persons) {
+        requireNonNull(persons);
+        List<SessionEntry> entries = persons.stream()
+                .flatMap(owner -> owner.getPets().stream()
+                        .flatMap(pet -> pet.getSessions().stream()
+                                .map(session -> new SessionEntry(
+                                        session, owner.getName().fullName, pet.getName().value))))
+                .collect(Collectors.toList());
+        displayedSessions.setAll(entries);
     }
 
     @Override
-    public ObservableList<Session> getSessionList() {
+    public ObservableList<SessionEntry> getSessionList() {
         return unmodifiableDisplayedSessions;
-    }
-
-    @Override
-    public String getSessionPanelTitle() {
-        return sessionPanelTitle;
     }
 
     //=========== Filtered Person List Accessors =============================================================

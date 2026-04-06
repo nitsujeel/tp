@@ -74,6 +74,7 @@ public class FindCommand extends Command {
         requireNonNull(model);
         List<Person> baselineOwners = List.copyOf(model.getFilteredPersonList());
         model.updateFilteredPersonList(person -> predicate.test(person) && matchesOwnerIndex(person, baselineOwners));
+        model.updateDisplayedSessions(model.getFilteredPersonList());
         return new CommandResult(
                 String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
     }

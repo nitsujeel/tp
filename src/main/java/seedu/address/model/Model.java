@@ -1,6 +1,7 @@
 package seedu.address.model;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
@@ -8,7 +9,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.person.Person;
 import seedu.address.model.pet.Pet;
 import seedu.address.model.service.Service;
-import seedu.address.model.session.Session;
+import seedu.address.model.session.SessionEntry;
 
 /**
  * The API of the Model component.
@@ -100,19 +101,14 @@ public interface Model {
     ObservableList<Service> getServiceList();
 
     /**
-     * Sets the pet whose sessions are displayed in the session panel.
-     * Updates the observable session list returned by {@link #getSessionList()}.
-     *
-     * @param pet   The pet to display sessions for.
-     * @param title The header text for the session panel (e.g. "John's Snowball — Sessions").
+     * Rebuilds the displayed session list from the given persons and their pets.
+     * Call with {@code getFilteredPersonList()} to show sessions for currently visible owners,
+     * or with the full person list to show all sessions.
      */
-    void setDisplayedPet(Pet pet, String title);
+    void updateDisplayedSessions(List<Person> persons);
 
-    /** Returns an unmodifiable observable view of the currently displayed pet's sessions. */
-    ObservableList<Session> getSessionList();
-
-    /** Returns the current session panel header title. */
-    String getSessionPanelTitle();
+    /** Returns an unmodifiable observable view of the currently displayed sessions. */
+    ObservableList<SessionEntry> getSessionList();
 
     /** Returns an unmodifiable view of the filtered person list */
     ObservableList<Person> getFilteredPersonList();

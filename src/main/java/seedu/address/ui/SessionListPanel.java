@@ -9,7 +9,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.model.session.Session;
+import seedu.address.model.session.SessionEntry;
 
 /**
  * Panel containing the list of sessions for the currently selected pet.
@@ -23,13 +23,13 @@ public class SessionListPanel extends UiPart<Region> {
     private Label sessionPanelTitle;
 
     @FXML
-    private ListView<Session> sessionListView;
+    private ListView<SessionEntry> sessionListView;
 
     /**
      * Creates a {@code SessionListPanel} bound to the given observable session list.
      * The panel updates automatically whenever the list changes.
      */
-    public SessionListPanel(ObservableList<Session> sessionList) {
+    public SessionListPanel(ObservableList<SessionEntry> sessionList) {
         super(FXML);
         sessionListView.setItems(sessionList);
         sessionListView.setCellFactory(listView -> new SessionListViewCell());
@@ -48,15 +48,15 @@ public class SessionListPanel extends UiPart<Region> {
     /**
      * Custom {@code ListCell} that displays a {@code Session} using a {@code SessionCard}.
      */
-    class SessionListViewCell extends ListCell<Session> {
+    class SessionListViewCell extends ListCell<SessionEntry> {
         @Override
-        protected void updateItem(Session session, boolean empty) {
-            super.updateItem(session, empty);
-            if (empty || session == null) {
+        protected void updateItem(SessionEntry entry, boolean empty) {
+            super.updateItem(entry, empty);
+            if (empty || entry == null) {
                 setGraphic(null);
                 setText(null);
             } else {
-                setGraphic(new SessionCard(session, getIndex() + 1).getRoot());
+                setGraphic(new SessionCard(entry, getIndex() + 1).getRoot());
             }
         }
     }

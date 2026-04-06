@@ -103,7 +103,7 @@ public class AddSessionCommandTest {
         command.execute(model);
 
         assertEquals(1, model.getSessionList().size());
-        assertEquals(new Session(VALID_START, VALID_END), model.getSessionList().get(0));
+        assertEquals(new Session(VALID_START, VALID_END), model.getSessionList().get(0).session());
     }
 
     @Test

@@ -63,12 +63,6 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommand_deleteService() throws Exception {
-        DeleteCommand command = (DeleteCommand) parser.parseCommand("deleteservice sn/Fur trim");
-        assertEquals(new DeleteCommand("Fur trim"), command);
-    }
-
-    @Test
     public void parseCommand_edit() throws Exception {
         Person person = new PersonBuilder().build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(person).build();

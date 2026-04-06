@@ -27,7 +27,6 @@ import seedu.address.logic.parser.exceptions.ParseException;
  * Parses user input.
  */
 public class AddressBookParser {
-    private static final String LEGACY_DELETE_SERVICE_COMMAND_WORD = "deleteservice";
 
     /**
      * Used for initial separation of command word and args.
@@ -90,9 +89,6 @@ public class AddressBookParser {
 
         case AddServiceCommand.COMMAND_WORD:
             return new AddServiceCommandParser().parse(arguments);
-
-        case LEGACY_DELETE_SERVICE_COMMAND_WORD:
-            return new DeleteCommandParser().parse(arguments);
 
         case AddSessionCommand.COMMAND_WORD:
             return new AddSessionCommandParser().parse(arguments);

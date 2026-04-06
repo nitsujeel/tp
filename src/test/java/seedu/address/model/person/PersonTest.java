@@ -14,6 +14,10 @@ import static seedu.address.testutil.TypicalPersons.BOB;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.model.pet.Pet;
+import seedu.address.model.pet.PetName;
+import seedu.address.model.pet.PetRemark;
+import seedu.address.model.pet.Species;
 import seedu.address.testutil.PersonBuilder;
 
 public class PersonTest {
@@ -97,6 +101,19 @@ public class PersonTest {
         // different tags -> returns false
         editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_HUSBAND).build();
         assertFalse(ALICE.equals(editedAlice));
+    }
+
+    @Test
+    public void hasPet() {
+        Pet existingPet = new Pet(new PetName("Buddy"), new Species("Dog"), new PetRemark("Friendly"));
+        Person person = new PersonBuilder().withPets(existingPet).build();
+        Pet sameIdentityPet = new Pet(new PetName("Buddy"), new Species("Dog"), new PetRemark("Needs medication"));
+        Pet normalizedIdentityPet = new Pet(new PetName("buddy"), new Species("dog"), new PetRemark("Shy"));
+        Pet differentPet = new Pet(new PetName("Buddy"), new Species("Cat"), new PetRemark("Friendly"));
+
+        assertTrue(person.hasPet(sameIdentityPet));
+        assertTrue(person.hasPet(normalizedIdentityPet));
+        assertFalse(person.hasPet(differentPet));
     }
 
     @Test

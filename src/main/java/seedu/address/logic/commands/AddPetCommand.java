@@ -66,8 +66,7 @@ public class AddPetCommand extends Command {
 
         Person owner = lastShownList.get(ownerIndex.getZeroBased());
 
-        boolean isDuplicate = owner.getPets().stream().anyMatch(p -> p.isSamePet(toAdd));
-        if (isDuplicate) {
+        if (owner.hasPet(toAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_PET);
         }
 

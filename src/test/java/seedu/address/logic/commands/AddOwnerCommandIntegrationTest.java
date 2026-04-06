@@ -45,4 +45,15 @@ public class AddOwnerCommandIntegrationTest {
                 AddOwnerCommand.MESSAGE_DUPLICATE_PERSON);
     }
 
+    @Test
+    public void execute_sameNameIgnoringCaseAndSamePhone_throwsCommandException() {
+        Person personInList = model.getAddressBook().getPersonList().get(0);
+        Person duplicatePerson = new PersonBuilder(personInList)
+                .withName(personInList.getName().fullName.toLowerCase())
+                .build();
+
+        assertCommandFailure(new AddOwnerCommand(duplicatePerson), model,
+                AddOwnerCommand.MESSAGE_DUPLICATE_PERSON);
+    }
+
 }

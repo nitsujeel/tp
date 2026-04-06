@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
@@ -94,7 +95,9 @@ public class Person {
      */
     public boolean hasPet(Pet pet) {
         requireAllNonNull(pet);
-        return pets.stream().anyMatch(pet::isSamePet);
+        return pets.stream().anyMatch(existingPet ->
+                normalizePetName(existingPet).equals(normalizePetName(pet))
+                        && normalizeSpecies(existingPet).equals(normalizeSpecies(pet)));
     }
 
     /**
@@ -119,7 +122,8 @@ public class Person {
     }
 
     /**
-     * Returns true if both persons have the same name.
+     * Returns true if both persons have the same name, ignoring case and surrounding spaces,
+     * and the same phone number.
      * This defines a weaker notion of equality between two persons.
      */
     public boolean isSamePerson(Person otherPerson) {
@@ -128,7 +132,20 @@ public class Person {
         }
 
         return otherPerson != null
-                && otherPerson.getName().equals(getName());
+                && normalizeName(otherPerson.getName()).equals(normalizeName(getName()))
+                && otherPerson.getPhone().equals(getPhone());
+    }
+
+    private String normalizeName(Name name) {
+        return name.fullName.trim().toLowerCase(Locale.ROOT);
+    }
+
+    private String normalizePetName(Pet pet) {
+        return pet.getName().value.trim().toLowerCase(Locale.ROOT);
+    }
+
+    private String normalizeSpecies(Pet pet) {
+        return pet.getSpecies().value.trim().toLowerCase(Locale.ROOT);
     }
 
     /**

@@ -65,6 +65,14 @@ public class Pet {
     }
 
     /**
+     * Returns true if the given session overlaps with any existing session for this pet.
+     */
+    public boolean hasOverlappingSession(Session session) {
+        requireNonNull(session);
+        return sessions.stream().anyMatch(existingSession -> existingSession.overlapsWith(session));
+    }
+
+    /**
      * Returns true if both pets have the same name and species.
      * This defines a weaker notion of equality between two pets.
      */

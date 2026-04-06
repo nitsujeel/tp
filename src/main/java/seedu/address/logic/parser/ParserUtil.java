@@ -17,6 +17,7 @@ import seedu.address.model.pet.PetName;
 import seedu.address.model.pet.PetRemark;
 import seedu.address.model.pet.Species;
 import seedu.address.model.service.Service;
+import seedu.address.model.session.Session;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -199,5 +200,20 @@ public class ParserUtil {
             throw new ParseException(Service.MESSAGE_PRICE_CONSTRAINTS);
         }
         return Double.parseDouble(trimmedServicePrice);
+    }
+
+    /**
+     * Parses a {@code String dateTime} into a canonical session date/time string.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code dateTime} is invalid.
+     */
+    public static String parseDateTime(String dateTime) throws ParseException {
+        requireNonNull(dateTime);
+        String trimmedDateTime = dateTime.trim();
+        if (!Session.isValidDateTime(trimmedDateTime)) {
+            throw new ParseException(Session.MESSAGE_DATETIME_CONSTRAINTS);
+        }
+        return trimmedDateTime;
     }
 }

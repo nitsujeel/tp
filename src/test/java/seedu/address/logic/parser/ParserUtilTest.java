@@ -30,6 +30,8 @@ public class ParserUtilTest {
     private static final String INVALID_SERVICE_NAME = "@wash";
     private static final String INVALID_SERVICE_PRICE = "-5.00";
     private static final String INVALID_SERVICE_PRICE_MORE_THAN_TWO_DP = "20.123";
+    private static final String INVALID_DATE_TIME = "2026-02-30 10:00";
+    private static final String INVALID_DATE_TIME_FORMAT = "2026/03/25 10:00";
 
     private static final String VALID_NAME = "Rachel Walker";
     private static final String VALID_PHONE = "123456";
@@ -39,6 +41,7 @@ public class ParserUtilTest {
     private static final String VALID_TAG_2 = "neighbour";
     private static final String VALID_SERVICE_NAME = "Fur trim";
     private static final String VALID_SERVICE_PRICE = "25.50";
+    private static final String VALID_DATE_TIME = "2026-03-25 10:00";
 
     private static final String WHITESPACE = " \t\r\n";
 
@@ -237,5 +240,22 @@ public class ParserUtilTest {
     public void parseServicePrice_validValueWithWhitespace_returnsServicePrice() throws Exception {
         String servicePriceWithWhitespace = WHITESPACE + VALID_SERVICE_PRICE + WHITESPACE;
         assertEquals(25.50, ParserUtil.parseServicePrice(servicePriceWithWhitespace), 1e-9);
+    }
+
+    @Test
+    public void parseDateTime_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseDateTime(null));
+    }
+
+    @Test
+    public void parseDateTime_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseDateTime(INVALID_DATE_TIME));
+        assertThrows(ParseException.class, () -> ParserUtil.parseDateTime(INVALID_DATE_TIME_FORMAT));
+    }
+
+    @Test
+    public void parseDateTime_validValueWithWhitespace_returnsTrimmedDateTime() throws Exception {
+        String dateTimeWithWhitespace = WHITESPACE + VALID_DATE_TIME + WHITESPACE;
+        assertEquals(VALID_DATE_TIME, ParserUtil.parseDateTime(dateTimeWithWhitespace));
     }
 }

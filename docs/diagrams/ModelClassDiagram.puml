@@ -19,6 +19,8 @@ Class Pet
 Class PetName
 Class Species
 Class PetRemark
+Class Session
+Class SessionEntry
 Class Service
 Class Address
 Class Email
@@ -54,6 +56,8 @@ Person *--> "*" Pet
 Pet *--> PetName
 Pet *--> Species
 Pet *--> PetRemark
+Pet *--> "*" Session
+Session --> "*" Service
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I
@@ -68,4 +72,6 @@ Species -[hidden]right-> PetRemark
 ModelManager --> "~* filtered" Person
 ModelManager --> "~* all" Service
 ModelManager --> "~* filtered" Pet
+ModelManager --> "~* displayed" SessionEntry
+SessionEntry --> "1" Session
 @enduml

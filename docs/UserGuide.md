@@ -84,7 +84,12 @@ Adds an owner to PetLog.
 
 Format: `addowner on/NAME ph/PHONE_NUMBER em/EMAIL ad/ADDRESS [ot/TAG]…​`
 
-* An owner can have any number of tags (including 0)
+* An owner can have any number of tags (including 0).
+* `NAME` must be 1 to 50 characters and use only letters, numbers, and spaces.
+* `PHONE_NUMBER` must be 3 to 15 characters and use only digits, spaces, `+`, or `-`.
+* `EMAIL` must be of the form `local-part@domain`.
+* `ADDRESS` must be 1 to 60 characters.
+* Each `TAG`, if provided, must be 1 to 50 characters and use only letters, numbers, `!`, or `?`.
 
 Examples:
 * `addowner on/John Doe ph/98765432 em/johnd@example.com ad/John street, block 123, #01-01`
@@ -110,7 +115,12 @@ Examples:
 
 Format: `addpet oi/OWNER_INDEX pn/PET_NAME ps/SPECIES [pr/REMARKS]`
 
-* Adds the pet with specified `NAME` and `SPECIES` (and optional remark) under the owner specified by `OWNER_INDEX`
+* Adds the pet with specified `PET_NAME` and `SPECIES` (and optional remark) under the owner specified by `OWNER_INDEX`.
+* `OWNER_INDEX` refers to the currently displayed owner list and must be a positive integer.
+* `PET_NAME` must be 1 to 15 characters and use only letters, spaces, hyphens, or apostrophes.
+* `SPECIES` must be 1 to 15 characters and use only letters and spaces.
+* `REMARKS`, if provided, must be at most 300 characters.
+* A pet is considered a duplicate under the same owner if both its name and species match an existing pet for that owner.
 
 Examples:
 * `addpet oi/2 pn/Molly ps/Golden Retriever pr/cuddly` Adds a cuddly golden retriever called Molly under the second

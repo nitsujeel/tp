@@ -124,13 +124,15 @@ How the parsing works:
 The `Model` component,
 
 * stores the PetLog data in an `AddressBook`, which contains all `Person` objects in a `UniquePersonList` and all `Service` objects in a `UniqueServiceList`.
-* stores each owner's pets inside the corresponding `Person` object. Each `Pet` is made up of its own value objects such as `PetName`, `Species`, and `PetRemark`.
-* stores the currently selected owners as a separate filtered list, exposed as an unmodifiable `ObservableList<Person>`. This allows the UI to observe owner list changes and update automatically.
+* stores each owner's pets inside the corresponding `Person` object. Each `Pet` is made up of its own value objects such as `PetName`, `Species`, and `PetRemark`, and also owns its own list of `Session` objects.
+* stores each `Session` as a time range with a fee and a list of associated `Service` objects, allowing one session to reference multiple services recorded in the `AddressBook`.
+* stores the currently selected owners as a filtered list, exposed as an unmodifiable `ObservableList<Person>`. This allows the UI to observe owner list changes and update automatically.
 * derives and stores a separate filtered pet list, exposed as an unmodifiable `ObservableList<Pet>`, so the UI can display pets independently of the owner cards.
+* derives and stores a displayed session list, exposed as an unmodifiable `ObservableList<SessionEntry>`. Each `SessionEntry` bundles a `Session` together with its owner and pet context for the UI.
 * stores a `UserPrefs` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPrefs` object.
 * does not depend on the `UI`, `Logic`, or `Storage` components, since the `Model` represents the domain entities and their relationships.
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It illustrates how `AddressBook` could store a shared `Tag` list that `Person` objects reference, instead of each `Person` storing its own `Tag` objects. This would reduce duplicate `Tag` instances across owners. For simplicity, the alternative diagram focuses only on the tag-related part of the model and omits the newer `Pet` and `Service` structures.<br>
+<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It illustrates how `AddressBook` could store a shared `Tag` list that `Person` objects reference, instead of each `Person` storing its own `Tag` objects. This would reduce duplicate `Tag` instances across owners. For simplicity, the alternative diagram focuses only on the tag-related part of the model and omits the newer `Pet`, `Session`, and `Service` structures.<br>
 
 <img src="images/BetterModelClassDiagram.png" width="450" />
 
@@ -325,7 +327,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. The list is empty.
 
-  Use case ends.
+    Use case ends.
 
 * 3a. The given index is invalid.
 
@@ -337,63 +339,67 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. User adds owner with relevant details
-2. PetLog adds owner into the list 
+1. User adds an owner with the relevant details
+2. PetLog adds the owner into the owner list
 3. PetLog informs user that the owner was added
-4. PetLog shows a list of owners with details
+4. PetLog shows the updated list of owners
 
     Use case ends.
 
 **Extensions**
 
 * 1a. Missing owner details or invalid entries
-  * 1a1. PetLog shows an error message 
-  
+  * 1a1. PetLog shows a relevant error message
+
     Use case ends.
-* 1b. Duplicate owner 
-  * 1b1. PetLog shows an error message
-  
+
+* 1b. Duplicate owner
+  * 1b1. PetLog shows a relevant error message
+
     Use case ends.
-       
+	       
 **Use case: Add Pet**
 
-**Preconditions: The owner of the pet exists**
+**Preconditions: The owner exists**
 
 **MSS**
 
-1. User adds pet to an owner
+1. User adds a pet to an existing owner
 2. PetLog adds pet to the specified owner
-3. PetLog informs user that the pet was added to the specified user
-4. PetLog shows the new list of owners with pet added 
+3. PetLog informs user that the pet was added
+4. PetLog shows the updated list of owners with the pet added
 
     Use case ends.
 
 **Extensions**
 
-* 1a. Invalid commands, invalid details
-  * 1a1. PetLog shows a relevant error message 
-  
-    Use case ends .
+* 1a. Missing owner index, invalid owner index, malformed command, or invalid pet details
+  * 1a1. PetLog shows a relevant error message
+
+    Use case ends.
+
 * 1b. Duplicate pet
   * 1b1. PetLog shows a relevant error message
-    
+
     Use case ends.
-  
+	  
 **Use case: Update Pet Remarks**
 
-**Preconditions: Pet and Owner exists**
+**Preconditions: Owner exists and pet exists under that owner**
 
 **MSS**
 
-1. User update remarks of an existing pet
+1. User updates the remarks of an existing pet
 2. PetLog updates the remarks
-3. PetLog informs user remark has been updated 
-4. PetLog updates the GUI to show list with added remark
+3. PetLog informs user that the remark has been updated
+4. PetLog displays the updated list with the new remark
+
+    Use case ends.
 
 **Extensions**
 
 * 1a. Missing or invalid indices, unrecognized prefixes, malformed command, repeated prefix
-  * 1a1. PetLog shows relevant error message 
+  * 1a1. PetLog shows a relevant error message
 
     Use case ends.
 
@@ -402,18 +408,22 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 
 1. User requests to delete the owner
-2. PetLog deletes the owner 
-3. PetLog informs user about the successful deletion 
+2. PetLog deletes the owner
+3. PetLog informs user about the successful deletion
 4. PetLog displays new list without the deleted owner
+
+    Use case ends.
 
 **Extensions**
 
 * 1a. Missing, invalid, out-of-range index, malformed command, unrecognized prefixes
-  * 1a1. PetLog shows relevant error message 
+  * 1a1. PetLog shows a relevant error message
 
     Use case ends.
 
 **Use case: Delete Pet**
+
+**Preconditions: Owner exists and pet exists under that owner**
 
 **MSS**
 
@@ -422,54 +432,61 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 3. PetLog informs user about the successful deletion
 4. PetLog displays new list without the deleted pet
 
+    Use case ends.
+
 **Extensions**
 
 * 1a. Missing, invalid, out-of-range index, malformed command, unrecognized prefixes
-    * 1a1. PetLog shows relevant error message
+  * 1a1. PetLog shows a relevant error message
 
-      Use case ends.
+    Use case ends.
 
- **Use case: Find owner** 
+**Use case: Find Owner**
 
 **MSS**
 
-1. User attempts owner search by keywords 
+1. User searches for owners by keywords
 2. PetLog finds matching owners
 3. PetLog displays a list of matching owners
-4. PetLog informs in writing the number of matching owners
+4. PetLog informs user of the number of matching owners
+
+    Use case ends.
 
 **Extensions**
 
 * 1a. No prefixes, unrecognized prefixes, malformed command
-  * 1a1. PetLog displays relevant error 
-    
-    Use case ends.
-  
+    * 1a1. PetLog shows a relevant error message
+
+      Use case ends.
+
+	  
 * 1b. Invalid field contents entered in search
-  * 1b1. PetLog displays that there is 0 matches
-    
+  * 1b1. PetLog displays that there are 0 matches
+
     Use case ends.
 
-**Use case: Find pet**
+**Use case: Find Pet**
 
 **MSS**
 
-1. User attempts pet search by keywords
+1. User searches for pets by keywords
 2. PetLog finds matching pets
 3. PetLog displays a list of matching pets
-4. PetLog informs in writing the number of matching pets
+4. PetLog informs user of the number of matching pets
+
+    Use case ends.
 
 **Extensions**
 
 * 1a. No prefixes, unrecognized prefixes, malformed command
-    * 1a1. PetLog displays relevant error
+  * 1a1. PetLog shows a relevant error message
 
-      Use case ends.
+    Use case ends.
 
 * 1b. Invalid field contents entered in search
-    * 1b1. PetLog displays that there is 0 matches
+  * 1b1. PetLog displays that there are 0 matches
 
-      Use case ends.
+    Use case ends.
 
 **Use case: List**
 
@@ -477,12 +494,120 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1. User requests to list all records of owners and pets
 2. PetLog displays the list of owners and pets
-3. PetLog confirms it is showing all records 
+3. PetLog confirms it is showing all records
+
+    Use case ends.
 
 **Extensions**
 
 * 1a. Misspelled command, unnecessary prefix inputs
   * 1a1. PetLog displays a relevant error message
+
+    Use case ends.
+
+**Use case: Add Service**
+
+**MSS**
+
+1. User adds a service with the service name and price
+2. PetLog adds the service into the service list
+3. PetLog informs user that the service was added
+4. PetLog displays the updated service list
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. Missing service details or invalid entries
+  * 1a1. PetLog shows a relevant error message
+
+    Use case ends.
+
+* 1b. Duplicate service
+  * 1b1. PetLog shows a relevant error message
+
+    Use case ends.
+
+**Use case: Add Session**
+
+**Preconditions: Owner exists and pet exists under that owner**
+
+**MSS**
+
+1. User adds a session to a specified pet under a specified owner
+2. PetLog validates the owner, pet, time range, and optional services
+3. PetLog adds the session to the specified pet
+4. PetLog computes the total fee for the session
+5. PetLog informs user that the session was added
+6. PetLog displays the updated session list
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. Missing indices, invalid indices, malformed command, or invalid date-time format
+  * 1a1. PetLog shows a relevant error message
+
+    Use case ends.
+
+* 2a. One or more specified services do not exist
+  * 2a1. PetLog shows a relevant error message
+
+    Use case ends.
+
+* 2b. End time is not after start time
+  * 2b1. PetLog shows a relevant error message
+
+    Use case ends.
+
+* 2c. Session overlaps with an existing session for the selected pet
+  * 2c1. PetLog shows a relevant error message
+
+    Use case ends.
+
+**Use case: Delete Session**
+
+**Preconditions: Owner exists, pet exists under that owner, and the pet has at least one session**
+
+**MSS**
+
+1. User requests to delete a session from a specified pet under a specified owner
+2. PetLog deletes the specified session
+3. PetLog informs user about the successful deletion
+4. PetLog displays the updated session list
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. Missing indices, invalid indices, out-of-range indices, or malformed command
+  * 1a1. PetLog shows a relevant error message
+
+    Use case ends.
+
+**Use case: Delete Service**
+
+**Preconditions: Service exists**
+
+**MSS**
+
+1. User requests to delete a service by service name
+2. PetLog finds the matching service
+3. PetLog deletes the service
+4. PetLog informs user about the successful deletion
+5. PetLog displays the updated service list
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. Missing service name, malformed command, or unrecognized prefixes
+  * 1a1. PetLog shows a relevant error message
+
+    Use case ends.
+
+* 2a. Service name does not match any existing service
+  * 2a1. PetLog shows a relevant error message
 
     Use case ends.
 
@@ -595,6 +720,24 @@ testers are expected to do more *exploratory* testing.
    1. Test case: `addowner on/Jane Tan ph/81234567 em/jane.tan@gmail.com`<br>
       Expected: Command fails due to invalid format (missing required `ad/` prefix).
 
+### Adding a pet
+
+1. Adding a pet to an existing owner
+
+   1. Prerequisites: App is launched with sample data (contains owner `Alex Yeoh` at owner index 1).
+
+   1. Test case: `addpet oi/1 pn/Milo ps/Cat pr/Needs medication after meals`<br>
+      Expected: A new pet named `Milo` is added under `Alex Yeoh` and shown in the pet list for that owner.
+
+   1. Test case: `addpet oi/1 pn/Buddy ps/Dog pr/Very energetic`<br>
+      Expected: Command fails with `This person already has this pet.`
+
+   1. Test case: `addpet oi/999 pn/Milo ps/Cat pr/Friendly`<br>
+      Expected: Command fails because the owner index is invalid.
+
+   1. Test case: `addpet oi/1 pn/Milo pr/Friendly`<br>
+      Expected: Command fails due to invalid format (missing required `ps/` prefix).
+
 ### Editing an owner
 
 1. Editing the fields of an existing owner
@@ -691,8 +834,15 @@ testers are expected to do more *exploratory* testing.
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Appendix: Effort**
+Difficulty level of our project: medium.
 
-This section aims to elaborate on the difficulty level, challenges faced, effort required, and achievements of this project.
+Compared to AB3, which primarily manages a single core entity type, our project required more effort because it supports multiple related entity types, namely owners, pets, services, and sessions. This introduced additional complexity in both the codebase and the product design, as we had to maintain clear relationships between these entities while keeping commands intuitive for users.
+
+The main challenges faced were in extending the original owner-centric data model to support nested pet records and session tracking, ensuring that commands remained consistent despite operating on different entity types, and keeping the UI and documentation aligned with the evolving feature set. Features such as service-linked sessions and indexed operations on pets and sessions also required more careful handling than the original AB3 workflow.
+
+The team spent about 10 hours per week over 5 weeks, for a team of 5. This gives an estimated overall effort of about 250 person-hours.
+
+Our key achievements were redesigning the model to support richer domain relationships, implementing features for managing pets, services, and care sessions, and producing a coherent user guide and developer guide that reflect the current architecture and feature set.
 
 --------------------------------------------------------------------------------------------------------------------
 

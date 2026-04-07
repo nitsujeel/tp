@@ -597,6 +597,24 @@ testers are expected to do more *exploratory* testing.
    1. Test case: `addowner on/Jane Tan ph/81234567 em/jane.tan@gmail.com`<br>
       Expected: Command fails due to invalid format (missing required `ad/` prefix).
 
+### Adding a pet
+
+1. Adding a pet to an existing owner
+
+   1. Prerequisites: App is launched with sample data (contains owner `Alex Yeoh` at owner index 1).
+
+   1. Test case: `addpet oi/1 pn/Milo ps/Cat pr/Needs medication after meals`<br>
+      Expected: A new pet named `Milo` is added under `Alex Yeoh` and shown in the pet list for that owner.
+
+   1. Test case: `addpet oi/1 pn/Buddy ps/Dog pr/Very energetic`<br>
+      Expected: Command fails with `This person already has this pet.`
+
+   1. Test case: `addpet oi/999 pn/Milo ps/Cat pr/Friendly`<br>
+      Expected: Command fails because the owner index is invalid.
+
+   1. Test case: `addpet oi/1 pn/Milo pr/Friendly`<br>
+      Expected: Command fails due to invalid format (missing required `ps/` prefix).
+
 ### Editing an owner
 
 1. Editing the fields of an existing owner

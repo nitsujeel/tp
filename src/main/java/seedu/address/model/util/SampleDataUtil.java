@@ -18,28 +18,47 @@ import seedu.address.model.pet.PetName;
 import seedu.address.model.pet.PetRemark;
 import seedu.address.model.pet.Species;
 import seedu.address.model.service.Service;
+import seedu.address.model.session.Session;
 import seedu.address.model.tag.Tag;
 
 /**
  * Contains utility methods for populating {@code AddressBook} with sample data.
  */
 public class SampleDataUtil {
+    private static final Service SAMPLE_BASE_SERVICE_CHARGE = new Service("Base service charge", 20);
+    private static final Service SAMPLE_SHAMPOO = new Service("Shampoo", 30);
+    private static final Service SAMPLE_FUR_TRIM = new Service("Fur trim", 25);
+    private static final Service SAMPLE_NAIL_TRIM = new Service("Nail trim", 10);
+    private static final Service SAMPLE_WALK = new Service("Walk", 15);
+
     public static Person[] getSamplePersons() {
         return new Person[] {
             new Person(new Name("Alex Yeoh"), new Phone("87438807"), new Email("alexyeoh@example.com"),
                 new Address("Blk 30 Geylang Street 29, #06-40"),
                 getTagSet("friends"),
                 new LinkedHashSet<>(List.of(
-                        new Pet(new PetName("Buddy"), new Species("Dog"),
-                                new PetRemark("Loyal and friendly")),
+                        createPetWithSessions(
+                                "Buddy",
+                                "Dog",
+                                "Loyal and friendly",
+                                createSession(
+                                        "2026-04-10 10:00",
+                                        "2026-04-10 11:00",
+                                        List.of(SAMPLE_BASE_SERVICE_CHARGE, SAMPLE_SHAMPOO, SAMPLE_WALK))),
                         new Pet(new PetName("Luna"), new Species("Rabbit"),
                                 new PetRemark("Loves leafy treats"))))),
             new Person(new Name("Bernice Yu"), new Phone("99272758"), new Email("berniceyu@example.com"),
                 new Address("Blk 30 Lorong 3 Serangoon Gardens, #07-18"),
                 getTagSet("colleagues", "friends"),
                 new LinkedHashSet<>(List.of(
-                        new Pet(new PetName("Mittens"), new Species("Cat"),
-                                new PetRemark("Likes to scratch furniture")),
+                        createPetWithSessions(
+                                "Mittens",
+                                "Cat",
+                                "Likes to scratch furniture",
+                                createSession(
+                                        "2026-04-11 14:00",
+                                        "2026-04-11 15:00",
+                                        List.of(SAMPLE_BASE_SERVICE_CHARGE, SAMPLE_FUR_TRIM, SAMPLE_NAIL_TRIM))),
                         new Pet(new PetName("Pebble"), new Species("Turtle"),
                                 new PetRemark("Enjoys basking by the window"))))),
             new Person(new Name("Charlotte Oliveiro"), new Phone("93210283"), new Email("charlotte@example.com"),
@@ -86,12 +105,25 @@ public class SampleDataUtil {
 
     public static Service[] getSampleServices() {
         return new Service[] {
-            new Service("Base service charge", 20),
-            new Service("Shampoo", 30),
-            new Service("Fur trim", 25),
-            new Service("Nail trim", 10),
-            new Service("Walk", 15)
+            SAMPLE_BASE_SERVICE_CHARGE,
+            SAMPLE_SHAMPOO,
+            SAMPLE_FUR_TRIM,
+            SAMPLE_NAIL_TRIM,
+            SAMPLE_WALK
         };
+    }
+
+    private static Session createSession(String startTime, String endTime, List<Service> services) {
+        double totalFee = services.stream().mapToDouble(Service::getCost).sum();
+        return new Session(startTime, endTime, totalFee, services);
+    }
+
+    private static Pet createPetWithSessions(String petName, String species, String remark, Session... sessions) {
+        Pet pet = new Pet(new PetName(petName), new Species(species), new PetRemark(remark));
+        for (Session session : sessions) {
+            pet.addSession(session);
+        }
+        return pet;
     }
 
     /**

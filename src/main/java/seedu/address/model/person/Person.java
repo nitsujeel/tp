@@ -1,6 +1,8 @@
 package seedu.address.model.person;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.commons.util.StringUtil.normalizeForComparison;
+import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,7 +10,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -133,19 +134,23 @@ public class Person {
 
         return otherPerson != null
                 && normalizeName(otherPerson.getName()).equals(normalizeName(getName()))
-                && otherPerson.getPhone().equals(getPhone());
+                && normalizePhone(otherPerson.getPhone()).equals(normalizePhone(getPhone()));
     }
 
     private String normalizeName(Name name) {
-        return name.fullName.trim().toLowerCase(Locale.ROOT);
+        return normalizeForComparison(name.fullName);
+    }
+
+    private String normalizePhone(Phone phone) {
+        return normalizeWhitespace(phone.value);
     }
 
     private String normalizePetName(Pet pet) {
-        return pet.getName().value.trim().toLowerCase(Locale.ROOT);
+        return normalizeForComparison(pet.getName().value);
     }
 
     private String normalizeSpecies(Pet pet) {
-        return pet.getSpecies().value.trim().toLowerCase(Locale.ROOT);
+        return normalizeForComparison(pet.getSpecies().value);
     }
 
     /**

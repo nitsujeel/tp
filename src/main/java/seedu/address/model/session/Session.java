@@ -1,6 +1,7 @@
 package seedu.address.model.session;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -144,8 +145,9 @@ public class Session {
      */
     public static boolean isValidDateTime(String dateTime) {
         requireNonNull(dateTime);
+        String normalizedDateTime = normalizeWhitespace(dateTime);
         try {
-            LocalDateTime.parse(dateTime, FORMATTER);
+            LocalDateTime.parse(normalizedDateTime, FORMATTER);
             return true;
         } catch (DateTimeParseException e) {
             return false;
@@ -159,8 +161,9 @@ public class Session {
      */
     public static LocalDateTime parseDateTime(String dateTime) {
         requireNonNull(dateTime);
+        String normalizedDateTime = normalizeWhitespace(dateTime);
         try {
-            return LocalDateTime.parse(dateTime, FORMATTER);
+            return LocalDateTime.parse(normalizedDateTime, FORMATTER);
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException(MESSAGE_DATETIME_CONSTRAINTS, e);
         }

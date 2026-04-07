@@ -2,6 +2,7 @@ package seedu.address.model.pet;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.commons.util.StringUtil.normalizeForComparison;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -88,8 +89,9 @@ public class Pet {
         }
 
         return otherPet != null
-                && otherPet.getName().equals(getName())
-                && otherPet.getSpecies().equals(getSpecies());
+                && normalizeForComparison(otherPet.getName().value).equals(normalizeForComparison(getName().value))
+                && normalizeForComparison(otherPet.getSpecies().value)
+                .equals(normalizeForComparison(getSpecies().value));
     }
 
     /**

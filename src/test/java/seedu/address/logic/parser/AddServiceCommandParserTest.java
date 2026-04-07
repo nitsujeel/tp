@@ -41,6 +41,15 @@ public class AddServiceCommandParserTest {
     }
 
     @Test
+    public void parse_serviceNameWithLongWhitespace_success() {
+        Service expectedService = new Service(VALID_SERVICE_NAME_FUR_TRIM,
+                Double.parseDouble(VALID_SERVICE_PRICE_FUR_TRIM));
+
+        assertParseSuccess(parser, " " + PREFIX_SERVICE_NAME + "  Fur   trim " + SERVICE_PRICE_DESC_FUR_TRIM,
+                new AddServiceCommand(expectedService));
+    }
+
+    @Test
     public void parse_repeatedNonServiceValue_failure() {
         String validExpectedServiceString = SERVICE_NAME_DESC_FUR_TRIM + SERVICE_PRICE_DESC_FUR_TRIM;
 

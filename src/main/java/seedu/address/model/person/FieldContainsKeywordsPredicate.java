@@ -1,9 +1,9 @@
 package seedu.address.model.person;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.StringUtil.normalizeForComparison;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -112,7 +112,7 @@ public class FieldContainsKeywordsPredicate implements Predicate<Person> {
     }
 
     private static boolean containsIgnoreCase(String fieldValue, String keyword) {
-        return fieldValue.toLowerCase(Locale.ROOT).contains(keyword.toLowerCase(Locale.ROOT));
+        return normalizeForComparison(fieldValue).contains(normalizeForComparison(keyword));
     }
 
     @Override

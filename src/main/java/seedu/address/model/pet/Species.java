@@ -2,6 +2,7 @@ package seedu.address.model.pet;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
+import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 
 /**
  * Represents a Pet's species in the address book.
@@ -23,15 +24,17 @@ public class Species {
      */
     public Species(String species) {
         requireNonNull(species);
-        checkArgument(isValidSpecies(species), MESSAGE_CONSTRAINTS);
-        value = species;
+        String normalizedSpecies = normalizeWhitespace(species);
+        checkArgument(isValidSpecies(normalizedSpecies), MESSAGE_CONSTRAINTS);
+        value = normalizedSpecies;
     }
 
     /**
      * Returns true if a given string is a valid species.
      */
     public static boolean isValidSpecies(String test) {
-        return test.matches(VALIDATION_REGEX);
+        requireNonNull(test);
+        return normalizeWhitespace(test).matches(VALIDATION_REGEX);
     }
 
     @Override

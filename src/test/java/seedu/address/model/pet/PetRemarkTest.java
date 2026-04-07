@@ -33,6 +33,14 @@ public class PetRemarkTest {
     }
 
     @Test
+    public void constructor_whitespaceNormalized() {
+        PetRemark withExtraWhitespace = new PetRemark("  Very\t  friendly   pet ");
+        PetRemark normalized = new PetRemark("Very friendly pet");
+
+        assertTrue(withExtraWhitespace.equals(normalized));
+    }
+
+    @Test
     public void equals() {
         PetRemark petRemark = new PetRemark("Loves treats");
 

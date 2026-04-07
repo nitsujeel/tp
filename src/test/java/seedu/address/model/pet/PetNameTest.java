@@ -36,6 +36,15 @@ public class PetNameTest {
         assertTrue(PetName.isValidName("O'Malley"));
         assertTrue(PetName.isValidName("Mary-Jane"));
         assertTrue(PetName.isValidName(VALID_MAX_LENGTH_NAME));
+        assertTrue(PetName.isValidName("  Mary   Jane  "));
+    }
+
+    @Test
+    public void constructor_whitespaceNormalized() {
+        PetName withExtraWhitespace = new PetName("  Mary   Jane ");
+        PetName normalized = new PetName("Mary Jane");
+
+        assertTrue(withExtraWhitespace.equals(normalized));
     }
 
     @Test

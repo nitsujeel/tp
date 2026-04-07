@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_OWNER_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PET_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SERVICE_NAME;
@@ -88,7 +89,7 @@ public class DeleteCommand extends Command {
         this.targetIndex = Optional.ofNullable(targetIndex);
         this.petIndex = Optional.ofNullable(petIndex);
         this.sessionIndex = Optional.ofNullable(sessionIndex);
-        this.serviceName = Optional.ofNullable(serviceName);
+        this.serviceName = Optional.ofNullable(serviceName).map(DeleteCommand::normalizeServiceName);
     }
 
     @Override
@@ -143,7 +144,7 @@ public class DeleteCommand extends Command {
     private CommandResult deleteService(Model model) throws CommandException {
         List<Service> services = model.getServiceList();
         Optional<Service> serviceToDelete = services.stream()
-                .filter(service -> service.getName().equalsIgnoreCase(serviceName.get()))
+                .filter(service -> service.hasSameName(serviceName.get()))
                 .findFirst();
 
         if (serviceToDelete.isEmpty()) {
@@ -173,6 +174,10 @@ public class DeleteCommand extends Command {
         if (sessionIndex.get().getZeroBased() >= sessionList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_SESSION_DISPLAYED_INDEX);
         }
+    }
+
+    private static String normalizeServiceName(String serviceName) {
+        return normalizeWhitespace(serviceName);
     }
 
     @Override

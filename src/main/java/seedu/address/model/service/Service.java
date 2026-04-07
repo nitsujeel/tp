@@ -2,6 +2,8 @@ package seedu.address.model.service;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
+import static seedu.address.commons.util.StringUtil.normalizeForComparison;
+import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -30,9 +32,10 @@ public class Service {
      */
     public Service(String serviceName, double servicePrice) {
         requireNonNull(serviceName);
-        checkArgument(isValidServiceName(serviceName), MESSAGE_CONSTRAINTS);
+        String normalizedServiceName = normalizeWhitespace(serviceName);
+        checkArgument(isValidServiceName(normalizedServiceName), MESSAGE_CONSTRAINTS);
         checkArgument(isValidServicePrice(servicePrice), MESSAGE_PRICE_CONSTRAINTS);
-        this.serviceName = serviceName;
+        this.serviceName = normalizedServiceName;
         this.servicePrice = roundTo2Dp(servicePrice);
     }
 
@@ -40,14 +43,16 @@ public class Service {
      * Returns true if a given string is a valid service name.
      */
     public static boolean isValidServiceName(String test) {
-        return test.matches(VALIDATION_REGEX);
+        requireNonNull(test);
+        return normalizeWhitespace(test).matches(VALIDATION_REGEX);
     }
 
     /**
      * Returns true if a given string is a valid service price.
      */
     public static boolean isValidServicePrice(String test) {
-        return test.matches(PRICE_VALIDATION_REGEX);
+        requireNonNull(test);
+        return normalizeWhitespace(test).matches(PRICE_VALIDATION_REGEX);
     }
 
     /**
@@ -95,7 +100,16 @@ public class Service {
         }
 
         return otherService != null
-                && otherService.getName().equalsIgnoreCase(getName());
+                && hasSameName(otherService.getName());
+    }
+
+    /**
+     * Returns true if this service has the same name as {@code otherServiceName}, ignoring case
+     * and collapsing long whitespace into a single space.
+     */
+    public boolean hasSameName(String otherServiceName) {
+        requireNonNull(otherServiceName);
+        return normalizeForComparison(getName()).equals(normalizeForComparison(otherServiceName));
     }
 
     @Override

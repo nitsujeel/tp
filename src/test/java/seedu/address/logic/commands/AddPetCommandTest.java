@@ -22,6 +22,8 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
 import seedu.address.model.pet.Pet;
+import seedu.address.model.pet.PetName;
+import seedu.address.model.pet.Species;
 import seedu.address.testutil.PetBuilder;
 import seedu.address.testutil.TypicalAddressBooks;
 
@@ -57,6 +59,20 @@ public class AddPetCommandTest {
 
         AddPetCommand command = new AddPetCommand(INDEX_FIRST_PERSON,
                 new Pet(duplicatePet.getName(), duplicatePet.getSpecies(), duplicatePet.getRemark()));
+
+        assertCommandFailure(command, model, AddPetCommand.MESSAGE_DUPLICATE_PET);
+    }
+
+    @Test
+    public void execute_duplicatePetForSameOwnerCaseAndWhitespaceInsensitive_throwsCommandException() {
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
+        Person owner = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Pet duplicatePet = owner.getPetList().get(0);
+
+        AddPetCommand command = new AddPetCommand(INDEX_FIRST_PERSON,
+                new Pet(new PetName("  " + duplicatePet.getName().value.toUpperCase() + "  "),
+                        new Species("  " + duplicatePet.getSpecies().value.toLowerCase() + "  "),
+                        duplicatePet.getRemark()));
 
         assertCommandFailure(command, model, AddPetCommand.MESSAGE_DUPLICATE_PET);
     }

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.FieldContainsKeywordsPredicate;
@@ -65,7 +66,7 @@ public class FindCommandParser implements Parser<FindCommand> {
 
     private static Optional<String> parseOptionalSearchString(ArgumentMultimap argMultimap, Prefix prefix)
             throws ParseException {
-        Optional<String> value = argMultimap.getValue(prefix).map(String::trim);
+        Optional<String> value = argMultimap.getValue(prefix).map(StringUtil::normalizeWhitespace);
 
         if (value.isPresent() && value.get().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
@@ -76,7 +77,7 @@ public class FindCommandParser implements Parser<FindCommand> {
 
     private static Optional<Index> parseOptionalIndex(ArgumentMultimap argMultimap, Prefix prefix)
             throws ParseException {
-        Optional<String> value = argMultimap.getValue(prefix).map(String::trim);
+        Optional<String> value = argMultimap.getValue(prefix).map(StringUtil::normalizeWhitespace);
 
         if (value.isEmpty()) {
             return Optional.empty();
@@ -92,11 +93,11 @@ public class FindCommandParser implements Parser<FindCommand> {
     private static List<String> parseTagSearchStrings(List<String> rawTagSearchStrings) throws ParseException {
         List<String> parsedTagSearchStrings = new ArrayList<>();
         for (String rawTagSearchString : rawTagSearchStrings) {
-            String trimmedTagSearchString = rawTagSearchString.trim();
-            if (trimmedTagSearchString.isEmpty()) {
+            String normalizedTagSearchString = StringUtil.normalizeWhitespace(rawTagSearchString);
+            if (normalizedTagSearchString.isEmpty()) {
                 throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
             }
-            parsedTagSearchStrings.add(trimmedTagSearchString);
+            parsedTagSearchStrings.add(normalizedTagSearchString);
         }
         return parsedTagSearchStrings;
     }

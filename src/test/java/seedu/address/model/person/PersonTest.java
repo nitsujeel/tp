@@ -58,6 +58,10 @@ public class PersonTest {
         editedBob = new PersonBuilder(BOB).withName(nameWithTrailingSpaces).build();
         assertTrue(BOB.isSamePerson(editedBob));
 
+        // name has repeated internal spaces, phone same -> returns true
+        editedBob = new PersonBuilder(BOB).withName("Bob   Choo").build();
+        assertTrue(BOB.isSamePerson(editedBob));
+
         // same name ignoring case, different phone -> returns false
         editedBob = new PersonBuilder(BOB).withName(VALID_NAME_BOB.toLowerCase()).withPhone("33333333")
                 .build();
@@ -109,10 +113,13 @@ public class PersonTest {
         Person person = new PersonBuilder().withPets(existingPet).build();
         Pet sameIdentityPet = new Pet(new PetName("Buddy"), new Species("Dog"), new PetRemark("Needs medication"));
         Pet normalizedIdentityPet = new Pet(new PetName("buddy"), new Species("dog"), new PetRemark("Shy"));
+        Pet whitespaceNormalizedIdentityPet = new Pet(new PetName("  Buddy   "), new Species("  Dog "),
+                new PetRemark("Calm"));
         Pet differentPet = new Pet(new PetName("Buddy"), new Species("Cat"), new PetRemark("Friendly"));
 
         assertTrue(person.hasPet(sameIdentityPet));
         assertTrue(person.hasPet(normalizedIdentityPet));
+        assertTrue(person.hasPet(whitespaceNormalizedIdentityPet));
         assertFalse(person.hasPet(differentPet));
     }
 

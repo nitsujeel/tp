@@ -2,6 +2,8 @@ package seedu.address.model.tag;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
+import static seedu.address.commons.util.StringUtil.normalizeForComparison;
+import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 
 /**
  * Represents a Tag in the address book.
@@ -22,15 +24,17 @@ public class Tag {
      */
     public Tag(String tagName) {
         requireNonNull(tagName);
-        checkArgument(isValidTagName(tagName), MESSAGE_CONSTRAINTS);
-        this.tagName = tagName;
+        String normalizedTagName = normalizeWhitespace(tagName);
+        checkArgument(isValidTagName(normalizedTagName), MESSAGE_CONSTRAINTS);
+        this.tagName = normalizedTagName;
     }
 
     /**
      * Returns true if a given string is a valid tag name.
      */
     public static boolean isValidTagName(String test) {
-        return test.matches(VALIDATION_REGEX);
+        requireNonNull(test);
+        return normalizeWhitespace(test).matches(VALIDATION_REGEX);
     }
 
     @Override
@@ -45,12 +49,12 @@ public class Tag {
         }
 
         Tag otherTag = (Tag) other;
-        return tagName.equals(otherTag.tagName);
+        return normalizeForComparison(tagName).equals(normalizeForComparison(otherTag.tagName));
     }
 
     @Override
     public int hashCode() {
-        return tagName.hashCode();
+        return normalizeForComparison(tagName).hashCode();
     }
 
     /**

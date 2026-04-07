@@ -6,6 +6,8 @@ import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.BENSON;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +17,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
+import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 
 public class JsonAdaptedPersonTest {
@@ -37,6 +40,27 @@ public class JsonAdaptedPersonTest {
     public void toModelType_validPersonDetails_returnsPerson() throws Exception {
         JsonAdaptedPerson person = new JsonAdaptedPerson(BENSON);
         assertEquals(BENSON, person.toModelType());
+    }
+
+    @Test
+    public void toModelType_whitespaceNormalized_returnsPerson() throws Exception {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                "  Benson   Meier  ",
+                " 9876   5432 ",
+                "  johnd@example.com  ",
+                " 311,   Clementi Ave 2,  #02-25 ",
+                VALID_TAGS,
+                EMPTY_PETS);
+
+        Person expected = new Person(
+                new Name("Benson Meier"),
+                new Phone("9876 5432"),
+                new Email("johnd@example.com"),
+                new Address("311, Clementi Ave 2, #02-25"),
+                new HashSet<>(BENSON.getTags()),
+                new LinkedHashSet<>());
+
+        assertEquals(expected, person.toModelType());
     }
 
     @Test

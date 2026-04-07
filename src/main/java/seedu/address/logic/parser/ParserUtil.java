@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -33,11 +34,11 @@ public class ParserUtil {
      * @throws ParseException if the specified index is invalid (not non-zero unsigned integer).
      */
     public static Index parseIndex(String oneBasedIndex) throws ParseException {
-        String trimmedIndex = oneBasedIndex.trim();
-        if (!StringUtil.isNonZeroUnsignedInteger(trimmedIndex)) {
+        String normalizedIndex = normalizeWhitespace(oneBasedIndex);
+        if (!StringUtil.isNonZeroUnsignedInteger(normalizedIndex)) {
             throw new ParseException(MESSAGE_INVALID_INDEX);
         }
-        return Index.fromOneBased(Integer.parseInt(trimmedIndex));
+        return Index.fromOneBased(Integer.parseInt(normalizedIndex));
     }
 
     /**
@@ -48,11 +49,11 @@ public class ParserUtil {
      */
     public static Name parseName(String name) throws ParseException {
         requireNonNull(name);
-        String trimmedName = name.trim();
-        if (!Name.isValidName(trimmedName)) {
+        String normalizedName = normalizeWhitespace(name);
+        if (!Name.isValidName(normalizedName)) {
             throw new ParseException(Name.MESSAGE_CONSTRAINTS);
         }
-        return new Name(trimmedName);
+        return new Name(normalizedName);
     }
 
     /**
@@ -63,11 +64,11 @@ public class ParserUtil {
      */
     public static Phone parsePhone(String phone) throws ParseException {
         requireNonNull(phone);
-        String trimmedPhone = phone.trim();
-        if (!Phone.isValidPhone(trimmedPhone)) {
+        String normalizedPhone = normalizeWhitespace(phone);
+        if (!Phone.isValidPhone(normalizedPhone)) {
             throw new ParseException(Phone.MESSAGE_CONSTRAINTS);
         }
-        return new Phone(trimmedPhone);
+        return new Phone(normalizedPhone);
     }
 
     /**
@@ -78,11 +79,11 @@ public class ParserUtil {
      */
     public static Address parseAddress(String address) throws ParseException {
         requireNonNull(address);
-        String trimmedAddress = address.trim();
-        if (!Address.isValidAddress(trimmedAddress)) {
+        String normalizedAddress = normalizeWhitespace(address);
+        if (!Address.isValidAddress(normalizedAddress)) {
             throw new ParseException(Address.MESSAGE_CONSTRAINTS);
         }
-        return new Address(trimmedAddress);
+        return new Address(normalizedAddress);
     }
 
     /**
@@ -93,11 +94,11 @@ public class ParserUtil {
      */
     public static Email parseEmail(String email) throws ParseException {
         requireNonNull(email);
-        String trimmedEmail = email.trim();
-        if (!Email.isValidEmail(trimmedEmail)) {
+        String normalizedEmail = normalizeWhitespace(email);
+        if (!Email.isValidEmail(normalizedEmail)) {
             throw new ParseException(Email.MESSAGE_CONSTRAINTS);
         }
-        return new Email(trimmedEmail);
+        return new Email(normalizedEmail);
     }
 
     /**
@@ -108,11 +109,11 @@ public class ParserUtil {
      */
     public static Tag parseTag(String tag) throws ParseException {
         requireNonNull(tag);
-        String trimmedTag = tag.trim();
-        if (!Tag.isValidTagName(trimmedTag)) {
+        String normalizedTag = normalizeWhitespace(tag);
+        if (!Tag.isValidTagName(normalizedTag)) {
             throw new ParseException(Tag.MESSAGE_CONSTRAINTS);
         }
-        return new Tag(trimmedTag);
+        return new Tag(normalizedTag);
     }
 
     /**
@@ -135,11 +136,11 @@ public class ParserUtil {
      */
     public static PetName parsePetName(String petName) throws ParseException {
         requireNonNull(petName);
-        String trimmedPetName = petName.trim();
-        if (!PetName.isValidName(trimmedPetName)) {
+        String normalizedPetName = normalizeWhitespace(petName);
+        if (!PetName.isValidName(normalizedPetName)) {
             throw new ParseException(PetName.MESSAGE_CONSTRAINTS);
         }
-        return new PetName(trimmedPetName);
+        return new PetName(normalizedPetName);
     }
 
     /**
@@ -150,11 +151,11 @@ public class ParserUtil {
      */
     public static Species parseSpecies(String species) throws ParseException {
         requireNonNull(species);
-        String trimmedSpecies = species.trim();
-        if (!Species.isValidSpecies(trimmedSpecies)) {
+        String normalizedSpecies = normalizeWhitespace(species);
+        if (!Species.isValidSpecies(normalizedSpecies)) {
             throw new ParseException(Species.MESSAGE_CONSTRAINTS);
         }
-        return new Species(trimmedSpecies);
+        return new Species(normalizedSpecies);
     }
 
     /**
@@ -165,11 +166,11 @@ public class ParserUtil {
      */
     public static PetRemark parsePetRemark(String petRemark) throws ParseException {
         requireNonNull(petRemark);
-        String trimmedPetRemark = petRemark.trim();
-        if (!PetRemark.isValidRemark(trimmedPetRemark)) {
+        String normalizedPetRemark = normalizeWhitespace(petRemark);
+        if (!PetRemark.isValidRemark(normalizedPetRemark)) {
             throw new ParseException(PetRemark.MESSAGE_CONSTRAINTS);
         }
-        return new PetRemark(trimmedPetRemark);
+        return new PetRemark(normalizedPetRemark);
     }
 
     /**
@@ -180,11 +181,11 @@ public class ParserUtil {
      */
     public static String parseServiceName(String serviceName) throws ParseException {
         requireNonNull(serviceName);
-        String trimmedServiceName = serviceName.trim();
-        if (!Service.isValidServiceName(trimmedServiceName)) {
+        String normalizedServiceName = normalizeWhitespace(serviceName);
+        if (!Service.isValidServiceName(normalizedServiceName)) {
             throw new ParseException(Service.MESSAGE_CONSTRAINTS);
         }
-        return trimmedServiceName;
+        return normalizedServiceName;
     }
 
     /**
@@ -195,11 +196,11 @@ public class ParserUtil {
      */
     public static double parseServicePrice(String servicePrice) throws ParseException {
         requireNonNull(servicePrice);
-        String trimmedServicePrice = servicePrice.trim();
-        if (!Service.isValidServicePrice(trimmedServicePrice)) {
+        String normalizedServicePrice = normalizeWhitespace(servicePrice);
+        if (!Service.isValidServicePrice(normalizedServicePrice)) {
             throw new ParseException(Service.MESSAGE_PRICE_CONSTRAINTS);
         }
-        return Double.parseDouble(trimmedServicePrice);
+        return Double.parseDouble(normalizedServicePrice);
     }
 
     /**
@@ -210,10 +211,10 @@ public class ParserUtil {
      */
     public static String parseDateTime(String dateTime) throws ParseException {
         requireNonNull(dateTime);
-        String trimmedDateTime = dateTime.trim();
-        if (!Session.isValidDateTime(trimmedDateTime)) {
+        String normalizedDateTime = normalizeWhitespace(dateTime);
+        if (!Session.isValidDateTime(normalizedDateTime)) {
             throw new ParseException(Session.MESSAGE_DATETIME_CONSTRAINTS);
         }
-        return trimmedDateTime;
+        return normalizedDateTime;
     }
 }

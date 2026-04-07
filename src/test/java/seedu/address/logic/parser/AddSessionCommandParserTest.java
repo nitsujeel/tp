@@ -20,6 +20,7 @@ public class AddSessionCommandParserTest {
     private static final String VALID_START = " st/2026-03-25 10:00";
     private static final String VALID_END = " et/2026-03-25 11:00";
     private static final String VALID_SERVICE = " sn/Shampoo";
+    private static final String VALID_SERVICE_WITH_LONG_WHITESPACE = " sn/  Sham   poo  ";
 
     private final AddSessionCommandParser parser = new AddSessionCommandParser();
 
@@ -35,6 +36,14 @@ public class AddSessionCommandParserTest {
         assertParseSuccess(parser, VALID_OWNER_INDEX + VALID_PET_INDEX + VALID_START + VALID_END + VALID_SERVICE,
                 new AddSessionCommand(Index.fromOneBased(1), Index.fromOneBased(1),
                         "2026-03-25 10:00", "2026-03-25 11:00", List.of("Shampoo")));
+    }
+
+    @Test
+    public void parse_optionalServicesWithLongWhitespace_success() {
+        assertParseSuccess(parser,
+                VALID_OWNER_INDEX + VALID_PET_INDEX + VALID_START + VALID_END + VALID_SERVICE_WITH_LONG_WHITESPACE,
+                new AddSessionCommand(Index.fromOneBased(1), Index.fromOneBased(1),
+                        "2026-03-25 10:00", "2026-03-25 11:00", List.of("Sham poo")));
     }
 
     @Test

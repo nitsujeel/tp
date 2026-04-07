@@ -31,6 +31,7 @@ public class PetTest {
         assertTrue(pet.isSamePet(pet));
         assertFalse(pet.isSamePet(null));
         assertTrue(pet.isSamePet(new Pet(new PetName("Buddy"), new Species("Dog"), new PetRemark("Needs medication"))));
+        assertTrue(pet.isSamePet(new Pet(new PetName("  buddy  "), new Species(" dog "), new PetRemark("Friendly"))));
         assertFalse(pet.isSamePet(new Pet(new PetName("Bella"), new Species("Dog"), VALID_REMARK)));
         assertFalse(pet.isSamePet(new Pet(new PetName("Buddy"), new Species("Cat"), VALID_REMARK)));
     }

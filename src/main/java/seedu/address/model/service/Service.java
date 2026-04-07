@@ -16,13 +16,13 @@ import java.util.Objects;
 public class Service {
 
     public static final String MESSAGE_CONSTRAINTS = "Service name must be 1 to 30 characters.";
-    private static final int MIN_NAME_LENGTH = 1;
-    private static final int MAX_NAME_LENGTH = 30;
+    public static final int MIN_NAME_LENGTH = 1;
+    public static final int MAX_NAME_LENGTH = 30;
     public static final String MESSAGE_PRICE_CONSTRAINTS = "Service price must be a number from 0 to 10000 inclusive, "
             + "with up to 2 decimal places. Only digits and '.' are allowed.";
     public static final String PRICE_VALIDATION_REGEX = "\\d+(?:\\.\\d{1,2})?";
-    private static final double MIN_PRICE = 0.0;
-    private static final double MAX_PRICE = 10000.0;
+    public static final double MIN_PRICE = 0.0;
+    public static final double MAX_PRICE = 10000.0;
 
     public final String serviceName;
     public final double servicePrice;

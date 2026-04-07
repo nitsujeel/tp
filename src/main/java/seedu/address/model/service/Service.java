@@ -14,9 +14,9 @@ import java.util.Objects;
  */
 public class Service {
 
-    public static final String MESSAGE_CONSTRAINTS = "Service name must be 1 to 30 characters and contain only "
-            + "alphanumeric characters or spaces.";
-    public static final String VALIDATION_REGEX = "(?=.{1,30}$)\\p{Alnum}+(?: \\p{Alnum}+)*";
+    public static final String MESSAGE_CONSTRAINTS = "Service name must be 1 to 30 characters.";
+    private static final int MIN_NAME_LENGTH = 1;
+    private static final int MAX_NAME_LENGTH = 30;
     public static final String MESSAGE_PRICE_CONSTRAINTS = "Service price must be a non-negative number with up to "
             + "2 decimal places.";
     public static final String PRICE_VALIDATION_REGEX = "\\d+(?:\\.\\d{1,2})?";
@@ -44,7 +44,8 @@ public class Service {
      */
     public static boolean isValidServiceName(String test) {
         requireNonNull(test);
-        return normalizeWhitespace(test).matches(VALIDATION_REGEX);
+        int normalizedLength = normalizeWhitespace(test).length();
+        return normalizedLength >= MIN_NAME_LENGTH && normalizedLength <= MAX_NAME_LENGTH;
     }
 
     /**

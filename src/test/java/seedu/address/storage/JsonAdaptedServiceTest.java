@@ -9,7 +9,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.service.Service;
 
 public class JsonAdaptedServiceTest {
-    private static final String INVALID_SERVICE_NAME = "@wash";
+    private static final String INVALID_SERVICE_NAME = "A".repeat(31);
 
     private static final String VALID_SERVICE_NAME = "Shampoo";
     private static final double VALID_SERVICE_COST = 30.00;
@@ -25,6 +25,13 @@ public class JsonAdaptedServiceTest {
     public void toModelType_nameWithLongWhitespace_returnsNormalizedService() throws Exception {
         JsonAdaptedService service = new JsonAdaptedService("  Fur   trim ", VALID_SERVICE_COST);
         Service expectedService = new Service("Fur trim", VALID_SERVICE_COST);
+        org.junit.jupiter.api.Assertions.assertEquals(expectedService, service.toModelType());
+    }
+
+    @Test
+    public void toModelType_nameWithSpecialCharacters_returnsService() throws Exception {
+        JsonAdaptedService service = new JsonAdaptedService("@wash!*", VALID_SERVICE_COST);
+        Service expectedService = new Service("@wash!*", VALID_SERVICE_COST);
         org.junit.jupiter.api.Assertions.assertEquals(expectedService, service.toModelType());
     }
 

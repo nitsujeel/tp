@@ -8,6 +8,8 @@ import static seedu.address.testutil.Assert.assertThrows;
 import org.junit.jupiter.api.Test;
 
 public class ServiceTest {
+    private static final String VALID_MAX_LENGTH_SERVICE_NAME = "A".repeat(30);
+    private static final String INVALID_TOO_LONG_SERVICE_NAME = "A".repeat(31);
 
     @Test
     public void constructor_nullName_throwsNullPointerException() {
@@ -16,7 +18,7 @@ public class ServiceTest {
 
     @Test
     public void constructor_invalidName_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> new Service("@wash", 10.00));
+        assertThrows(IllegalArgumentException.class, () -> new Service(INVALID_TOO_LONG_SERVICE_NAME, 10.00));
     }
 
     @Test
@@ -31,8 +33,7 @@ public class ServiceTest {
 
         assertFalse(Service.isValidServiceName(""));
         assertFalse(Service.isValidServiceName(" "));
-        assertFalse(Service.isValidServiceName("^"));
-        assertFalse(Service.isValidServiceName("fur*trim"));
+        assertFalse(Service.isValidServiceName(INVALID_TOO_LONG_SERVICE_NAME));
         assertTrue(Service.isValidServiceName(" fur trim"));
         assertTrue(Service.isValidServiceName("fur trim "));
         assertTrue(Service.isValidServiceName("fur  trim"));
@@ -40,6 +41,9 @@ public class ServiceTest {
         assertTrue(Service.isValidServiceName("Shampoo"));
         assertTrue(Service.isValidServiceName("Fur trim"));
         assertTrue(Service.isValidServiceName("Walk 2"));
+        assertTrue(Service.isValidServiceName("^"));
+        assertTrue(Service.isValidServiceName("fur*trim"));
+        assertTrue(Service.isValidServiceName(VALID_MAX_LENGTH_SERVICE_NAME));
         assertTrue(Service.isValidServiceName("  Fur   trim  "));
     }
 

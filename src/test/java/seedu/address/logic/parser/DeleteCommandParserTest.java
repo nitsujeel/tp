@@ -95,7 +95,7 @@ public class DeleteCommandParserTest {
 
     @Test
     public void parse_invalidServiceName_throwsParseException() {
-        assertParseFailure(parser, " sn/@wash", Service.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, " sn/" + "A".repeat(31), Service.MESSAGE_CONSTRAINTS);
     }
 
     @Test

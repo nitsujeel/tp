@@ -34,7 +34,7 @@ public class ParserUtilTest {
     private static final String INVALID_TOO_LONG_PET_NAME = "A".repeat(31);
     private static final String INVALID_SPECIES = " ";
     private static final String INVALID_TOO_LONG_SPECIES = "A".repeat(31);
-    private static final String INVALID_SERVICE_NAME = "@wash";
+    private static final String INVALID_SERVICE_NAME = "A".repeat(31);
     private static final String INVALID_SERVICE_PRICE = "-5.00";
     private static final String INVALID_SERVICE_PRICE_MORE_THAN_TWO_DP = "20.123";
     private static final String INVALID_DATE_TIME = "2026-02-30 10:00";
@@ -49,6 +49,7 @@ public class ParserUtilTest {
     private static final String VALID_PET_NAME = "Buddy";
     private static final String VALID_SPECIES = "Dog";
     private static final String VALID_SERVICE_NAME = "Fur trim";
+    private static final String VALID_SERVICE_NAME_WITH_SPECIAL_CHARACTERS = "@wash!*";
     private static final String VALID_SERVICE_PRICE = "25.50";
     private static final String VALID_DATE_TIME = "2026-03-25 10:00";
 
@@ -359,6 +360,12 @@ public class ParserUtilTest {
     public void parseServiceName_validValueWithWhitespace_returnsTrimmedServiceName() throws Exception {
         String serviceNameWithWhitespace = WHITESPACE + VALID_SERVICE_NAME + WHITESPACE;
         assertEquals(VALID_SERVICE_NAME, ParserUtil.parseServiceName(serviceNameWithWhitespace));
+    }
+
+    @Test
+    public void parseServiceName_validValueWithSpecialCharacters_returnsServiceName() throws Exception {
+        assertEquals(VALID_SERVICE_NAME_WITH_SPECIAL_CHARACTERS,
+                ParserUtil.parseServiceName(VALID_SERVICE_NAME_WITH_SPECIAL_CHARACTERS));
     }
 
     @Test

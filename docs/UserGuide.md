@@ -195,6 +195,7 @@ Adds a service to the list of services.
 
 Format: `addservice sn/SERVICE_NAME sp/SERVICE_PRICE`
 
+* `SERVICE_NAME` must be 1 to 30 characters, with no restrictions on character type.
 * The service name must not match that of an existing service in the list (case-insensitive).
 * The price must be a non-negative number with up to 2 decimal places.
 

@@ -807,8 +807,14 @@ testers are expected to do more *exploratory* testing.
    1. Test case: `addservice sn/Ear cleaning sp/12.50`<br>
       Expected: Service is added to the service panel.
 
+   1. Test case: `addservice sn/@wash!* sp/9.90`<br>
+      Expected: Service is added to the service panel.
+
    1. Test case: `addservice sn/Ear cleaning sp/15.00`<br>
       Expected: Command fails with `Service already exists.`
+
+   1. Test case: `addservice sn/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA sp/12.50`<br>
+      Expected: Command fails with service name validation error (`Service name must be 1 to 30 characters.`).
 
    1. Test case: `addservice sn/Ear cleaning sp/-1`<br>
       Expected: Command fails with service price constraint error.

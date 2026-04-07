@@ -25,7 +25,7 @@ public class AddServiceCommandParserTest {
     private static final String SERVICE_PRICE_DESC_FUR_TRIM = " " + PREFIX_SERVICE_PRICE + VALID_SERVICE_PRICE_FUR_TRIM;
     private static final String SERVICE_PRICE_DESC_SHAMPOO = " " + PREFIX_SERVICE_PRICE + VALID_SERVICE_PRICE_SHAMPOO;
 
-    private static final String INVALID_SERVICE_NAME_DESC = " " + PREFIX_SERVICE_NAME + "@wash";
+    private static final String INVALID_SERVICE_NAME_DESC = " " + PREFIX_SERVICE_NAME + "A".repeat(31);
     private static final String INVALID_SERVICE_PRICE_DESC = " " + PREFIX_SERVICE_PRICE + "-1.00";
 
     private final AddServiceCommandParser parser = new AddServiceCommandParser();
@@ -46,6 +46,17 @@ public class AddServiceCommandParserTest {
                 Double.parseDouble(VALID_SERVICE_PRICE_FUR_TRIM));
 
         assertParseSuccess(parser, " " + PREFIX_SERVICE_NAME + "  Fur   trim " + SERVICE_PRICE_DESC_FUR_TRIM,
+                new AddServiceCommand(expectedService));
+    }
+
+    @Test
+    public void parse_serviceNameWithSpecialCharacters_success() {
+        String serviceNameWithSpecialCharacters = "@wash!*";
+        Service expectedService = new Service(serviceNameWithSpecialCharacters,
+                Double.parseDouble(VALID_SERVICE_PRICE_FUR_TRIM));
+
+        assertParseSuccess(parser, " " + PREFIX_SERVICE_NAME + serviceNameWithSpecialCharacters
+                        + SERVICE_PRICE_DESC_FUR_TRIM,
                 new AddServiceCommand(expectedService));
     }
 
@@ -84,7 +95,7 @@ public class AddServiceCommandParserTest {
 
     @Test
     public void parse_invalidValue_failure() {
-        // invalid service name
+        // invalid service name (too long)
         assertParseFailure(parser, INVALID_SERVICE_NAME_DESC + SERVICE_PRICE_DESC_FUR_TRIM,
                 Service.MESSAGE_CONSTRAINTS);
 

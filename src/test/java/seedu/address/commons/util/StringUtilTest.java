@@ -1,5 +1,6 @@
 package seedu.address.commons.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
@@ -121,6 +122,31 @@ public class StringUtilTest {
 
         // Matches multiple words in sentence
         assertTrue(StringUtil.containsWordIgnoreCase("AAA bBb ccc  bbb", "bbB"));
+    }
+
+    //---------------- Tests for normalizeWhitespace --------------------------------------
+
+    @Test
+    public void normalizeWhitespace_nullGiven_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> StringUtil.normalizeWhitespace(null));
+    }
+
+    @Test
+    public void normalizeWhitespace_validInput_collapsesWhitespace() {
+        assertEquals("Alice Bob", StringUtil.normalizeWhitespace("  Alice\t \n Bob  "));
+        assertEquals("", StringUtil.normalizeWhitespace(" \t\n "));
+    }
+
+    //---------------- Tests for normalizeForComparison --------------------------------------
+
+    @Test
+    public void normalizeForComparison_nullGiven_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> StringUtil.normalizeForComparison(null));
+    }
+
+    @Test
+    public void normalizeForComparison_validInput_normalizesCaseAndWhitespace() {
+        assertEquals("fur trim", StringUtil.normalizeForComparison("  Fur\t  TRIM  "));
     }
 
     //---------------- Tests for getDetails --------------------------------------

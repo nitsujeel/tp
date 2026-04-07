@@ -50,6 +50,11 @@ public class DeleteCommandParserTest {
     }
 
     @Test
+    public void parse_validServiceNameWithLongWhitespace_returnsDeleteCommand() {
+        assertParseSuccess(parser, " sn/  Fur   trim ", new DeleteCommand("Fur trim"));
+    }
+
+    @Test
     public void parse_missingRequiredPrefixes_throwsParseException() {
         assertParseFailure(parser, " pi/1",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));

@@ -56,6 +56,18 @@ public class FieldContainsKeywordsPredicateTest {
     }
 
     @Test
+    public void test_keywordsWithLongWhitespaceMatchNormalizedFields_returnsTrue() {
+        FieldContainsKeywordsPredicate predicate = new FieldContainsKeywordsPredicate(
+                Optional.of("alice    bob"),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.of("jurong    west"),
+                List.of("friEnds"));
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").withAddress("123 Jurong West")
+                .withTags("friends").build()));
+    }
+
+    @Test
     public void test_anyProvidedFieldDoesNotMatch_returnsFalse() {
         FieldContainsKeywordsPredicate predicate = new FieldContainsKeywordsPredicate(
                 Optional.of("alice"),

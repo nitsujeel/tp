@@ -2,6 +2,7 @@ package seedu.address.model.pet;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
+import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 
 /**
  * Represents a Pet's remark in the address book.
@@ -23,15 +24,17 @@ public class PetRemark {
      */
     public PetRemark(String remark) {
         requireNonNull(remark);
-        checkArgument(isValidRemark(remark), MESSAGE_CONSTRAINTS);
-        value = remark;
+        String normalizedRemark = normalizeWhitespace(remark);
+        checkArgument(isValidRemark(normalizedRemark), MESSAGE_CONSTRAINTS);
+        value = normalizedRemark;
     }
 
     /**
      * Returns true if a given string is a valid remark.
      */
     public static boolean isValidRemark(String test) {
-        return test.length() <= MAX_LENGTH;
+        requireNonNull(test);
+        return normalizeWhitespace(test).length() <= MAX_LENGTH;
     }
 
     @Override

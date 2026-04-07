@@ -20,6 +20,7 @@ public class UniqueServiceListTest {
     private static final Service SHAMPOO = new Service("Shampoo", 30.00);
     private static final Service FUR_TRIM = new Service("Fur trim", 25.00);
     private static final Service SHAMPOO_WITH_DIFFERENT_PRICE = new Service("Shampoo", 35.00);
+    private static final Service SHAMPOO_LOWERCASE_EXTRA_WHITESPACE = new Service("  shamPoo  ", 40.00);
 
     private final UniqueServiceList uniqueServiceList = new UniqueServiceList();
 
@@ -54,6 +55,13 @@ public class UniqueServiceListTest {
     public void add_duplicateService_throwsDuplicateServiceException() {
         uniqueServiceList.add(SHAMPOO);
         assertThrows(DuplicateServiceException.class, () -> uniqueServiceList.add(SHAMPOO_WITH_DIFFERENT_PRICE));
+    }
+
+    @Test
+    public void add_duplicateServiceCaseAndWhitespaceInsensitive_throwsDuplicateServiceException() {
+        uniqueServiceList.add(SHAMPOO);
+        assertThrows(DuplicateServiceException.class, () -> uniqueServiceList.add(
+                SHAMPOO_LOWERCASE_EXTRA_WHITESPACE));
     }
 
     @Test

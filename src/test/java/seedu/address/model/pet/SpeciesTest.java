@@ -35,6 +35,15 @@ public class SpeciesTest {
         assertTrue(Species.isValidSpecies("Dog"));
         assertTrue(Species.isValidSpecies("Sea Lion"));
         assertTrue(Species.isValidSpecies(VALID_MAX_LENGTH_SPECIES));
+        assertTrue(Species.isValidSpecies("  Sea   Lion  "));
+    }
+
+    @Test
+    public void constructor_whitespaceNormalized() {
+        Species withExtraWhitespace = new Species("  Sea   Lion ");
+        Species normalized = new Species("Sea Lion");
+
+        assertTrue(withExtraWhitespace.equals(normalized));
     }
 
     @Test

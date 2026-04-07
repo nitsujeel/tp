@@ -7,6 +7,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PET_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SERVICE_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_START_TIME;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -48,7 +49,11 @@ public class AddSessionCommandParser implements Parser<AddSessionCommand> {
         String startTime = ParserUtil.parseDateTime(argMultimap.getValue(PREFIX_START_TIME).get());
         String endTime = ParserUtil.parseDateTime(argMultimap.getValue(PREFIX_END_TIME).get());
 
-        List<String> serviceNames = argMultimap.getAllValues(PREFIX_SERVICE_NAME);
+        List<String> rawServiceNames = argMultimap.getAllValues(PREFIX_SERVICE_NAME);
+        List<String> serviceNames = new ArrayList<>();
+        for (String rawServiceName : rawServiceNames) {
+            serviceNames.add(ParserUtil.parseServiceName(rawServiceName));
+        }
         return new AddSessionCommand(ownerIndex, petIndex, startTime, endTime, serviceNames);
     }
 

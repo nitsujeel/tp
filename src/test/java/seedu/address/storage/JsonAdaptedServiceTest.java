@@ -22,6 +22,13 @@ public class JsonAdaptedServiceTest {
     }
 
     @Test
+    public void toModelType_nameWithLongWhitespace_returnsNormalizedService() throws Exception {
+        JsonAdaptedService service = new JsonAdaptedService("  Fur   trim ", VALID_SERVICE_COST);
+        Service expectedService = new Service("Fur trim", VALID_SERVICE_COST);
+        org.junit.jupiter.api.Assertions.assertEquals(expectedService, service.toModelType());
+    }
+
+    @Test
     public void toModelType_invalidName_throwsIllegalValueException() {
         JsonAdaptedService service = new JsonAdaptedService(INVALID_SERVICE_NAME, VALID_SERVICE_COST);
         assertThrows(IllegalValueException.class, Service.MESSAGE_CONSTRAINTS, service::toModelType);

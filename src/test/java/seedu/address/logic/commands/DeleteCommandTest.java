@@ -37,6 +37,7 @@ public class DeleteCommandTest {
 
     private static final String EXISTING_SERVICE_NAME = "Base service charge";
     private static final String EXISTING_SERVICE_NAME_DIFFERENT_CASE = "base service charge";
+    private static final String EXISTING_SERVICE_NAME_LONG_WHITESPACE = "  Base   service   charge ";
     private static final String NON_EXISTENT_SERVICE_NAME = "Non existent service";
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
@@ -255,6 +256,23 @@ public class DeleteCommandTest {
                 .get();
 
         DeleteCommand deleteCommand = new DeleteCommand(EXISTING_SERVICE_NAME_DIFFERENT_CASE);
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_SERVICE_SUCCESS, serviceToDelete);
+
+        Model expectedModel = new ModelManager(modelWithServices.getAddressBook(), new UserPrefs());
+        expectedModel.deleteService(serviceToDelete);
+
+        assertCommandSuccess(deleteCommand, modelWithServices, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_validServiceNameWithLongWhitespace_success() {
+        Model modelWithServices = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
+        Service serviceToDelete = modelWithServices.getServiceList().stream()
+                .filter(service -> service.getName().equals(EXISTING_SERVICE_NAME))
+                .findFirst()
+                .get();
+
+        DeleteCommand deleteCommand = new DeleteCommand(EXISTING_SERVICE_NAME_LONG_WHITESPACE);
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_SERVICE_SUCCESS, serviceToDelete);
 
         Model expectedModel = new ModelManager(modelWithServices.getAddressBook(), new UserPrefs());

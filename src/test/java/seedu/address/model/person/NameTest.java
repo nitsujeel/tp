@@ -37,6 +37,12 @@ public class NameTest {
         assertTrue(Name.isValidName("peter the 2nd")); // alphanumeric characters
         assertTrue(Name.isValidName("Capital Tan")); // with capital letters
         assertTrue(Name.isValidName("David Roger Jackson Ray Jr 2nd")); // long names
+        assertTrue(Name.isValidName("  David   Roger  ")); // extra whitespace is normalized
+    }
+
+    @Test
+    public void constructor_whitespaceNormalized() {
+        assertTrue(new Name("  Alice\t  Bob  ").equals(new Name("Alice Bob")));
     }
 
     @Test

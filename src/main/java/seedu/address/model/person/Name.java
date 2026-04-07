@@ -2,6 +2,7 @@ package seedu.address.model.person;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
+import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 
 /**
  * Represents a Person's name in the address book.
@@ -27,15 +28,17 @@ public class Name {
      */
     public Name(String name) {
         requireNonNull(name);
-        checkArgument(isValidName(name), MESSAGE_CONSTRAINTS);
-        fullName = name;
+        String normalizedName = normalizeWhitespace(name);
+        checkArgument(isValidName(normalizedName), MESSAGE_CONSTRAINTS);
+        fullName = normalizedName;
     }
 
     /**
      * Returns true if a given string is a valid name.
      */
     public static boolean isValidName(String test) {
-        return test.matches(VALIDATION_REGEX);
+        requireNonNull(test);
+        return normalizeWhitespace(test).matches(VALIDATION_REGEX);
     }
 
 

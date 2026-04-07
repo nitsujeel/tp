@@ -69,6 +69,17 @@ public class AddressBookTest {
     }
 
     @Test
+    public void resetData_withDuplicateServicesIgnoringCaseAndWhitespace_throwsDuplicateServiceException() {
+        List<Person> persons = Collections.emptyList();
+        Service shampoo = new Service("Shampoo", 30.00);
+        Service duplicateShampoo = new Service("  shamPoo  ", 35.00);
+        List<Service> newServices = Arrays.asList(shampoo, duplicateShampoo);
+        AddressBookStub newData = new AddressBookStub(persons, newServices);
+
+        assertThrows(DuplicateServiceException.class, () -> addressBook.resetData(newData));
+    }
+
+    @Test
     public void hasPerson_nullPerson_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> addressBook.hasPerson(null));
     }

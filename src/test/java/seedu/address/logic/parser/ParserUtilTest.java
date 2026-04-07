@@ -89,6 +89,12 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseName_validValueWithLongWhitespace_returnsNormalizedName() throws Exception {
+        Name expectedName = new Name("Rachel Walker");
+        assertEquals(expectedName, ParserUtil.parseName(" Rachel   \tWalker "));
+    }
+
+    @Test
     public void parsePhone_null_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> ParserUtil.parsePhone((String) null));
     }
@@ -112,6 +118,12 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parsePhone_validValueWithLongWhitespace_returnsNormalizedPhone() throws Exception {
+        Phone expectedPhone = new Phone("123 456");
+        assertEquals(expectedPhone, ParserUtil.parsePhone("123 \t 456"));
+    }
+
+    @Test
     public void parseAddress_null_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> ParserUtil.parseAddress((String) null));
     }
@@ -132,6 +144,12 @@ public class ParserUtilTest {
         String addressWithWhitespace = WHITESPACE + VALID_ADDRESS + WHITESPACE;
         Address expectedAddress = new Address(VALID_ADDRESS);
         assertEquals(expectedAddress, ParserUtil.parseAddress(addressWithWhitespace));
+    }
+
+    @Test
+    public void parseAddress_validValueWithLongWhitespace_returnsNormalizedAddress() throws Exception {
+        Address expectedAddress = new Address("123 Main Street #0505");
+        assertEquals(expectedAddress, ParserUtil.parseAddress("123  Main\tStreet   #0505"));
     }
 
     @Test
@@ -220,6 +238,11 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseServiceName_validValueWithLongWhitespace_returnsNormalizedServiceName() throws Exception {
+        assertEquals(VALID_SERVICE_NAME, ParserUtil.parseServiceName(" Fur   \t trim "));
+    }
+
+    @Test
     public void parseServicePrice_null_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> ParserUtil.parseServicePrice(null));
     }
@@ -257,5 +280,10 @@ public class ParserUtilTest {
     public void parseDateTime_validValueWithWhitespace_returnsTrimmedDateTime() throws Exception {
         String dateTimeWithWhitespace = WHITESPACE + VALID_DATE_TIME + WHITESPACE;
         assertEquals(VALID_DATE_TIME, ParserUtil.parseDateTime(dateTimeWithWhitespace));
+    }
+
+    @Test
+    public void parseDateTime_validValueWithLongWhitespace_returnsNormalizedDateTime() throws Exception {
+        assertEquals(VALID_DATE_TIME, ParserUtil.parseDateTime("2026-03-25   \t 10:00"));
     }
 }

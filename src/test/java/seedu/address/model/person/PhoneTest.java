@@ -40,6 +40,14 @@ public class PhoneTest {
         assertTrue(Phone.isValidPhone("+651234567890")); // with +
         assertTrue(Phone.isValidPhone("65-1234-5678")); // with -
         assertTrue(Phone.isValidPhone("1234 5678")); // with space
+        assertTrue(Phone.isValidPhone("  1234   5678  ")); // extra whitespace is normalized
+    }
+
+    @Test
+    public void constructor_whitespaceNormalized() {
+        Phone withExtraWhitespace = new Phone("  1234   5678 ");
+        Phone normalized = new Phone("1234 5678");
+        assertTrue(withExtraWhitespace.equals(normalized));
     }
 
     @Test

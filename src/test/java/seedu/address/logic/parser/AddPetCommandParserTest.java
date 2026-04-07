@@ -51,6 +51,15 @@ public class AddPetCommandParserTest {
     }
 
     @Test
+    public void parse_validArgsWithLongWhitespace_returnsNormalizedAddPetCommand() {
+        assertParseSuccess(parser,
+                " oi/1 pn/  Mary   Jane  ps/  Sea   Lion  pr/  Very\t  calm  ",
+                new AddPetCommand(INDEX_FIRST_PERSON,
+                        new Pet(new PetName("Mary Jane"), new Species("Sea Lion"),
+                                new PetRemark("Very calm"))));
+    }
+
+    @Test
     public void parse_missingCompulsoryPrefixes_failure() {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPetCommand.MESSAGE_USAGE);
 

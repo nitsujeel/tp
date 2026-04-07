@@ -33,13 +33,14 @@ public class ServiceTest {
         assertFalse(Service.isValidServiceName(" "));
         assertFalse(Service.isValidServiceName("^"));
         assertFalse(Service.isValidServiceName("fur*trim"));
-        assertFalse(Service.isValidServiceName(" fur trim"));
-        assertFalse(Service.isValidServiceName("fur trim "));
-        assertFalse(Service.isValidServiceName("fur  trim"));
+        assertTrue(Service.isValidServiceName(" fur trim"));
+        assertTrue(Service.isValidServiceName("fur trim "));
+        assertTrue(Service.isValidServiceName("fur  trim"));
 
         assertTrue(Service.isValidServiceName("Shampoo"));
         assertTrue(Service.isValidServiceName("Fur trim"));
         assertTrue(Service.isValidServiceName("Walk 2"));
+        assertTrue(Service.isValidServiceName("  Fur   trim  "));
     }
 
     @Test
@@ -55,6 +56,7 @@ public class ServiceTest {
         assertTrue(Service.isValidServicePrice("12"));
         assertTrue(Service.isValidServicePrice("12.3"));
         assertTrue(Service.isValidServicePrice("12.34"));
+        assertTrue(Service.isValidServicePrice("  12.34  "));
     }
 
     @Test
@@ -77,6 +79,7 @@ public class ServiceTest {
         assertTrue(service.isSameService(service));
         assertFalse(service.isSameService(null));
         assertTrue(service.isSameService(new Service("Shampoo", 35.00)));
+        assertTrue(service.isSameService(new Service("  shamPoo  ", 35.00)));
         assertFalse(service.isSameService(new Service("Walk", 30.00)));
     }
 

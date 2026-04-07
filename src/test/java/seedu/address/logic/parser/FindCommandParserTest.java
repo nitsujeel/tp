@@ -83,4 +83,17 @@ public class FindCommandParserTest {
                 expectedFindCommand);
     }
 
+    @Test
+    public void parse_valuesWithLongWhitespace_returnsNormalizedFindCommand() {
+        FindCommand expectedFindCommand =
+                new FindCommand(new FieldContainsKeywordsPredicate(
+                        Optional.of("Alice Bob"),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty(),
+                        List.of("friends")));
+
+        assertParseSuccess(parser, " on/  Alice   Bob  ot/  friends  ", expectedFindCommand);
+    }
+
 }

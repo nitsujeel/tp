@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_END_TIME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_OWNER_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PET_INDEX;
@@ -9,6 +10,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_START_TIME;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -80,9 +82,11 @@ public class AddSessionCommand extends Command {
         requireNonNull(serviceNames);
         this.ownerIndex = ownerIndex;
         this.petIndex = petIndex;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.serviceNames = List.copyOf(serviceNames);
+        this.startTime = normalizeWhitespace(startTime);
+        this.endTime = normalizeWhitespace(endTime);
+        this.serviceNames = serviceNames.stream()
+                .map(AddSessionCommand::normalizeServiceName)
+                .collect(Collectors.toUnmodifiableList());
     }
 
     @Override
@@ -151,11 +155,15 @@ public class AddSessionCommand extends Command {
      */
     private Service findServiceByName(List<Service> availServices, String serviceName) {
         for (Service service : availServices) {
-            if (service.getName().equalsIgnoreCase(serviceName)) {
+            if (service.hasSameName(serviceName)) {
                 return service;
             }
         }
         return null;
+    }
+
+    private static String normalizeServiceName(String serviceName) {
+        return normalizeWhitespace(serviceName);
     }
 
     @Override

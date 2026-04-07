@@ -197,6 +197,24 @@ public class AddSessionCommandTest {
     }
 
     @Test
+    public void execute_withServicesCaseAndWhitespaceInsensitiveServiceMatch_success() throws Exception {
+        Model modelWithServices = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
+        AddSessionCommand command = new AddSessionCommand(
+                INDEX_FIRST_PERSON, INDEX_FIRST_PERSON, VALID_START, VALID_END,
+                List.of("  shampoo  ", "  Nail   trim "));
+        command.execute(modelWithServices);
+
+        Pet pet = modelWithServices.getFilteredPersonList()
+                .get(INDEX_FIRST_PERSON.getZeroBased())
+                .getPetList()
+                .get(INDEX_FIRST_PERSON.getZeroBased());
+        Session addedSession = pet.getSessions().get(0);
+
+        assertEquals(2, addedSession.getServices().size());
+        assertEquals(40.0, addedSession.getFee(), 1e-9);
+    }
+
+    @Test
     public void equals() {
         AddSessionCommand commandA = new AddSessionCommand(
                 INDEX_FIRST_PERSON, INDEX_FIRST_PERSON, VALID_START, VALID_END);

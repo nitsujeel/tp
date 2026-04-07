@@ -135,6 +135,19 @@ public class AddOwnerCommandParserTest {
     }
 
     @Test
+    public void parse_fieldsWithLongWhitespace_success() {
+        Person expectedPerson = new PersonBuilder()
+                .withName("Bob Choo")
+                .withPhone("1234 5678")
+                .withEmail("bob@example.com")
+                .withAddress("123 Main Street")
+                .build();
+
+        assertParseSuccess(parser, " on/  Bob   Choo  ph/ 1234   5678 em/ bob@example.com  ad/ 123   Main\tStreet ",
+                new AddOwnerCommand(expectedPerson));
+    }
+
+    @Test
     public void parse_compulsoryFieldMissing_failure() {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddOwnerCommand.MESSAGE_USAGE);
 

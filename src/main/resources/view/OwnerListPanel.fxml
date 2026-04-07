@@ -1,8 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+  <GridPane styleClass="owner-pet-header">
+    <columnConstraints>
+      <ColumnConstraints percentWidth="56" hgrow="ALWAYS" />
+      <ColumnConstraints percentWidth="44" hgrow="ALWAYS" />
+    </columnConstraints>
+    <Label fx:id="ownersHeader" text="Owners"
+           styleClass="owner-pet-header-label" GridPane.columnIndex="0" GridPane.halignment="LEFT">
+      <padding>
+        <Insets top="0" right="0" bottom="0" left="15" />
+      </padding>
+    </Label>
+    <Label fx:id="petsHeader" text="Pets" styleClass="owner-pet-header-label"
+           GridPane.columnIndex="1" GridPane.halignment="LEFT">
+      <padding>
+        <Insets top="0" right="0" bottom="0" left="8" />
+      </padding>
+    </Label>
+  </GridPane>
   <ListView fx:id="personListView" VBox.vgrow="ALWAYS" />
 </VBox>

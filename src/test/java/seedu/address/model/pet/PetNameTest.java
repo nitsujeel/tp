@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 public class PetNameTest {
 
-    private static final String VALID_MAX_LENGTH_NAME = "ABCDEFGHIJKLMNO";
-    private static final String INVALID_TOO_LONG_NAME = "ABCDEFGHIJKLMNOP";
+    private static final String VALID_MAX_LENGTH_NAME = "A".repeat(30);
+    private static final String INVALID_TOO_LONG_NAME = "A".repeat(31);
 
     @Test
     public void constructor_null_throwsNullPointerException() {
@@ -27,14 +27,13 @@ public class PetNameTest {
 
         assertFalse(PetName.isValidName(""));
         assertFalse(PetName.isValidName(" "));
-        assertFalse(PetName.isValidName("1Buddy"));
-        assertFalse(PetName.isValidName("Buddy!"));
         assertFalse(PetName.isValidName(INVALID_TOO_LONG_NAME));
 
         assertTrue(PetName.isValidName("A"));
         assertTrue(PetName.isValidName("Buddy"));
-        assertTrue(PetName.isValidName("O'Malley"));
-        assertTrue(PetName.isValidName("Mary-Jane"));
+        assertTrue(PetName.isValidName("1Buddy"));
+        assertTrue(PetName.isValidName("Buddy!"));
+        assertTrue(PetName.isValidName("#$%^&*"));
         assertTrue(PetName.isValidName(VALID_MAX_LENGTH_NAME));
         assertTrue(PetName.isValidName("  Mary   Jane  "));
     }

@@ -11,9 +11,9 @@ import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 public class PetName {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Pet names should be 1 to 15 characters long and only contain letters, spaces, hyphens or apostrophes.";
-
-    public static final String VALIDATION_REGEX = "[A-Za-z][A-Za-z '\\-]{0,14}";
+            "Pet name must be 1 to 30 characters.";
+    private static final int MIN_LENGTH = 1;
+    private static final int MAX_LENGTH = 30;
 
     public final String value;
 
@@ -34,7 +34,8 @@ public class PetName {
      */
     public static boolean isValidName(String test) {
         requireNonNull(test);
-        return normalizeWhitespace(test).matches(VALIDATION_REGEX);
+        int normalizedLength = normalizeWhitespace(test).length();
+        return normalizedLength >= MIN_LENGTH && normalizedLength <= MAX_LENGTH;
     }
 
     @Override

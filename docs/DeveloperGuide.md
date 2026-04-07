@@ -726,11 +726,17 @@ testers are expected to do more *exploratory* testing.
    1. Test case: `addpet oi/1 pn/Milo ps/Cat pr/Needs medication after meals`<br>
       Expected: A new pet named `Milo` is added under `Alex Yeoh` and shown in the pet list for that owner.
 
+   1. Test case: `addpet oi/1 pn/@Milo! ps/Cat`<br>
+      Expected: Command succeeds. A new pet named `@Milo!` is added under `Alex Yeoh`.
+
    1. Test case: `addpet oi/1 pn/Buddy ps/Dog pr/Very energetic`<br>
       Expected: Command fails with `This person already has this pet.`
 
    1. Test case: `addpet oi/999 pn/Milo ps/Cat pr/Friendly`<br>
       Expected: Command fails because the owner index is invalid.
+
+   1. Test case: `addpet oi/1 pn/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ps/Cat`<br>
+      Expected: Command fails with pet name validation error (`Pet name must be 1 to 30 characters.`).
 
    1. Test case: `addpet oi/1 pn/Milo pr/Friendly`<br>
       Expected: Command fails due to invalid format (missing required `ps/` prefix).

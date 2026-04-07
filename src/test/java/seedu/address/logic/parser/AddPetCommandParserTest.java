@@ -22,13 +22,13 @@ import seedu.address.model.pet.Species;
 public class AddPetCommandParserTest {
 
     private static final String VALID_MIN_NAME = "A";
-    private static final String VALID_MAX_NAME = "ABCDEFGHIJKLMNO";
+    private static final String VALID_MAX_NAME = "A".repeat(30);
     private static final String VALID_MIN_SPECIES = "C";
     private static final String VALID_MAX_SPECIES = "ABCDEFGHIJKLMNO";
     private static final String VALID_MAX_REMARK = "a".repeat(300);
     private static final String INVALID_ZERO_INDEX = "0";
     private static final String INVALID_NON_NUMERIC_INDEX = "one";
-    private static final String INVALID_LONG_NAME = "ABCDEFGHIJKLMNOP";
+    private static final String INVALID_LONG_NAME = "A".repeat(31);
     private static final String INVALID_LONG_SPECIES = "ABCDEFGHIJKLMNOP";
     private static final String INVALID_LONG_REMARK = "a".repeat(301);
 
@@ -57,6 +57,16 @@ public class AddPetCommandParserTest {
                 new AddPetCommand(INDEX_FIRST_PERSON,
                         new Pet(new PetName("Mary Jane"), new Species("Sea Lion"),
                                 new PetRemark("Very calm"))));
+    }
+
+    @Test
+    public void parse_validArgsWithSpecialCharactersInPetName_returnsAddPetCommand() {
+        String petNameWithSpecialCharacters = "@Buddy#1!";
+        assertParseSuccess(parser,
+                " oi/1 pn/" + petNameWithSpecialCharacters + " ps/" + VALID_MIN_SPECIES,
+                new AddPetCommand(INDEX_FIRST_PERSON,
+                        new Pet(new PetName(petNameWithSpecialCharacters), new Species(VALID_MIN_SPECIES),
+                                new PetRemark(""))));
     }
 
     @Test

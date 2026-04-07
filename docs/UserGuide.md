@@ -123,7 +123,7 @@ Format: `addpet oi/OWNER_INDEX pn/PET_NAME ps/SPECIES [pr/REMARKS]`
 
 * Adds the pet with specified `PET_NAME` and `SPECIES` (and optional remark) under the owner specified by `OWNER_INDEX`.
 * `OWNER_INDEX` refers to the currently displayed owner list and must be a positive integer.
-* `PET_NAME` must be 1 to 15 characters and use only letters, spaces, hyphens, or apostrophes.
+* `PET_NAME` must be 1 to 30 characters, with no restrictions on character type.
 * `SPECIES` must be 1 to 15 characters and use only letters and spaces.
 * `REMARKS`, if provided, must be at most 300 characters.
 * A pet is considered a duplicate under the same owner if both its name and species match an existing pet for that owner.
@@ -156,7 +156,6 @@ Format: `find [on/OWNER_NAME] [ph/PHONE_NUMBER] [em/EMAIL] [ad/ADDRESS] [ot/OWNE
 
 Examples:
 * `find ps/Dog` returns owners who own pets that are `Dog`s.
-* `find on/avi jon` returns owners whose names contain `avi` OR `jon`, e.g. `Avi`, `Xavier`, `Jonathan`.
 * `find on/avi jon` returns owners whose names contain `avi` OR `jon`, e.g. `Avi`, `Xavier`, `Jonathan`.
 * `find ad/Tampines ot/VIP` returns owners whose address contains `Tampines` OR who are tagged as `VIP`s _(screenshot cropped to show relevant UI elements)_:
 ![[result for 'find ad/Tampines ot/VIP']](images/findAdTampinesOtVip.png)

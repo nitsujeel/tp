@@ -126,21 +126,24 @@ Format: `update oi/OWNER_INDEX pi/PET_INDEX pr/REMARKS`
 Examples:
 * `update oi/1 pi/3 pr/aggressive` updates the remark of the third pet listed under the first owner to be "aggressive".
 
-### Locating an owner or pet: `find`
+### Locating an owner: `find`
 
-Finds owners or pets whose details match all the given keywords.
+Finds owners whose details match at least one of the given keywords.
 
 Format: `find [on/OWNER_NAME] [ph/PHONE] [em/EMAIL] [ad/ADDRESS] [ot/OWNER_TAG]…​ [oi/OWNER_INDEX] [pn/PET_NAME] [ps/SPECIES] [pr/REMARKS]`
 
 * At least one of the optional fields must be provided.
 * The search is case-insensitive. e.g `hans` will match `Hans`.
 * Partial matches are displayed e.g. `Han` will match `Hans`.
-* Owners/Pets matching all keywords will be returned (i.e. `AND` search).
+* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
+* Owners matching at least one keyword will be returned (i.e. `OR` search) e.g. `Hans Bo` will match `Hans Gruber`, `Bo Yang`
 
 Examples:
-* `find on/Hans ps/Dog` returns pets that are `Dogs` whose owner's name contains `Hans`.
-* `find ad/Serangoon` returns owners whose address contains `Serangoon` _(screenshot cropped to show relevant UI elements)_:
-  ![[result for 'find ad/Serangoon']](images/findAdSerangoon.png)
+* `find ps/Dog` returns owners who own pets that are `Dog`s.
+* `find on/avi jon` returns owners whose names contain `avi` OR `jon`, e.g. `Avi`, `Xavier`, `Jonathan`.
+* `find on/avi jon` returns owners whose names contain `avi` OR `jon`, e.g. `Avi`, `Xavier`, `Jonathan`.
+* `find ad/Tampines ot/VIP` returns owners whose address contains `Tampines` OR who are tagged as `VIP`s _(screenshot cropped to show relevant UI elements)_:
+[[result for 'find ad/Tampines ot/VIP']](images/findAdTampinesOtVip.png)
 
 ### Listing all persons : `list`
 
@@ -271,7 +274,7 @@ Action | Format, Examples
 **Edit Owner** | `editowner oi/OWNER_INDEX [on/NAME] [ph/PHONE] [em/EMAIL] [ad/ADDRESS] [t/TAG]…​`<br> e.g., `editowner oi/1 ph/91234567 em/johndoe@example.com`
 **Add Pet** | `addpet oi/OWNER_INDEX pn/PET_NAME ps/SPECIES [pr/REMARKS]` <br> e.g., `addpet oi/2 pn/Molly ps/Golden Retriever pr/cuddly`
 **Update Pet Remarks** | `update oi/OWNER_INDEX pi/PET_INDEX pr/REMARKS` <br> e.g., `update oi/1 pi/3 pr/aggressive`
-**Find Owner or Pet** | `find [on/OWNER_NAME] [ph/PHONE] [em/EMAIL] [ad/ADDRESS] [ot/OWNER_TAG]…​ [oi/OWNER_INDEX] [pn/PET_NAME] [ps/SPECIES] [pr/REMARKS]`<br> e.g., `find on/Hans ps/Dog`
+**Find Owner** | `find [on/OWNER_NAME] [ph/PHONE] [em/EMAIL] [ad/ADDRESS] [ot/OWNER_TAG]…​ [oi/OWNER_INDEX] [pn/PET_NAME] [ps/SPECIES] [pr/REMARKS]`<br> e.g., `find on/Hans ps/Dog`
 **List All Owners and Pets** | `list`
 **Delete Owner or Pet** | `delete INDEX`<br> e.g., `delete 3`
 **Add Service** | `addservice sn/SERVICE_NAME sp/SERVICE_PRICE` <br> e.g., `addservice sn/Ear Cleaning sp/12.50`

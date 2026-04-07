@@ -28,12 +28,15 @@ public class TagTest {
         assertFalse(Tag.isValidTagName("")); // empty
         assertFalse(Tag.isValidTagName("tag_name")); // underscore
         assertFalse(Tag.isValidTagName("tag-name")); // hyphen
-        assertFalse(Tag.isValidTagName("123456789012345678901")); // 21 chars
+        assertFalse(Tag.isValidTagName("a".repeat(51))); // invalid length, exceeds 50 characters
 
         // valid tag names
         assertTrue(Tag.isValidTagName("a")); // 1 char
         assertTrue(Tag.isValidTagName("abc123")); // alphanumeric
-        assertTrue(Tag.isValidTagName("12345678901234567890")); // 20 chars
+        assertTrue(Tag.isValidTagName("123456789012345678901")); // 21 chars
+        assertTrue(Tag.isValidTagName("a".repeat(50))); // 50 chars
+        assertTrue(Tag.isValidTagName("hello!")); // includes !
+        assertTrue(Tag.isValidTagName("what?")); // includes ?
     }
 
 }

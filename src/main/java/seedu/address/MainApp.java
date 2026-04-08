@@ -3,6 +3,7 @@ package seedu.address;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 import javafx.application.Application;
@@ -103,33 +104,26 @@ public class MainApp extends Application {
      * if {@code configFilePath} is null.
      */
     protected Config initConfig(Path configFilePath) {
-        Config initializedConfig;
-        Path configFilePathUsed;
-
-        configFilePathUsed = Config.DEFAULT_CONFIG_FILE;
+        Path configFilePathUsed = Config.DEFAULT_CONFIG_FILE;
 
         if (configFilePath != null) {
             logger.info("Custom Config file specified " + configFilePath);
             configFilePathUsed = configFilePath;
         }
 
-        logger.info("Using config file : " + configFilePathUsed);
+        final Path finalConfigFilePath = configFilePathUsed;
 
-        try {
-            Optional<Config> configOptional = ConfigUtil.readConfig(configFilePathUsed);
-            if (!configOptional.isPresent()) {
-                logger.info("Creating new config file " + configFilePathUsed);
-            }
-            initializedConfig = configOptional.orElse(new Config());
-        } catch (DataLoadingException e) {
-            logger.warning("Config file at " + configFilePathUsed + " could not be loaded."
-                    + " Using default config properties.");
-            initializedConfig = new Config();
-        }
+        logger.info("Using config file : " + finalConfigFilePath);
+
+        Config initializedConfig = loadOrDefault(
+                () -> ConfigUtil.readConfig(finalConfigFilePath),
+                () -> new Config(),
+                "Creating new config file " + finalConfigFilePath,
+                "Config file at " + finalConfigFilePath + " could not be loaded. Using default config properties.");
 
         //Update config file in case it was missing to begin with or there are new/unused fields
         try {
-            ConfigUtil.saveConfig(initializedConfig, configFilePathUsed);
+            ConfigUtil.saveConfig(initializedConfig, finalConfigFilePath);
         } catch (IOException e) {
             logger.warning("Failed to save config file : " + StringUtil.getDetails(e));
         }
@@ -145,18 +139,11 @@ public class MainApp extends Application {
         Path prefsFilePath = storage.getUserPrefsFilePath();
         logger.info("Using preference file : " + prefsFilePath);
 
-        UserPrefs initializedPrefs;
-        try {
-            Optional<UserPrefs> prefsOptional = storage.readUserPrefs();
-            if (!prefsOptional.isPresent()) {
-                logger.info("Creating new preference file " + prefsFilePath);
-            }
-            initializedPrefs = prefsOptional.orElse(new UserPrefs());
-        } catch (DataLoadingException e) {
-            logger.warning("Preference file at " + prefsFilePath + " could not be loaded."
-                    + " Using default preferences.");
-            initializedPrefs = new UserPrefs();
-        }
+        UserPrefs initializedPrefs = loadOrDefault(
+                storage::readUserPrefs,
+                () -> new UserPrefs(),
+                "Creating new preference file " + prefsFilePath,
+                "Preference file at " + prefsFilePath + " could not be loaded. Using default preferences.");
 
         //Update prefs file in case it was missing to begin with or there are new/unused fields
         try {
@@ -166,6 +153,27 @@ public class MainApp extends Application {
         }
 
         return initializedPrefs;
+    }
+
+    private <T> T loadOrDefault(ThrowingOptionalSupplier<T> loader,
+                                Supplier<T> defaultSupplier,
+                                String missingDataMessage,
+                                String invalidDataMessage) {
+        try {
+            Optional<T> loadedData = loader.get();
+            if (!loadedData.isPresent()) {
+                logger.info(missingDataMessage);
+            }
+            return loadedData.orElseGet(defaultSupplier);
+        } catch (DataLoadingException e) {
+            logger.warning(invalidDataMessage);
+            return defaultSupplier.get();
+        }
+    }
+
+    @FunctionalInterface
+    private interface ThrowingOptionalSupplier<T> {
+        Optional<T> get() throws DataLoadingException;
     }
 
     @Override

@@ -74,8 +74,22 @@ public class FindCommand extends Command {
         List<Person> baselineOwners = List.copyOf(model.getFilteredPersonList());
         model.updateFilteredPersonList(person -> predicate.test(person) && matchesOwnerIndex(person, baselineOwners));
         model.updateDisplayedSessions(model.getFilteredPersonList());
-        return new CommandResult(
-                String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
+        List<Person> matched = model.getFilteredPersonList();
+        int count = matched.size();
+
+        if (count == 0) {
+            return new CommandResult("No owners found.");
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, count));
+        for (int i = 0; i < count; i++) {
+            Person person = matched.get(i);
+            sb.append(String.format("%n%d. %s — matched: %s",
+                    i + 1, person.getName().fullName, predicate.describeMatch(person)));
+        }
+
+        return new CommandResult(sb.toString());
     }
 
     private boolean matchesOwnerIndex(Person person, List<Person> baselineOwners) {

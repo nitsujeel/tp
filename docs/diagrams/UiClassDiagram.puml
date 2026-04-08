@@ -30,8 +30,8 @@ package Logic <<Rectangle>> {
 Class HiddenLogic #FFFFFF
 }
 
-Class HiddenOutside #FFFFFF
-HiddenOutside ..> Ui
+Class H #FFFFFF
+H ..> Ui
 
 UiManager .|> Ui
 UiManager --> "1" MainWindow

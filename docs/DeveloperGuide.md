@@ -71,7 +71,7 @@ The sections below give more details of each component.
 
 The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
 
-<img src="images/UiClassDiagram.png" width="600"/>
+<img src="images/UiClassDiagram.png" width="1000"/>
 
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `OwnerListPanel`, `PetListPanel`, `SessionListPanel`, `ServiceListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
@@ -90,11 +90,11 @@ The `UI` component,
 
 Here's a (partial) class diagram of the `Logic` component:
 
-<img src="images/LogicClassDiagram.png" width="550"/>
+<img src="images/LogicClassDiagram.png" width="500"/>
 
 The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete oi/1")` API call as an example.
 
-![Interactions Inside the Logic Component for the `delete 1` Command](images/DeleteSequenceDiagram.png)
+<img src="images/DeleteSequenceDiagram.png" width="800"/>
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 </div>
@@ -119,7 +119,7 @@ How the parsing works:
 
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
 
-<img src="images/ModelClassDiagram.png" width="800" />
+<img src="images/ModelClassDiagram.png" width="500" />
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** Owner and pet fields (e.g. `Address`, `Species`) have been omitted from the diagram.
 

@@ -25,14 +25,14 @@ It helps you manage owners, pets, services, and sessions quickly with structured
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **[`help`](#viewing-help-help)** and pressing Enter will open the help window.<br>
+1. Type the command in the command box and press Enter to execute it. e.g. typing [`help`](#viewing-help-help) and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
-   * [`list`](#listing-all-owners--list) : Lists all owners and pets.
+   * [`list`](#listing-all-owners-list) : Lists all owners and pets.
 
    * [`addowner on/John Doe ph/98765432 em/johnd@example.com ad/John street, block 123, #01-01`](#adding-an-owner-addowner) : Adds an owner.
 
-   * [`addpet oi/1 pn/Molly ps/Golden Retriever pr/cuddly`](#adding-a-pet-under-an-owner-addpet) : Adds a pet under owner index `1`.
+   * [`addpet oi/1 pn/Molly ps/Golden Retriever pr/cuddly`](#adding-a-pet-under-an-owner-addpet) : Adds a pet.
 
    * [`addservice sn/Nail trim sp/10.00`](#adding-a-service-addservice) : Adds a new available service.
 
@@ -53,7 +53,7 @@ It helps you manage owners, pets, services, and sessions quickly with structured
 **:information_source: Notes about the command format:**<br>
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
-  e.g. in `addowner on/OWNER_NAME`, `OWNER_NAME` is a parameter which can be used as `addowner on/John Doe`.
+  e.g. in [`addowner on/OWNER_NAME`](#adding-an-owner-addowner) , `OWNER_NAME` is a parameter which can be used as [`addowner on/John Doe`](#adding-an-owner-addowner).
 
 * Items in square brackets are optional.<br>
   e.g. `on/OWNER_NAME [ot/TAG]` can be used as `on/John Doe ot/priority` or as `on/John Doe`.
@@ -65,10 +65,10 @@ It helps you manage owners, pets, services, and sessions quickly with structured
   e.g. if the command specifies `on/OWNER_NAME ph/PHONE_NUMBER`, `ph/PHONE_NUMBER on/OWNER_NAME` is also acceptable.
 
 * Command words and prefixes are case-insensitive.<br>
-  e.g. `AdDoWnEr on/John Doe Ph/98765432 eM/j@example.com AD/123, Street` is accepted.
+  e.g. [`AdDoWnEr on/John Doe Ph/98765432 eM/j@example.com AD/123, Street`](#adding-an-owner-addowner) is accepted.
 
-* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
-  e.g. if the command specifies `help 123`, it will be interpreted as `help`.
+* Extraneous parameters for commands that do not take in parameters (such as [`help`](#viewing-help-help), [`list`](#listing-all-owners-list), [`exit`](#exiting-the-program-exit) and [`clear`](#clearing-all-owners-pets-services-and-sessions-clear)) will be ignored.<br>
+  e.g. if the command specifies [`help 123`](#listing-all-owners-list), it will be interpreted as [`help`](#listing-all-owners-list).
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
@@ -105,7 +105,7 @@ Edits an existing owner in PetLog.
 Format: `editowner oi/OWNER_INDEX [on/OWNER_NAME] [ph/PHONE_NUMBER] [em/EMAIL] [ad/ADDRESS] [ot/OVERWRITE_TAG]…​ [at/ADD_TAG]…​ [rt/REMOVE_TAG]…​`
 
 * `OWNER_INDEX` refers to the index number shown in the displayed owner list. It must be a positive integer.
-* At least one of the optional fields must be provided, following the same input validation rules as in `addowner`.
+* At least one of the optional fields must be provided, following the same input validation rules as in [`addowner`](#adding-an-owner-addowner).
 * Existing values, except tags, will be updated to the input values.
 * To add to existing tags, use `at/`.
 * To remove existing tags, use `rt/`.
@@ -172,7 +172,7 @@ Shows a list of all owners and pets in PetLog.
 Format: `list`
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-Use `list` after using `find` to go back to displaying all owners and pets.
+Use `list` after using [`find`](#searching-for-owners-find) to go back to displaying all owners and pets.
 </div>
 
 ### Adding a service: `addservice`
@@ -225,8 +225,8 @@ Examples:
 * `delete oi/4` deletes the 4th owner listed.
 * `delete oi/4 pi/2` deletes the 2nd pet listed of the 4th owner.
 * `delete oi/4 pi/2 si/3` deletes the 3rd session listed of the 2nd pet of the 4th owner.
-* `list` followed by `delete oi/2` deletes the 2nd owner listed.
-* `find Betsy` followed by `delete oi/1 pi/2` deletes the 2nd pet of the 1st owner in the results of the `find` command.
+* [`list`](#listing-all-owners-list) followed by `delete oi/2` deletes the 2nd owner listed.
+* [`find on/Betsy`](#searching-for-owners-find) followed by `delete oi/1 pi/2` deletes the 2nd pet of the 1st owner in the results of the [`find`](#searching-for-owners-find) command.
 
 **2. Deleting a service**
 
@@ -238,6 +238,14 @@ Format: `delete sn/SERVICE_NAME`
 
 Examples:
 * `delete sn/Ear Cleaning` deletes Ear Cleaning as a service from the list (if it exists).
+
+<div markdown="block" class="alert alert-info">
+
+**:information_source: Notes about the `delete` formats:**<br>
+
+Using a combination of both formats, e.g. `delete oi/1 sn/Ear cleaning`, is invalid and will not succeed.
+
+</div>
 
 ### Clearing all owners, pets, services and sessions: `clear`
 
@@ -279,20 +287,20 @@ _Details coming soon ..._
 **Q**: How do I transfer my PetLog data to another computer?<br>
 **A**: Install PetLog in the other computer, and overwrite the empty data file it creates with the file that contains the data of your previous PetLog home folder.
 
-**Q**: Why do indexes become invalid after I run `find`?<br>
-**A**: Indexes always refer to the current displayed list. After filtering, either use the new filtered indexes or run `list` to reset the indexes, before deleting/updating.
+**Q**: Why do indexes become invalid after I run [`find`](#searching-for-owners-find)?<br>
+**A**: Indexes always refer to the current displayed list. After filtering, either use the new filtered indexes or run [`list`](#listing-all-owners-list) to reset the indexes, before deleting/updating.
 
 **Q**: How do I clear a pet’s remark?<br>
-**A**: Use an empty remark value: `update oi/OWNER_INDEX pi/PET_INDEX pr/`.
+**A**: Use an empty remark value: [`update oi/OWNER_INDEX pi/PET_INDEX pr/`](#updating-the-remarks-of-a-pet-update).
 
 **Q**: Can I create a session without services?<br>
-**A**: Yes. `sn/` is optional in `addsession`. If no services are provided, the session fee is `0.00`.
+**A**: Yes. `sn/` is optional in [`addsession`](#adding-a-session-addsession). If no services are provided, the session fee is `0.00`.
 
 **Q**: How is a session’s total fee calculated?<br>
-**A**: It is the sum of all services provided in the `addsession` command, using the current service prices in PetLog.
+**A**: It is the sum of all services provided in the [`addsession`](#adding-a-session-addsession) command, using the current service prices in PetLog.
 
-**Q**: Why does `addsession` fail with “Unknown service”?<br>
-**A**: At least one `sn/SERVICE_NAME` does not exist in your current service list. Add it first with `addservice`, or correct the name.
+**Q**: Why does [`addsession`](#adding-a-session-addsession) fail with “Unknown service”?<br>
+**A**: At least one `sn/SERVICE_NAME` does not exist in your current service list. Add it first with [`addservice`](#adding-a-service-addservice), or correct the name.
 
 **Q**: Where is my data stored, and how do I reset to sample data?<br>
 **A**: Data is stored at `[JAR location]/data/petlog.json`. Back up that file to migrate data. To reset to sample data, delete `petlog.json` and restart the app.
@@ -303,7 +311,7 @@ _Details coming soon ..._
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
 
-1. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
+1. **If you minimize the Help Window** and then run the [`help`](#viewing-help-help) command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -311,16 +319,16 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Help** | `help`
-**Add Owner** | `addowner on/OWNER_NAME ph/PHONE_NUMBER em/EMAIL ad/ADDRESS [ot/TAG]…​` <br> e.g., `addowner on/John Doe ph/98765432 em/johnd@example.com ad/John street, block 123, #01-01`
-**Edit Owner** | `editowner oi/OWNER_INDEX [on/OWNER_NAME] [ph/PHONE_NUMBER] [em/EMAIL] [ad/ADDRESS] [ot/OVERWRITE_TAG]…​ [at/ADD_TAG]…​ [rt/REMOVE_TAG]…​`<br> e.g., `editowner oi/1 ph/91234567 em/johndoe@example.com`
-**Add Pet** | `addpet oi/OWNER_INDEX pn/PET_NAME ps/SPECIES [pr/REMARKS]` <br> e.g., `addpet oi/2 pn/Molly ps/Golden Retriever pr/cuddly`
-**Update Pet Remarks** | `update oi/OWNER_INDEX pi/PET_INDEX pr/REMARKS` <br> e.g., `update oi/1 pi/3 pr/aggressive`
-**Search for Owner** | `find [on/OWNER_NAME] [ph/PHONE_NUMBER] [em/EMAIL] [ad/ADDRESS] [ot/OWNER_TAG]…​ [oi/OWNER_INDEX] [pn/PET_NAME] [ps/SPECIES] [pr/REMARKS]`<br> e.g., `find on/Hans ps/Dog`
-**List All Owners and Pets** | `list`
-**Add Service** | `addservice sn/SERVICE_NAME sp/SERVICE_PRICE` <br> e.g., `addservice sn/Ear Cleaning sp/12.50`
-**Add Session** | `addsession oi/OWNER_INDEX pi/PET_INDEX st/START_TIME et/END_TIME [sn/SERVICE_NAME]…​` <br> e.g., `addsession oi/1 pi/2 st/2026-05-15 14:30 et/2026-05-15 15:30 sn/Base service charge sn/Shampoo`
-**Delete Owner, Pet or Session** | `delete oi/OWNER_INDEX [pi/PET_INDEX [si/SESSION_INDEX]]`<br> e.g., `delete oi/4 pi/2`
-**Delete Service** | `delete sn/SERVICE_NAME` <br> e.g., `delete sn/Ear Cleaning`
-**Clear All Entries** | `clear`
-**Exit Application** | `exit`
+[**Help**](#viewing-help-help) | `help`
+[**Add Owner**](#adding-an-owner-addowner) | `addowner on/OWNER_NAME ph/PHONE_NUMBER em/EMAIL ad/ADDRESS [ot/TAG]…​` <br> e.g., `addowner on/John Doe ph/98765432 em/johnd@example.com ad/John street, block 123, #01-01`
+[**Edit Owner**](#editing-an-owner-editowner) | `editowner oi/OWNER_INDEX [on/OWNER_NAME] [ph/PHONE_NUMBER] [em/EMAIL] [ad/ADDRESS] [ot/OVERWRITE_TAG]…​ [at/ADD_TAG]…​ [rt/REMOVE_TAG]…​`<br> e.g., `editowner oi/1 ph/91234567 em/johndoe@example.com`
+[**Add Pet**](#adding-a-pet-under-an-owner-addpet) | `addpet oi/OWNER_INDEX pn/PET_NAME ps/SPECIES [pr/REMARKS]` <br> e.g., `addpet oi/2 pn/Molly ps/Golden Retriever pr/cuddly`
+[**Update Pet Remarks**](#updating-the-remarks-of-a-pet-update) | `update oi/OWNER_INDEX pi/PET_INDEX pr/REMARKS` <br> e.g., `update oi/1 pi/3 pr/aggressive`
+[**Search for Owner**](#searching-for-owners-find) | `find [on/OWNER_NAME] [ph/PHONE_NUMBER] [em/EMAIL] [ad/ADDRESS] [ot/OWNER_TAG]…​ [oi/OWNER_INDEX] [pn/PET_NAME] [ps/SPECIES] [pr/REMARKS]`<br> e.g., `find on/Hans ps/Dog`
+[**List All Owners and Pets**](#listing-all-owners-list) | `list`
+[**Add Service**](#adding-a-service-addservice) | `addservice sn/SERVICE_NAME sp/SERVICE_PRICE` <br> e.g., `addservice sn/Ear Cleaning sp/12.50`
+[**Add Session**](#adding-a-session-addsession) | `addsession oi/OWNER_INDEX pi/PET_INDEX st/START_TIME et/END_TIME [sn/SERVICE_NAME]…​` <br> e.g., `addsession oi/1 pi/2 st/2026-05-15 14:30 et/2026-05-15 15:30 sn/Base service charge sn/Shampoo`
+[**Delete Owner, Pet or Session**](#deleting-an-owner-pet-session-or-service-delete) | `delete oi/OWNER_INDEX [pi/PET_INDEX [si/SESSION_INDEX]]`<br> e.g., `delete oi/4 pi/2`
+[**Delete Service**](#deleting-an-owner-pet-session-or-service-delete) | `delete sn/SERVICE_NAME` <br> e.g., `delete sn/Ear Cleaning`
+[**Clear All Entries**](#clearing-all-owners-pets-services-and-sessions-clear) | `clear`
+[**Exit Application**](#exiting-the-program-exit) | `exit`

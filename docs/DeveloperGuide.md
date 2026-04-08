@@ -645,30 +645,30 @@ MSS:
 * PetLog should work without requiring an installer.
 
 **Performance and Responsiveness**
-* PetLog should start and show the main window within 2.5 s on a baseline machine (8 GB RAM, SSD).
-* Commands should complete and update UI within 500 ms for a dataset size of up to 1000 owners + 5000 pets.
-* Opening an existing data file of up to 1000 owners + 2000 pets + 50 services + 2000 sessions should complete within 5.0 s.
+* PetLog should start and show the main window within 1.0 s on initial launch on a baseline machine (8 GB RAM, SSD).
+* Commands should complete and update UI within 500 ms for a maximal dataset size (up to 500 owners + 1000 pets + 50 services + 2000 sessions) on a baseline machine.
+* Subsequent launches that open an existing data file of a maximal data set should complete and show the main window within 2.5 s on a baseline machine.
 
 **Usability and Learnability**
-* A user with typing speed above 50 words per minute for regular English text (i.e. not code, not system admin commands) should be able to accomplish their tasks faster using commands than using the mouse.
+* A user with typing speed above 50 words per minute for regular English text (i.e. not code, not system admin commands) should be able to accomplish their tasks faster using commands than they would using the mouse on a GUI application.
 * Command error messages should be understandable to the user, by displaying the field/prefix at fault or the constraint violated.
 * Success and error messages should be consistent to the user, by following a consistent template across commands.
-* New users should be able to add an owner, add a pet, add a service and add a session in <= 10 minutes after reading the quickstart guide.
+* New users should be able to add an owner, add a pet, add a service and add a session in ≤ 5 minutes after reading the quickstart guide.
 
 **Reliability and Data Integrity**
-* When exiting PetLog via the exit command, 100% of data should persist across the app restarts.
+* When exiting PetLog via the `exit` command, 100% of data should persist across the app restarts.
 * The data should be stored locally and should be in a human editable text file.
 * The data should not be stored in a database management system.
 * On file load, invalid/corrupted data should be detected and reported to the user without PetLog crashing.
-* PetLog should have a crash-free session rate of ≥ 99.5% in pre-release Quality Assurance runs.
+* PetLog should have a crash-free session rate of ≥ 99.9% in pre-release Quality Assurance runs.
 
 **Network, Security and Privacy**
 * PetLog should function fully offline and should not transmit data over any network.
 
 **Maintainability**
 * PetLog's codebase should utilise relevant Object-Oriented Programming paradigms whenever applicable.
-* PetLog's codebase should abide by all the standards in the CS2103/T Java coding standard.
-* PetLog's codebase should be of high quality, with >= 95% of the lines of code not violating any of the guidelines in the CS2103/T textbook (under Implementation → Code quality). The violations should be justifiable by the author of the section of code.
+* PetLog's codebase should abide by all the standards in the [CS2103/T Java coding standard](https://se-education.org/guides/conventions/java/intermediate.html).
+* PetLog's codebase should be of high quality, with ≥ 95% of the lines of code not violating any of the guidelines in the [CS2103/T textbook](https://nus-cs2103-ay2526-s2.github.io/website/se-book-adapted/chapters/codeQuality.html). The violations should be justifiable by the author of the section of code.
 
 **Professionalism**
 * PetLog should not use any vulgar/offensive language.
@@ -678,28 +678,24 @@ MSS:
 * PetLog's implementation is expected to adhere to a schedule that dynamically shifts and is agreed upon by the majority of members.
 * PetLog's codebase should only use third-party frameworks/libraries/services if they are free, open-source, and have permissive license terms, and do not require any installation by the user.
 * PetLog should be packaged in a single JAR file.
-* PetLog should abide by the following file sizes: <= 100 MB for JAR file, <= 15 MB / file for documents (e.g. PDF files).
+* PetLog should abide by the following file sizes: ≤ 100 MB for JAR file, ≤ 15 MB / file for documents (e.g. PDF files).
 * PetLog's DG and UG should be PDF-friendly.
 
 ### Glossary
 
+* **Prefix** - A short keyword followed by `/` used to identify a parameter in a command (e.g., `n/`, `ph/`).
 * **Owner** - A pet owner who has entrusted their pet(s) to the boarding/day care service.
+* **Tag** - A short label attached to an owner record for categorisation (e.g., regular, VIP).
 * **Pet** - An animal registered under an owner in PetLog.
 * **Species** - The type of animal (e.g., Cat, Dog, Guinea Pig).
 * **Remarks** - Optional free-text notes attached to a pet or owner record (e.g., special care instructions, dietary needs).
-* **Owner index (`oi/`)** - A 1-based index into the currently displayed owner list.
-* **Pet index (`pi/`)** - A 1-based index into the selected owner's pet list.
-* **Service** - A globally defined care item (e.g., shampoo, nail trim) with a price from 0 to 10000 (inclusive),
-  up to 2 decimal places, using only digits and `.`.
+* **Service** - A globally defined care item (e.g., shampoo, nail trim) with a price.
 * **Service catalogue** - The full list of services stored in PetLog and reused by sessions.
 * **Session** - A care booking/event attached to one pet, with start/end times and a computed total fee.
 * **Fee** - The monetary total for a session, computed from selected services at session creation.
 * **CLI** - Command Line Interface; a text-based interface where users interact by typing commands.
 * **GUI** - Graphical User Interface; the visual interface displayed to the user.
 * **Mainstream OS** - Windows, Linux, Unix, MacOS.
-* **Care Session** - A period during which a pet is checked in to the boarding/day care service.
-* **Tag** - A short label attached to an owner record for categorisation (e.g., regular, VIP).
-* **Prefix** - A short keyword followed by `/` used to identify a parameter in a command (e.g., `n/`, `ph/`).
 * **Home folder** - The directory where the JAR runs and where PetLog stores `data/petlog.json`.
 
 --------------------------------------------------------------------------------------------------------------------

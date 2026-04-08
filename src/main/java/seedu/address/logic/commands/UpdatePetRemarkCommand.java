@@ -55,13 +55,11 @@ public class UpdatePetRemarkCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
-        //This ownerIndex is zero based
-        if (ownerIndex.getZeroBased() < 0 || ownerIndex.getZeroBased() >= lastShownList.size()) {
+        if (ownerIndex.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_OWNER_DISPLAYED_INDEX);
         }
         Person owner = lastShownList.get(ownerIndex.getZeroBased());
-        //This petIndex is zero based as well
-        if (petIndex.getZeroBased() < 0 || petIndex.getZeroBased() >= owner.getPetCount()) {
+        if (petIndex.getZeroBased() >= owner.getPetCount()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PET_DISPLAYED_INDEX);
         }
         owner.updatePetRemark(petIndex.getZeroBased(), newRemark);

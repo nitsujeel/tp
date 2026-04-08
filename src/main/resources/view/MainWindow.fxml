@@ -41,14 +41,16 @@
           </padding>
         </StackPane>
 
-        <StackPane VBox.vgrow="NEVER" fx:id="resultDisplayPlaceholder" styleClass="pane-with-border"
-                   minHeight="100" prefHeight="100" maxHeight="100">
-          <padding>
-            <Insets top="5" right="10" bottom="5" left="10" />
-          </padding>
-        </StackPane>
-
-        <StackPane fx:id="serviceListPanelPlaceholder" styleClass="pane-with-border" VBox.vgrow="NEVER" minHeight="60" minWidth="200" />
+        <HBox styleClass="pane-with-border" VBox.vgrow="NEVER">
+          <StackPane HBox.hgrow="ALWAYS" fx:id="resultDisplayPlaceholder"
+                     minHeight="100" prefHeight="100" maxHeight="100">
+            <padding>
+              <Insets top="5" right="10" bottom="5" left="10" />
+            </padding>
+          </StackPane>
+          <StackPane fx:id="serviceListPanelPlaceholder" minWidth="300" maxWidth="300"
+                     minHeight="100" prefHeight="100" maxHeight="100" />
+        </HBox>
 
         <SplitPane VBox.vgrow="ALWAYS" dividerPositions="0.55">
           <VBox styleClass="pane-with-border" minWidth="340" SplitPane.resizableWithParent="true">

@@ -4,13 +4,12 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.StringUtil.normalizeForComparison;
 import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import java.util.ArrayList;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.pet.Pet;

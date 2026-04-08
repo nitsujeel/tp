@@ -165,6 +165,46 @@ These include indexes, exceptions and utility classes.
 
 This section describes some noteworthy details on how certain features are implemented.
 
+### Pet management
+
+The pet feature is implemented by extending each `Person` with a `LinkedHashSet<Pet>`.
+
+Key implementation points:
+* `AddPetCommand` targets an owner from the current filtered owner list using `oi/`.
+* Pet identity is checked per owner via `Person#hasPet(Pet)`, which compares pet name + species after normalisation (case-insensitive, whitespace-normalised).
+* On successful `addpet`, the command rebuilds that owner with an updated pet set and applies it through `Model#setPerson(...)`.
+* Pet remarks are updated through `update oi/... pi/... pr/...` (`UpdatePetRemarkCommand`), which edits the selected pet and writes the owner back via `Model#setPerson(...)`.
+* The model also maintains a derived filtered pet list (`Model#getFilteredPetList`) so the UI can render pets directly without recalculating from owners.
+
+### Service catalogue
+
+Services are stored as a top-level catalog in `AddressBook` via `UniqueServiceList`.
+
+Key implementation points:
+* `addservice` validates service name/price through `ParserUtil` and `Service` constraints, then adds the service via `Model#addService(...)`.
+* Service uniqueness is identity-based by normalised name (`Service#isSameService` / `Service#hasSameName`), so case/spacing variants are treated as duplicates.
+* Price validation accepts only values from `0` to `10000` with up to 2 decimal places.
+* `delete sn/...` removes a service by normalised name, and rejects mixed delete modes (e.g., owner index + service name in one command) at parser level.
+
+### Session scheduling
+
+Sessions are attached to pets (not stored as a top-level list), and each `Session` stores:
+* a strict start time/end time (`yyyy-MM-dd HH:mm`)
+* a computed total fee
+* an immutable list of selected services
+
+Key implementation points:
+* `addsession` resolves owner (`oi/`) and pet (`pi/`) from the current filtered owner list.
+* Date/time parsing is strict (`Session#parseDateTime`), and end time must be after start time.
+* Optional repeated `sn/` prefixes are allowed to attach multiple services from the service catalogue.
+* Total session fee is computed from the sum of selected service prices.
+* Overlap prevention is enforced per pet via `Pet#hasOverlappingSession(...)`; sessions that only touch at boundaries are allowed.
+* `delete oi/... pi/... si/...` removes a session by index within that pet’s session list.
+* The UI-facing session list is a derived projection (`SessionEntry`) rebuilt by `Model#updateDisplayedSessions(...)`, so `list`, `find`, `addsession`, and relevant `delete` operations keep the session panel synchronised with the current owner filter.
+
+Design note:
+* Existing sessions keep their own service snapshots. Deleting a service from the catalogue affects future session creation, but not historical sessions already stored on pets.
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation

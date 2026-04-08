@@ -2,20 +2,17 @@ package seedu.address.model.person;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
+import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 
 /**
- * Represents a Person's address in the address book.
+ * Represents an owner's address.
  * Guarantees: immutable; is valid as declared in {@link #isValidAddress(String)}
  */
 public class Address {
 
-    public static final String MESSAGE_CONSTRAINTS = "Addresses should contain 1-60 characters";
-
-    /*
-     * The first character of the address must not be a whitespace,
-     * otherwise " " (a blank string) becomes a valid input.
-     */
-    public static final String VALIDATION_REGEX = "(?=.{1,60}$)[^\\s].*";
+    public static final String MESSAGE_CONSTRAINTS = "Address must be 1 to 100 characters.";
+    private static final int MIN_LENGTH = 1;
+    private static final int MAX_LENGTH = 100;
 
     public final String value;
 
@@ -26,15 +23,18 @@ public class Address {
      */
     public Address(String address) {
         requireNonNull(address);
-        checkArgument(isValidAddress(address), MESSAGE_CONSTRAINTS);
-        value = address;
+        String normalizedAddress = normalizeWhitespace(address);
+        checkArgument(isValidAddress(normalizedAddress), MESSAGE_CONSTRAINTS);
+        value = normalizedAddress;
     }
 
     /**
-     * Returns true if a given string is a valid email.
+     * Returns true if a given string is a valid address.
      */
     public static boolean isValidAddress(String test) {
-        return test.matches(VALIDATION_REGEX);
+        requireNonNull(test);
+        int normalizedLength = normalizeWhitespace(test).length();
+        return normalizedLength >= MIN_LENGTH && normalizedLength <= MAX_LENGTH;
     }
 
     @Override

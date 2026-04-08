@@ -48,6 +48,21 @@ public class AddOwnerCommandTest {
     }
 
     @Test
+    public void execute_phoneContainsNonNumericCharacters_showsWarning() throws Exception {
+        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
+        Person validPersonWithNonNumericPhone = new PersonBuilder()
+                .withPhone("65-1234-5678")
+                .build();
+
+        CommandResult commandResult = new AddOwnerCommand(validPersonWithNonNumericPhone).execute(modelStub);
+
+        assertEquals(String.format(AddOwnerCommand.MESSAGE_SUCCESS_WITH_PHONE_WARNING,
+                        Messages.format(validPersonWithNonNumericPhone)),
+                commandResult.getFeedbackToUser());
+        assertEquals(Arrays.asList(validPersonWithNonNumericPhone), modelStub.personsAdded);
+    }
+
+    @Test
     public void execute_duplicatePerson_throwsCommandException() {
         Person validPerson = new PersonBuilder().build();
         AddOwnerCommand addOwnerCommand = new AddOwnerCommand(validPerson);

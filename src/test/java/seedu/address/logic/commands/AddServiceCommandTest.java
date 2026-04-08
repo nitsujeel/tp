@@ -50,6 +50,16 @@ public class AddServiceCommandTest {
     }
 
     @Test
+    public void execute_duplicateServiceCaseAndWhitespaceInsensitive_throwsCommandException() {
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
+        Service duplicateService = model.getServiceList().get(0);
+        AddServiceCommand addServiceCommand = new AddServiceCommand(
+                new Service("  " + duplicateService.getName().toUpperCase() + "  ", duplicateService.getCost()));
+
+        assertCommandFailure(addServiceCommand, model, AddServiceCommand.MESSAGE_DUPLICATE_SERVICE);
+    }
+
+    @Test
     public void equals() {
         Service furTrim = new Service("Fur trim", 25);
         Service shampoo = new Service("Shampoo", 30);

@@ -14,6 +14,7 @@ import java.util.LinkedHashSet;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.logic.Messages;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -66,7 +67,7 @@ public class UpdatePetRemarkCommandTest {
         UpdatePetRemarkCommand command = new UpdatePetRemarkCommand(invalidOwnerIndex, INDEX_FIRST_PERSON,
                 "Some remark");
 
-        assertCommandFailure(command, model, "The owner index provided is invalid.");
+        assertCommandFailure(command, model, Messages.MESSAGE_INVALID_OWNER_DISPLAYED_INDEX);
     }
 
     @Test
@@ -79,7 +80,7 @@ public class UpdatePetRemarkCommandTest {
         UpdatePetRemarkCommand command = new UpdatePetRemarkCommand(INDEX_FIRST_PERSON, invalidPetIndex,
                 "Some remark");
 
-        assertCommandFailure(command, model, "The pet index provided is invalid.");
+        assertCommandFailure(command, model, Messages.MESSAGE_INVALID_PET_DISPLAYED_INDEX);
     }
 
     @Test
@@ -88,7 +89,7 @@ public class UpdatePetRemarkCommandTest {
         UpdatePetRemarkCommand command = new UpdatePetRemarkCommand(Index.fromOneBased(3), INDEX_FIRST_PERSON,
                 "Some remark");
 
-        assertCommandFailure(command, model, "The pet index provided is invalid.");
+        assertCommandFailure(command, model, Messages.MESSAGE_INVALID_PET_DISPLAYED_INDEX);
     }
 
     @Test

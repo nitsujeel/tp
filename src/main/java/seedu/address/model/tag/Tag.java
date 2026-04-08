@@ -2,6 +2,8 @@ package seedu.address.model.tag;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
+import static seedu.address.commons.util.StringUtil.normalizeForComparison;
+import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 
 /**
  * Represents a Tag in the address book.
@@ -9,8 +11,9 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Tag {
 
-    public static final String MESSAGE_CONSTRAINTS = "Tags names should be alphanumeric";
-    public static final String VALIDATION_REGEX = "\\p{Alnum}+";
+    public static final String MESSAGE_CONSTRAINTS = "Tag names should be 1 to 20 characters.";
+    private static final int MIN_LENGTH = 1;
+    private static final int MAX_LENGTH = 20;
 
     public final String tagName;
 
@@ -21,15 +24,18 @@ public class Tag {
      */
     public Tag(String tagName) {
         requireNonNull(tagName);
-        checkArgument(isValidTagName(tagName), MESSAGE_CONSTRAINTS);
-        this.tagName = tagName;
+        String normalizedTagName = normalizeWhitespace(tagName);
+        checkArgument(isValidTagName(normalizedTagName), MESSAGE_CONSTRAINTS);
+        this.tagName = normalizedTagName;
     }
 
     /**
      * Returns true if a given string is a valid tag name.
      */
     public static boolean isValidTagName(String test) {
-        return test.matches(VALIDATION_REGEX);
+        requireNonNull(test);
+        int normalizedLength = normalizeWhitespace(test).length();
+        return normalizedLength >= MIN_LENGTH && normalizedLength <= MAX_LENGTH;
     }
 
     @Override
@@ -44,12 +50,12 @@ public class Tag {
         }
 
         Tag otherTag = (Tag) other;
-        return tagName.equals(otherTag.tagName);
+        return normalizeForComparison(tagName).equals(normalizeForComparison(otherTag.tagName));
     }
 
     @Override
     public int hashCode() {
-        return tagName.hashCode();
+        return normalizeForComparison(tagName).hashCode();
     }
 
     /**

@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
@@ -18,6 +19,7 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.person.Person;
 import seedu.address.model.pet.Pet;
 import seedu.address.model.service.Service;
+import seedu.address.model.session.Session;
 import seedu.address.model.session.SessionEntry;
 
 /**
@@ -162,12 +164,16 @@ public class ModelManager implements Model {
     @Override
     public void updateDisplayedSessions(List<Person> persons) {
         requireNonNull(persons);
-        List<SessionEntry> entries = persons.stream()
-                .flatMap(owner -> owner.getPets().stream()
-                        .flatMap(pet -> pet.getSessions().stream()
-                                .map(session -> new SessionEntry(
-                                        session, owner.getName().fullName, pet.getName().value))))
-                .collect(Collectors.toList());
+        List<SessionEntry> entries = new ArrayList<>();
+        for (Person owner : persons) {
+            for (Pet pet : owner.getPetList()) {
+                List<Session> sessions = pet.getSessions();
+                for (int i = 0; i < sessions.size(); i++) {
+                    entries.add(new SessionEntry(
+                            sessions.get(i), owner.getName().fullName, pet.getName().value, i + 1));
+                }
+            }
+        }
         displayedSessions.setAll(entries);
     }
 

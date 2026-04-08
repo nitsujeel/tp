@@ -59,12 +59,15 @@ public class OwnerCard extends UiPart<Region> {
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
-        person.getPets().stream()
-                .forEach(pet -> petsContainer.getChildren().add(createPetLabel(pet)));
+
+        for (int i = 0; i < person.getPetList().size(); i++) {
+            Pet pet = person.getPetList().get(i);
+            petsContainer.getChildren().add(createPetLabel(pet, i + 1));
+        }
     }
 
-    private Label createPetLabel(Pet pet) {
-        Label label = new Label(pet.getName().value + " (" + pet.getSpecies().value + ")"
+    private Label createPetLabel(Pet pet, int ownerPetIndex) {
+        Label label = new Label(ownerPetIndex + ". " + pet.getName().value + " (" + pet.getSpecies().value + ")"
                 + (pet.getRemark().value.isEmpty() ? "" : " — " + pet.getRemark().value));
         label.setWrapText(true);
         label.getStyleClass().add("cell_small_label");

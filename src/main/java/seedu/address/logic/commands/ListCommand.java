@@ -15,7 +15,7 @@ public class ListCommand extends Command {
     public static final String MESSAGE_SUCCESS = "Showing all records.";
 
     public static final String MESSAGE_EXTRA_ARGS =
-            "Invalid command format: list takes no arguments.";
+            "Invalid command format. The list command does not take arguments.";
 
     @Override
     public CommandResult execute(Model model) {

@@ -116,6 +116,16 @@ public class ArgumentTokenizerTest {
     }
 
     @Test
+    public void tokenize_prefixesCaseInsensitive() {
+        String argsString = "Different Preamble String ^q111 -T dashT-Value P/pSlash value";
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(argsString, pSlash, dashT, hatQ);
+        assertPreamblePresent(argMultimap, "Different Preamble String");
+        assertArgumentPresent(argMultimap, pSlash, "pSlash value");
+        assertArgumentPresent(argMultimap, dashT, "dashT-Value");
+        assertArgumentPresent(argMultimap, hatQ, "111");
+    }
+
+    @Test
     public void tokenize_multipleArgumentsWithRepeats() {
         // Two arguments repeated, some have empty values
         String argsString = "SomePreambleString -t dashT-Value ^Q ^Q -t another dashT value p/ pSlash value -t";

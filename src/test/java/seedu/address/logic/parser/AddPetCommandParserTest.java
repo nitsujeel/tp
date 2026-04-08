@@ -22,15 +22,15 @@ import seedu.address.model.pet.Species;
 public class AddPetCommandParserTest {
 
     private static final String VALID_MIN_NAME = "A";
-    private static final String VALID_MAX_NAME = "ABCDEFGHIJKLMNO";
+    private static final String VALID_MAX_NAME = "A".repeat(30);
     private static final String VALID_MIN_SPECIES = "C";
-    private static final String VALID_MAX_SPECIES = "ABCDEFGHIJKLMNO";
-    private static final String VALID_MAX_REMARK = "a".repeat(300);
+    private static final String VALID_MAX_SPECIES = "A".repeat(30);
+    private static final String VALID_MAX_REMARK = "a".repeat(100);
     private static final String INVALID_ZERO_INDEX = "0";
     private static final String INVALID_NON_NUMERIC_INDEX = "one";
-    private static final String INVALID_LONG_NAME = "ABCDEFGHIJKLMNOP";
-    private static final String INVALID_LONG_SPECIES = "ABCDEFGHIJKLMNOP";
-    private static final String INVALID_LONG_REMARK = "a".repeat(301);
+    private static final String INVALID_LONG_NAME = "A".repeat(31);
+    private static final String INVALID_LONG_SPECIES = "A".repeat(31);
+    private static final String INVALID_LONG_REMARK = "a".repeat(101);
 
     private final AddPetCommandParser parser = new AddPetCommandParser();
 
@@ -48,6 +48,45 @@ public class AddPetCommandParserTest {
                 new AddPetCommand(INDEX_FIRST_PERSON,
                         new Pet(new PetName(VALID_MAX_NAME), new Species(VALID_MAX_SPECIES),
                                 new PetRemark(VALID_MAX_REMARK))));
+    }
+
+    @Test
+    public void parse_validArgsWithLongWhitespace_returnsNormalizedAddPetCommand() {
+        assertParseSuccess(parser,
+                " oi/1 pn/  Mary   Jane  ps/  Sea   Lion  pr/  Very\t  calm  ",
+                new AddPetCommand(INDEX_FIRST_PERSON,
+                        new Pet(new PetName("Mary Jane"), new Species("Sea Lion"),
+                                new PetRemark("Very calm"))));
+    }
+
+    @Test
+    public void parse_validArgsWithSpecialCharactersInPetName_returnsAddPetCommand() {
+        String petNameWithSpecialCharacters = "@Buddy#1!";
+        assertParseSuccess(parser,
+                " oi/1 pn/" + petNameWithSpecialCharacters + " ps/" + VALID_MIN_SPECIES,
+                new AddPetCommand(INDEX_FIRST_PERSON,
+                        new Pet(new PetName(petNameWithSpecialCharacters), new Species(VALID_MIN_SPECIES),
+                                new PetRemark(""))));
+    }
+
+    @Test
+    public void parse_validArgsWithSpecialCharactersInSpecies_returnsAddPetCommand() {
+        String speciesWithSpecialCharacters = "D0g-@Home";
+        assertParseSuccess(parser,
+                " oi/1 pn/" + VALID_MIN_NAME + " ps/" + speciesWithSpecialCharacters,
+                new AddPetCommand(INDEX_FIRST_PERSON,
+                        new Pet(new PetName(VALID_MIN_NAME), new Species(speciesWithSpecialCharacters),
+                                new PetRemark(""))));
+    }
+
+    @Test
+    public void parse_validArgsWithSpecialCharactersInRemark_returnsAddPetCommand() {
+        String remarkWithSpecialCharacters = "@Needs meds! #2";
+        assertParseSuccess(parser,
+                " oi/1 pn/" + VALID_MIN_NAME + " ps/" + VALID_MIN_SPECIES + " pr/" + remarkWithSpecialCharacters,
+                new AddPetCommand(INDEX_FIRST_PERSON,
+                        new Pet(new PetName(VALID_MIN_NAME), new Species(VALID_MIN_SPECIES),
+                                new PetRemark(remarkWithSpecialCharacters))));
     }
 
     @Test
@@ -87,7 +126,10 @@ public class AddPetCommandParserTest {
                 Species.MESSAGE_CONSTRAINTS);
         assertParseFailure(parser,
                 " oi/1 pn/" + VALID_MIN_NAME + " ps/" + VALID_MIN_SPECIES + " pr/" + INVALID_LONG_REMARK,
-                PetRemark.MESSAGE_CONSTRAINTS);
+                AddPetCommandParser.MESSAGE_PET_REMARK_CONSTRAINTS);
+        assertParseFailure(parser,
+                " oi/1 pn/" + VALID_MIN_NAME + " ps/" + VALID_MIN_SPECIES + " pr/   ",
+                AddPetCommandParser.MESSAGE_PET_REMARK_CONSTRAINTS);
     }
 
     @Test

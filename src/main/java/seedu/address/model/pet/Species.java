@@ -2,6 +2,7 @@ package seedu.address.model.pet;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
+import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 
 /**
  * Represents a Pet's species in the address book.
@@ -10,9 +11,9 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Species {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Species should be 1 to 15 characters long and only contain letters and spaces.";
-
-    public static final String VALIDATION_REGEX = "[A-Za-z][A-Za-z ]{0,14}";
+            "Species must be 1 to 30 characters.";
+    private static final int MIN_LENGTH = 1;
+    private static final int MAX_LENGTH = 30;
 
     public final String value;
 
@@ -23,15 +24,18 @@ public class Species {
      */
     public Species(String species) {
         requireNonNull(species);
-        checkArgument(isValidSpecies(species), MESSAGE_CONSTRAINTS);
-        value = species;
+        String normalizedSpecies = normalizeWhitespace(species);
+        checkArgument(isValidSpecies(normalizedSpecies), MESSAGE_CONSTRAINTS);
+        value = normalizedSpecies;
     }
 
     /**
      * Returns true if a given string is a valid species.
      */
     public static boolean isValidSpecies(String test) {
-        return test.matches(VALIDATION_REGEX);
+        requireNonNull(test);
+        int normalizedLength = normalizeWhitespace(test).length();
+        return normalizedLength >= MIN_LENGTH && normalizedLength <= MAX_LENGTH;
     }
 
     @Override

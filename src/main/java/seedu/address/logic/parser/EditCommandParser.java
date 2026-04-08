@@ -3,10 +3,12 @@ package seedu.address.logic.parser;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADD_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_OWNER_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_OWNER_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_REMOVE_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.Collection;
@@ -36,7 +38,7 @@ public class EditCommandParser implements Parser<EditCommand> {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_OWNER_INDEX, PREFIX_OWNER_NAME, PREFIX_PHONE,
-                        PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG);
+                        PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG, PREFIX_ADD_TAG, PREFIX_REMOVE_TAG);
 
         if (!arePrefixesPresent(argMultimap, PREFIX_OWNER_INDEX) || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
@@ -44,6 +46,13 @@ public class EditCommandParser implements Parser<EditCommand> {
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_OWNER_INDEX, PREFIX_OWNER_NAME,
                 PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS);
+
+        // precent mixing replace tags with add / remove tags
+        if (!argMultimap.getAllValues(PREFIX_TAG).isEmpty()
+                && (!argMultimap.getAllValues(PREFIX_ADD_TAG).isEmpty()
+                || !argMultimap.getAllValues(PREFIX_REMOVE_TAG).isEmpty())) {
+            throw new ParseException("Cannot use ot/ with at/ or rt/ together.");
+        }
 
         Index index = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_OWNER_INDEX).get());
 
@@ -61,7 +70,15 @@ public class EditCommandParser implements Parser<EditCommand> {
         if (argMultimap.getValue(PREFIX_ADDRESS).isPresent()) {
             editPersonDescriptor.setAddress(ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get()));
         }
-        parseTagsForEdit(argMultimap.getAllValues(PREFIX_TAG)).ifPresent(editPersonDescriptor::setTags);
+
+        parseTagsForEdit(argMultimap.getAllValues(PREFIX_TAG))
+                .ifPresent(editPersonDescriptor::setTags);
+
+        parseTagsForIncrementalEdit(argMultimap.getAllValues(PREFIX_ADD_TAG))
+                .ifPresent(editPersonDescriptor::setTagsToAdd);
+
+        parseTagsForIncrementalEdit(argMultimap.getAllValues(PREFIX_REMOVE_TAG))
+                .ifPresent(editPersonDescriptor::setTagsToRemove);
 
         if (!editPersonDescriptor.isAnyFieldEdited()) {
             throw new ParseException(EditCommand.MESSAGE_NOT_EDITED);
@@ -90,6 +107,19 @@ public class EditCommandParser implements Parser<EditCommand> {
         }
         Collection<String> tagSet = tags.size() == 1 && tags.contains("") ? Collections.emptySet() : tags;
         return Optional.of(ParserUtil.parseTags(tagSet));
+    }
+
+    /**
+     * Parses tags for incremental updates ({@code at/} and {@code rt/}).
+     * Unlike full tag replacement, empty values are invalid.
+     */
+    private Optional<Set<Tag>> parseTagsForIncrementalEdit(Collection<String> tags) throws ParseException {
+        assert tags != null;
+
+        if (tags.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(ParserUtil.parseTags(tags));
     }
 
 }

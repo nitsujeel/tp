@@ -31,6 +31,7 @@ public class PetTest {
         assertTrue(pet.isSamePet(pet));
         assertFalse(pet.isSamePet(null));
         assertTrue(pet.isSamePet(new Pet(new PetName("Buddy"), new Species("Dog"), new PetRemark("Needs medication"))));
+        assertTrue(pet.isSamePet(new Pet(new PetName("  buddy  "), new Species(" dog "), new PetRemark("Friendly"))));
         assertFalse(pet.isSamePet(new Pet(new PetName("Bella"), new Species("Dog"), VALID_REMARK)));
         assertFalse(pet.isSamePet(new Pet(new PetName("Buddy"), new Species("Cat"), VALID_REMARK)));
     }
@@ -86,5 +87,21 @@ public class PetTest {
 
         assertTrue(pet.equals(samePetWithoutSessions));
         assertEquals(pet.hashCode(), samePetWithoutSessions.hashCode());
+    }
+
+    @Test
+    public void toStringMethod() {
+        Pet pet = new Pet(VALID_NAME, VALID_SPECIES, VALID_REMARK);
+        String expected = "Name: Buddy; Species: Dog; Remark: Friendly";
+
+        assertEquals(expected, pet.toString());
+    }
+
+    @Test
+    public void toStringMethod_emptyRemark_showsNone() {
+        Pet pet = new Pet(VALID_NAME, VALID_SPECIES, new PetRemark(""));
+        String expected = "Name: Buddy; Species: Dog; Remark: None";
+
+        assertEquals(expected, pet.toString());
     }
 }

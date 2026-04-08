@@ -56,21 +56,33 @@ public class FieldContainsKeywordsPredicateTest {
     }
 
     @Test
-    public void test_anyProvidedFieldDoesNotMatch_returnsFalse() {
+    public void test_keywordsWithLongWhitespaceMatchNormalizedFields_returnsTrue() {
+        FieldContainsKeywordsPredicate predicate = new FieldContainsKeywordsPredicate(
+                Optional.of("alice    bob"),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.of("jurong    west"),
+                List.of("friEnds"));
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").withAddress("123 Jurong West")
+                .withTags("friends").build()));
+    }
+
+    @Test
+    public void test_anyProvidedFieldMatches_returnsTrue() {
         FieldContainsKeywordsPredicate predicate = new FieldContainsKeywordsPredicate(
                 Optional.of("alice"),
                 Optional.of("111"),
                 Optional.empty(),
                 Optional.empty(),
                 Collections.emptyList());
-        assertFalse(predicate.test(new PersonBuilder().withName("Alice Bob").withPhone("94351253").build()));
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").withPhone("94351253").build()));
     }
 
     @Test
-    public void test_allTagSearchStringsMustMatch_returnsFalse() {
+    public void test_anyTagSearchStringMatches_returnsTrue() {
         FieldContainsKeywordsPredicate predicate = new FieldContainsKeywordsPredicate(
                 Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), List.of("friend", "vip"));
-        assertFalse(predicate.test(new PersonBuilder().withName("Alice Bob").withTags("friends").build()));
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").withTags("friends").build()));
     }
 
     @Test
@@ -86,11 +98,11 @@ public class FieldContainsKeywordsPredicateTest {
     }
 
     @Test
-    public void test_petCriteriaSplitAcrossDifferentPets_returnsFalse() {
+    public void test_petCriteriaSplitAcrossDifferentPets_returnsTrue() {
         FieldContainsKeywordsPredicate predicate = new FieldContainsKeywordsPredicate(
                 Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), List.of(),
                 Optional.of("buddy"), Optional.of("cat"), Optional.empty());
-        assertFalse(predicate.test(new PersonBuilder().withPets(
+        assertTrue(predicate.test(new PersonBuilder().withPets(
                 new Pet(
                         new PetName("Buddy"),
                         new Species("Dog"),
@@ -102,13 +114,37 @@ public class FieldContainsKeywordsPredicateTest {
     }
 
     @Test
+    public void test_eachWordInPrefixSearchedSeparately_returnsTrue() {
+        FieldContainsKeywordsPredicate predicate = new FieldContainsKeywordsPredicate(
+                Optional.of("avi jon"), Optional.empty(), Optional.empty(), Optional.empty(), List.of(),
+                Optional.of("sam"), Optional.empty(), Optional.empty());
+
+        assertTrue(predicate.test(new PersonBuilder().withName("Javier Tan")
+                .withPets(new Pet(new PetName("Milo"), new Species("Dog"), new PetRemark("Friendly")))
+                .build()));
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice Tan")
+                .withPets(new Pet(new PetName("Sesame"), new Species("Cat"), new PetRemark("Calm")))
+                .build()));
+    }
+
+    @Test
+    public void test_noMatchingTerms_returnsFalse() {
+        FieldContainsKeywordsPredicate predicate = new FieldContainsKeywordsPredicate(
+                Optional.of("avi jon"), Optional.empty(), Optional.empty(), Optional.empty(), List.of(),
+                Optional.of("sam"), Optional.empty(), Optional.empty());
+
+        assertFalse(predicate.test(new PersonBuilder().withName("Alice Bob")
+                .withPets(new Pet(new PetName("Buddy"), new Species("Dog"), new PetRemark("Friendly")))
+                .build()));
+    }
+
+    @Test
     public void toStringMethod() {
         FieldContainsKeywordsPredicate predicate = new FieldContainsKeywordsPredicate(
                 Optional.of("alice"), Optional.of("9435"), Optional.empty(), Optional.empty(), List.of("friend"));
-        String expected = FieldContainsKeywordsPredicate.class.getCanonicalName()
-                + "{ownerNameKeyword=Optional[alice], phoneKeyword=Optional[9435], emailKeyword=Optional.empty, "
-                + "addressKeyword=Optional.empty, tagKeywords=[friend], petNameKeyword=Optional.empty, "
-                + "speciesKeyword=Optional.empty, petRemarkKeyword=Optional.empty}";
+        String expected = FieldContainsKeywordsPredicate.class.getCanonicalName() + "{ownerNameTerms=[alice], "
+                + "phoneTerms=[9435], emailTerms=[], addressTerms=[], tagTerms=[friend], petNameTerms=[], "
+                + "speciesTerms=[], petRemarkTerms=[]}";
         assertEquals(expected, predicate.toString());
     }
 }

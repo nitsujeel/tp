@@ -9,6 +9,8 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +21,9 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
 import seedu.address.model.pet.Pet;
+import seedu.address.model.service.Service;
 import seedu.address.model.session.Session;
+import seedu.address.testutil.TypicalAddressBooks;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
@@ -35,6 +39,8 @@ public class AddSessionCommandTest {
     private static final String OVERLAPPING_END = "2026-03-25 11:30";
     private static final String ADJACENT_START = "2026-03-25 11:00";
     private static final String ADJACENT_END = "2026-03-25 12:00";
+    private static final String SHAMPOO = "Shampoo";
+    private static final String NAIL_TRIM = "Nail trim";
 
     private Model model;
 
@@ -52,7 +58,7 @@ public class AddSessionCommandTest {
                 INDEX_FIRST_PERSON, INDEX_FIRST_PERSON, VALID_START, VALID_END);
 
         String expectedMessage = String.format(AddSessionCommand.MESSAGE_SUCCESS,
-                owner.getName(), pet.getName(), VALID_START, VALID_END) + ". Total fee: $0.00";
+                owner.getName(), pet.getName(), VALID_START, VALID_END) + " Total fee: $0.00.";
 
         // Model equality is unaffected by session addition (sessions excluded from equals)
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
@@ -162,6 +168,50 @@ public class AddSessionCommandTest {
 
         assertEquals(2, pet.getSessions().size());
         assertEquals(new Session(ADJACENT_START, ADJACENT_END), pet.getSessions().get(1));
+    }
+
+    @Test
+    public void execute_withServices_servicesStoredAndFeeCalculated() throws Exception {
+        Model modelWithServices = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
+        AddSessionCommand command = new AddSessionCommand(
+                INDEX_FIRST_PERSON, INDEX_FIRST_PERSON, VALID_START, VALID_END, List.of(SHAMPOO, NAIL_TRIM));
+        command.execute(modelWithServices);
+
+        Pet pet = modelWithServices.getFilteredPersonList()
+                .get(INDEX_FIRST_PERSON.getZeroBased())
+                .getPetList()
+                .get(INDEX_FIRST_PERSON.getZeroBased());
+        Session addedSession = pet.getSessions().get(0);
+
+        Service shampooService = modelWithServices.getServiceList().stream()
+                .filter(service -> service.getName().equals(SHAMPOO))
+                .findFirst()
+                .get();
+        Service nailTrimService = modelWithServices.getServiceList().stream()
+                .filter(service -> service.getName().equals(NAIL_TRIM))
+                .findFirst()
+                .get();
+
+        assertEquals(List.of(shampooService, nailTrimService), addedSession.getServices());
+        assertEquals(40.0, addedSession.getFee(), 1e-9);
+    }
+
+    @Test
+    public void execute_withServicesCaseAndWhitespaceInsensitiveServiceMatch_success() throws Exception {
+        Model modelWithServices = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
+        AddSessionCommand command = new AddSessionCommand(
+                INDEX_FIRST_PERSON, INDEX_FIRST_PERSON, VALID_START, VALID_END,
+                List.of("  shampoo  ", "  Nail   trim "));
+        command.execute(modelWithServices);
+
+        Pet pet = modelWithServices.getFilteredPersonList()
+                .get(INDEX_FIRST_PERSON.getZeroBased())
+                .getPetList()
+                .get(INDEX_FIRST_PERSON.getZeroBased());
+        Session addedSession = pet.getSessions().get(0);
+
+        assertEquals(2, addedSession.getServices().size());
+        assertEquals(40.0, addedSession.getFee(), 1e-9);
     }
 
     @Test

@@ -83,4 +83,33 @@ public class FindCommandParserTest {
                 expectedFindCommand);
     }
 
+    @Test
+    public void parse_valuesWithLongWhitespace_returnsNormalizedFindCommand() {
+        FindCommand expectedFindCommand =
+                new FindCommand(new FieldContainsKeywordsPredicate(
+                        Optional.of("Alice Bob"),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty(),
+                        List.of("friends")));
+
+        assertParseSuccess(parser, " on/  Alice   Bob  ot/  friends  ", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_ownerAndPetMultiWordTerms_returnsFindCommand() {
+        FindCommand expectedFindCommand =
+                new FindCommand(new FieldContainsKeywordsPredicate(
+                        Optional.of("avi jon"),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty(),
+                        List.of(),
+                        Optional.of("sam"),
+                        Optional.empty(),
+                        Optional.empty()));
+
+        assertParseSuccess(parser, " on/avi jon pn/sam", expectedFindCommand);
+    }
+
 }

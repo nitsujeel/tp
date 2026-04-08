@@ -1,28 +1,32 @@
 package seedu.address.model.person;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.StringUtil.normalizeForComparison;
+import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.pet.Pet;
 import seedu.address.model.tag.Tag;
 
 /**
- * Tests that a {@code Person} matches all provided field search strings.
+ * Tests that a {@code Person} matches at least one provided search term.
+ * Each whitespace-delimited word in each prefixed input is treated as a separate term.
  */
 public class FieldContainsKeywordsPredicate implements Predicate<Person> {
-    private final Optional<String> ownerNameKeyword;
-    private final Optional<String> phoneKeyword;
-    private final Optional<String> emailKeyword;
-    private final Optional<String> addressKeyword;
-    private final List<String> tagKeywords;
-    private final Optional<String> petNameKeyword;
-    private final Optional<String> speciesKeyword;
-    private final Optional<String> petRemarkKeyword;
+    private final List<String> ownerNameTerms;
+    private final List<String> phoneTerms;
+    private final List<String> emailTerms;
+    private final List<String> addressTerms;
+    private final List<String> tagTerms;
+    private final List<String> petNameTerms;
+    private final List<String> speciesTerms;
+    private final List<String> petRemarkTerms;
 
     /**
      * Constructs a predicate that matches persons whose provided fields contain the corresponding search strings.
@@ -35,8 +39,7 @@ public class FieldContainsKeywordsPredicate implements Predicate<Person> {
     }
 
     /**
-     * Constructs a predicate that matches persons whose provided owner fields contain the corresponding search
-     * strings and, when pet fields are provided, have at least one pet matching all provided pet search strings.
+     * Constructs a predicate that matches persons whose provided fields contain at least one provided search term.
      */
     public FieldContainsKeywordsPredicate(Optional<String> ownerNameKeyword, Optional<String> phoneKeyword,
                                           Optional<String> emailKeyword, Optional<String> addressKeyword,
@@ -50,69 +53,129 @@ public class FieldContainsKeywordsPredicate implements Predicate<Person> {
         requireNonNull(petNameKeyword);
         requireNonNull(speciesKeyword);
         requireNonNull(petRemarkKeyword);
-        this.ownerNameKeyword = ownerNameKeyword;
-        this.phoneKeyword = phoneKeyword;
-        this.emailKeyword = emailKeyword;
-        this.addressKeyword = addressKeyword;
-        this.tagKeywords = List.copyOf(tagKeywords);
-        this.petNameKeyword = petNameKeyword;
-        this.speciesKeyword = speciesKeyword;
-        this.petRemarkKeyword = petRemarkKeyword;
+        this.ownerNameTerms = toTerms(ownerNameKeyword);
+        this.phoneTerms = toTerms(phoneKeyword);
+        this.emailTerms = toTerms(emailKeyword);
+        this.addressTerms = toTerms(addressKeyword);
+        this.tagTerms = tagKeywords.stream()
+                .flatMap(tagKeyword -> toTerms(tagKeyword).stream())
+                .collect(Collectors.toUnmodifiableList());
+        this.petNameTerms = toTerms(petNameKeyword);
+        this.speciesTerms = toTerms(speciesKeyword);
+        this.petRemarkTerms = toTerms(petRemarkKeyword);
     }
 
     @Override
     public boolean test(Person person) {
-        return matchesField(person.getName().fullName, ownerNameKeyword)
-                && matchesField(person.getPhone().value, phoneKeyword)
-                && matchesField(person.getEmail().value, emailKeyword)
-                && matchesField(person.getAddress().value, addressKeyword)
-                && matchesTags(person.getTags())
-                && matchesPets(person.getPets());
-    }
-
-    private static boolean matchesField(String fieldValue, Optional<String> keyword) {
-        return keyword.map(value -> containsIgnoreCase(fieldValue, value)).orElse(true);
-    }
-
-    private boolean matchesTags(Iterable<Tag> tags) {
-        return tagKeywords.stream()
-                .allMatch(tagKeyword -> containsInAnyTag(tags, tagKeyword));
-    }
-
-    private static boolean containsInAnyTag(Iterable<Tag> tags, String tagKeyword) {
-        for (Tag tag : tags) {
-            if (containsIgnoreCase(tag.tagName, tagKeyword)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean matchesPets(Iterable<Pet> pets) {
-        if (!hasPetCriteria()) {
+        if (!hasAnyCriteria()) {
             return true;
         }
 
-        for (Pet pet : pets) {
-            if (matchesPet(pet)) {
+        return matchesField(person.getName().fullName, ownerNameTerms)
+                || matchesField(person.getPhone().value, phoneTerms)
+                || matchesField(person.getEmail().value, emailTerms)
+                || matchesField(person.getAddress().value, addressTerms)
+                || matchesTags(person.getTags())
+                || matchesPetNames(person.getPets())
+                || matchesPetSpecies(person.getPets())
+                || matchesPetRemarks(person.getPets());
+    }
+
+    private boolean hasAnyCriteria() {
+        return !ownerNameTerms.isEmpty()
+                || !phoneTerms.isEmpty()
+                || !emailTerms.isEmpty()
+                || !addressTerms.isEmpty()
+                || !tagTerms.isEmpty()
+                || !petNameTerms.isEmpty()
+                || !speciesTerms.isEmpty()
+                || !petRemarkTerms.isEmpty();
+    }
+
+    private static boolean matchesField(String fieldValue, List<String> terms) {
+        if (terms.isEmpty()) {
+            return false;
+        }
+
+        return terms.stream().anyMatch(term -> containsIgnoreCase(fieldValue, term));
+    }
+
+    private boolean matchesTags(Iterable<Tag> tags) {
+        if (tagTerms.isEmpty()) {
+            return false;
+        }
+
+        return tagTerms.stream()
+                .anyMatch(tagTerm -> containsInAnyTag(tags, tagTerm));
+    }
+
+    private static boolean containsInAnyTag(Iterable<Tag> tags, String tagTerm) {
+        for (Tag tag : tags) {
+            if (containsIgnoreCase(tag.tagName, tagTerm)) {
                 return true;
             }
         }
         return false;
     }
 
-    private boolean hasPetCriteria() {
-        return petNameKeyword.isPresent() || speciesKeyword.isPresent() || petRemarkKeyword.isPresent();
+    private boolean matchesPetNames(Iterable<Pet> pets) {
+        if (petNameTerms.isEmpty()) {
+            return false;
+        }
+
+        for (Pet pet : pets) {
+            if (matchesField(pet.getName().value, petNameTerms)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    private boolean matchesPet(Pet pet) {
-        return matchesField(pet.getName().value, petNameKeyword)
-                && matchesField(pet.getSpecies().value, speciesKeyword)
-                && matchesField(pet.getRemark().value, petRemarkKeyword);
+    private boolean matchesPetSpecies(Iterable<Pet> pets) {
+        if (speciesTerms.isEmpty()) {
+            return false;
+        }
+
+        for (Pet pet : pets) {
+            if (matchesField(pet.getSpecies().value, speciesTerms)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean matchesPetRemarks(Iterable<Pet> pets) {
+        if (petRemarkTerms.isEmpty()) {
+            return false;
+        }
+
+        for (Pet pet : pets) {
+            if (matchesField(pet.getRemark().value, petRemarkTerms)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean containsIgnoreCase(String fieldValue, String keyword) {
-        return fieldValue.toLowerCase(Locale.ROOT).contains(keyword.toLowerCase(Locale.ROOT));
+        return normalizeForComparison(fieldValue).contains(normalizeForComparison(keyword));
+    }
+
+    private static List<String> toTerms(Optional<String> optionalKeyword) {
+        requireNonNull(optionalKeyword);
+        return optionalKeyword.map(FieldContainsKeywordsPredicate::toTerms).orElse(List.of());
+    }
+
+    private static List<String> toTerms(String keyword) {
+        requireNonNull(keyword);
+        String normalizedKeyword = normalizeWhitespace(keyword);
+        if (normalizedKeyword.isEmpty()) {
+            return List.of();
+        }
+
+        return Arrays.stream(normalizedKeyword.split(" "))
+                .filter(term -> !term.isBlank())
+                .collect(Collectors.toUnmodifiableList());
     }
 
     @Override
@@ -127,27 +190,27 @@ public class FieldContainsKeywordsPredicate implements Predicate<Person> {
         }
 
         FieldContainsKeywordsPredicate otherNameContainsKeywordsPredicate = (FieldContainsKeywordsPredicate) other;
-        return ownerNameKeyword.equals(otherNameContainsKeywordsPredicate.ownerNameKeyword)
-                && phoneKeyword.equals(otherNameContainsKeywordsPredicate.phoneKeyword)
-                && emailKeyword.equals(otherNameContainsKeywordsPredicate.emailKeyword)
-                && addressKeyword.equals(otherNameContainsKeywordsPredicate.addressKeyword)
-                && tagKeywords.equals(otherNameContainsKeywordsPredicate.tagKeywords)
-                && petNameKeyword.equals(otherNameContainsKeywordsPredicate.petNameKeyword)
-                && speciesKeyword.equals(otherNameContainsKeywordsPredicate.speciesKeyword)
-                && petRemarkKeyword.equals(otherNameContainsKeywordsPredicate.petRemarkKeyword);
+        return ownerNameTerms.equals(otherNameContainsKeywordsPredicate.ownerNameTerms)
+                && phoneTerms.equals(otherNameContainsKeywordsPredicate.phoneTerms)
+                && emailTerms.equals(otherNameContainsKeywordsPredicate.emailTerms)
+                && addressTerms.equals(otherNameContainsKeywordsPredicate.addressTerms)
+                && tagTerms.equals(otherNameContainsKeywordsPredicate.tagTerms)
+                && petNameTerms.equals(otherNameContainsKeywordsPredicate.petNameTerms)
+                && speciesTerms.equals(otherNameContainsKeywordsPredicate.speciesTerms)
+                && petRemarkTerms.equals(otherNameContainsKeywordsPredicate.petRemarkTerms);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("ownerNameKeyword", ownerNameKeyword)
-                .add("phoneKeyword", phoneKeyword)
-                .add("emailKeyword", emailKeyword)
-                .add("addressKeyword", addressKeyword)
-                .add("tagKeywords", tagKeywords)
-                .add("petNameKeyword", petNameKeyword)
-                .add("speciesKeyword", speciesKeyword)
-                .add("petRemarkKeyword", petRemarkKeyword)
+                .add("ownerNameTerms", ownerNameTerms)
+                .add("phoneTerms", phoneTerms)
+                .add("emailTerms", emailTerms)
+                .add("addressTerms", addressTerms)
+                .add("tagTerms", tagTerms)
+                .add("petNameTerms", petNameTerms)
+                .add("speciesTerms", speciesTerms)
+                .add("petRemarkTerms", petRemarkTerms)
                 .toString();
     }
 }

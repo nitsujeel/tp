@@ -2,7 +2,11 @@ package seedu.address.model.service;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
+import static seedu.address.commons.util.StringUtil.normalizeForComparison;
+import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 
+import java.math.BigDecimal;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -11,12 +15,14 @@ import java.util.Objects;
  */
 public class Service {
 
-    public static final String MESSAGE_CONSTRAINTS = "Service names should only contain 1-30 alphanumeric characters "
-            + "or spaces";
-    public static final String VALIDATION_REGEX = "(?=.{1,30}$)\\p{Alnum}+(?: \\p{Alnum}+)*";
-    public static final String MESSAGE_PRICE_CONSTRAINTS = "Service price should be a non-negative number with up to "
-            + "2 decimal places";
+    public static final String MESSAGE_CONSTRAINTS = "Service name must be 1 to 30 characters.";
+    public static final int MIN_NAME_LENGTH = 1;
+    public static final int MAX_NAME_LENGTH = 30;
+    public static final String MESSAGE_PRICE_CONSTRAINTS = "Service price must be a number from 0 to 10000 inclusive, "
+            + "with up to 2 decimal places. Only digits and '.' are allowed.";
     public static final String PRICE_VALIDATION_REGEX = "\\d+(?:\\.\\d{1,2})?";
+    public static final double MIN_PRICE = 0.0;
+    public static final double MAX_PRICE = 10000.0;
 
     public final String serviceName;
     public final double servicePrice;
@@ -29,9 +35,10 @@ public class Service {
      */
     public Service(String serviceName, double servicePrice) {
         requireNonNull(serviceName);
-        checkArgument(isValidServiceName(serviceName), MESSAGE_CONSTRAINTS);
+        String normalizedServiceName = normalizeWhitespace(serviceName);
+        checkArgument(isValidServiceName(normalizedServiceName), MESSAGE_CONSTRAINTS);
         checkArgument(isValidServicePrice(servicePrice), MESSAGE_PRICE_CONSTRAINTS);
-        this.serviceName = serviceName;
+        this.serviceName = normalizedServiceName;
         this.servicePrice = roundTo2Dp(servicePrice);
     }
 
@@ -39,21 +46,34 @@ public class Service {
      * Returns true if a given string is a valid service name.
      */
     public static boolean isValidServiceName(String test) {
-        return test.matches(VALIDATION_REGEX);
+        requireNonNull(test);
+        int normalizedLength = normalizeWhitespace(test).length();
+        return normalizedLength >= MIN_NAME_LENGTH && normalizedLength <= MAX_NAME_LENGTH;
     }
 
     /**
      * Returns true if a given string is a valid service price.
      */
     public static boolean isValidServicePrice(String test) {
-        return test.matches(PRICE_VALIDATION_REGEX);
+        requireNonNull(test);
+        String normalizedPrice = normalizeWhitespace(test);
+        if (!normalizedPrice.matches(PRICE_VALIDATION_REGEX)) {
+            return false;
+        }
+
+        BigDecimal price = new BigDecimal(normalizedPrice);
+        return price.compareTo(BigDecimal.valueOf(MIN_PRICE)) >= 0
+                && price.compareTo(BigDecimal.valueOf(MAX_PRICE)) <= 0;
     }
 
     /**
      * Returns true if a given number is a valid service price.
      */
     public static boolean isValidServicePrice(double test) {
-        return Double.isFinite(test) && test >= 0 && Math.abs(test - roundTo2Dp(test)) < 1e-9;
+        return Double.isFinite(test)
+                && test >= MIN_PRICE
+                && test <= MAX_PRICE
+                && Math.abs(test - roundTo2Dp(test)) < 1e-9;
     }
 
     private static double roundTo2Dp(double value) {
@@ -94,7 +114,16 @@ public class Service {
         }
 
         return otherService != null
-                && otherService.getName().equalsIgnoreCase(getName());
+                && hasSameName(otherService.getName());
+    }
+
+    /**
+     * Returns true if this service has the same name as {@code otherServiceName}, ignoring case
+     * and collapsing long whitespace into a single space.
+     */
+    public boolean hasSameName(String otherServiceName) {
+        requireNonNull(otherServiceName);
+        return normalizeForComparison(getName()).equals(normalizeForComparison(otherServiceName));
     }
 
     @Override
@@ -106,6 +135,6 @@ public class Service {
      * Format state as text for viewing.
      */
     public String toString() {
-        return "[Service: " + serviceName + ", Price: " + servicePrice + ']';
+        return String.format(Locale.ROOT, "Name: %s; Price: $%.2f", serviceName, servicePrice);
     }
 }

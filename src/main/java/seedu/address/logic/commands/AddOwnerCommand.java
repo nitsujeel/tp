@@ -14,7 +14,7 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
 /**
- * Adds a person to the address book.
+ * Adds an Owner to PetLog.
  */
 public class AddOwnerCommand extends Command {
 
@@ -22,8 +22,8 @@ public class AddOwnerCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds an owner to the address book. "
             + "Parameters: "
-            + PREFIX_OWNER_NAME + "NAME "
-            + PREFIX_PHONE + "PHONE "
+            + PREFIX_OWNER_NAME + "OWNER_NAME "
+            + PREFIX_PHONE + "PHONE_NUMBER "
             + PREFIX_EMAIL + "EMAIL "
             + PREFIX_ADDRESS + "ADDRESS "
             + "[" + PREFIX_TAG + "TAG]...\n"
@@ -35,8 +35,10 @@ public class AddOwnerCommand extends Command {
             + PREFIX_TAG + "friends "
             + PREFIX_TAG + "owesMoney";
 
-    public static final String MESSAGE_SUCCESS = "New owner added: %1$s";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This owner already exists in PetLog";
+    public static final String MESSAGE_SUCCESS = "Added owner: %1$s";
+    public static final String MESSAGE_SUCCESS_WITH_PHONE_WARNING = "Added owner: %1$s\n"
+            + "Warning: Phone contains non-numeric characters. Use editowner to ammend if necessary.";
+    public static final String MESSAGE_DUPLICATE_PERSON = "Owner already exists.";
 
     private final Person toAdd;
 
@@ -57,7 +59,10 @@ public class AddOwnerCommand extends Command {
         }
 
         model.addPerson(toAdd);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
+        String messageTemplate = toAdd.getPhone().hasOnlyDigits()
+                ? MESSAGE_SUCCESS
+                : MESSAGE_SUCCESS_WITH_PHONE_WARNING;
+        return new CommandResult(String.format(messageTemplate, Messages.format(toAdd)));
     }
 
     @Override

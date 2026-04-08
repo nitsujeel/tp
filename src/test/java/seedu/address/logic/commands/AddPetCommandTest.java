@@ -22,6 +22,8 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
 import seedu.address.model.pet.Pet;
+import seedu.address.model.pet.PetName;
+import seedu.address.model.pet.Species;
 import seedu.address.testutil.PetBuilder;
 import seedu.address.testutil.TypicalAddressBooks;
 
@@ -62,6 +64,20 @@ public class AddPetCommandTest {
     }
 
     @Test
+    public void execute_duplicatePetForSameOwnerCaseAndWhitespaceInsensitive_throwsCommandException() {
+        Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
+        Person owner = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Pet duplicatePet = owner.getPetList().get(0);
+
+        AddPetCommand command = new AddPetCommand(INDEX_FIRST_PERSON,
+                new Pet(new PetName("  " + duplicatePet.getName().value.toUpperCase() + "  "),
+                        new Species("  " + duplicatePet.getSpecies().value.toLowerCase() + "  "),
+                        duplicatePet.getRemark()));
+
+        assertCommandFailure(command, model, AddPetCommand.MESSAGE_DUPLICATE_PET);
+    }
+
+    @Test
     public void execute_duplicatePetForDifferentOwner_success() {
         Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
         Person firstOwner = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
@@ -90,7 +106,7 @@ public class AddPetCommandTest {
 
         AddPetCommand command = new AddPetCommand(outOfBoundsOwnerIndex, petToAdd);
 
-        assertCommandFailure(command, model, "The owner index provided is invalid.");
+        assertCommandFailure(command, model, Messages.MESSAGE_INVALID_OWNER_DISPLAYED_INDEX);
     }
 
     @Test
@@ -196,7 +212,7 @@ public class AddPetCommandTest {
         AddPetCommand command = new AddPetCommand(negativeIndex, petToAdd);
 
         // This should fail because one-based index 0 is not a valid index
-        assertCommandFailure(command, model, "The owner index provided is invalid.");
+        assertCommandFailure(command, model, Messages.MESSAGE_INVALID_OWNER_DISPLAYED_INDEX);
     }
 
     @Test
@@ -243,7 +259,7 @@ public class AddPetCommandTest {
 
         AddPetCommand command = new AddPetCommand(negativeIndex, petToAdd);
 
-        assertCommandFailure(command, model, "The owner index provided is invalid.");
+        assertCommandFailure(command, model, Messages.MESSAGE_INVALID_OWNER_DISPLAYED_INDEX);
     }
      */
 }

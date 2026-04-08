@@ -7,6 +7,9 @@ import static seedu.address.testutil.Assert.assertThrows;
 import org.junit.jupiter.api.Test;
 
 public class NameTest {
+    private static final String VALID_MAX_LENGTH_NAME = "A".repeat(50);
+    private static final String INVALID_TOO_LONG_NAME = "A".repeat(51);
+
 
     @Test
     public void constructor_null_throwsNullPointerException() {
@@ -27,16 +30,23 @@ public class NameTest {
         // invalid name
         assertFalse(Name.isValidName("")); // empty string
         assertFalse(Name.isValidName(" ")); // spaces only
-        assertFalse(Name.isValidName("^")); // only non-alphanumeric characters
-        assertFalse(Name.isValidName("peter*")); // contains non-alphanumeric characters
-        assertFalse(Name.isValidName("David Roger Jackson Ray Jr 2nd Prince of the Southern Isles")); // too long
+        assertFalse(Name.isValidName(INVALID_TOO_LONG_NAME)); // exceeds 50 characters
+        assertFalse(Name.isValidName("  " + INVALID_TOO_LONG_NAME + "  ")); // still exceeds limit after trimming
 
         // valid name
         assertTrue(Name.isValidName("peter jack")); // alphabets only
         assertTrue(Name.isValidName("12345")); // numbers only
         assertTrue(Name.isValidName("peter the 2nd")); // alphanumeric characters
         assertTrue(Name.isValidName("Capital Tan")); // with capital letters
-        assertTrue(Name.isValidName("David Roger Jackson Ray Jr 2nd")); // long names
+        assertTrue(Name.isValidName("@@@ --- ???")); // special characters are allowed
+        assertTrue(Name.isValidName("John_Doe*#")); // punctuation/symbols are allowed
+        assertTrue(Name.isValidName(VALID_MAX_LENGTH_NAME)); // upper bound
+        assertTrue(Name.isValidName("  David   Roger  ")); // extra whitespace is normalized
+    }
+
+    @Test
+    public void constructor_whitespaceNormalized() {
+        assertTrue(new Name("  Alice\t  Bob  ").equals(new Name("Alice Bob")));
     }
 
     @Test

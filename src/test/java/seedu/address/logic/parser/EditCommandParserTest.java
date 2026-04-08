@@ -23,9 +23,11 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADD_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_OWNER_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_REMOVE_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
@@ -49,6 +51,12 @@ import seedu.address.testutil.EditPersonDescriptorBuilder;
 public class EditCommandParserTest {
 
     private static final String TAG_EMPTY = " " + PREFIX_TAG;
+    private static final String ADD_TAG_DESC_FRIEND = " " + PREFIX_ADD_TAG + VALID_TAG_FRIEND;
+    private static final String ADD_TAG_DESC_HUSBAND = " " + PREFIX_ADD_TAG + VALID_TAG_HUSBAND;
+    private static final String REMOVE_TAG_DESC_FRIEND = " " + PREFIX_REMOVE_TAG + VALID_TAG_FRIEND;
+    private static final String REMOVE_TAG_DESC_HUSBAND = " " + PREFIX_REMOVE_TAG + VALID_TAG_HUSBAND;
+    private static final String ADD_TAG_EMPTY = " " + PREFIX_ADD_TAG;
+    private static final String REMOVE_TAG_EMPTY = " " + PREFIX_REMOVE_TAG;
 
     private static final String MESSAGE_INVALID_FORMAT =
             String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE);
@@ -218,5 +226,77 @@ public class EditCommandParserTest {
         EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_addTagSpecified_success() throws Exception {
+        Index targetIndex = INDEX_FIRST_PERSON;
+        String userInput = " " + PREFIX_OWNER_INDEX + targetIndex.getOneBased() + ADD_TAG_DESC_FRIEND;
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptor();
+        descriptor.setTagsToAdd(java.util.Set.of(new Tag(VALID_TAG_FRIEND)));
+        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_removeTagSpecified_success() throws Exception {
+        Index targetIndex = INDEX_FIRST_PERSON;
+        String userInput = " " + PREFIX_OWNER_INDEX + targetIndex.getOneBased() + REMOVE_TAG_DESC_HUSBAND;
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptor();
+        descriptor.setTagsToRemove(ParserUtil.parseTags(java.util.List.of(VALID_TAG_HUSBAND)));
+        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_addAndRemoveTagsSpecified_success() throws Exception {
+        Index targetIndex = INDEX_FIRST_PERSON;
+        String userInput = " " + PREFIX_OWNER_INDEX + targetIndex.getOneBased()
+                + ADD_TAG_DESC_FRIEND + REMOVE_TAG_DESC_HUSBAND;
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptor();
+        descriptor.setTagsToAdd(java.util.Set.of(new Tag(VALID_TAG_FRIEND)));
+        descriptor.setTagsToRemove(java.util.Set.of(new Tag(VALID_TAG_HUSBAND)));
+        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_replaceAndAddTags_failure() {
+        Index targetIndex = INDEX_FIRST_PERSON;
+        String userInput = " " + PREFIX_OWNER_INDEX + targetIndex.getOneBased()
+                + TAG_DESC_FRIEND + ADD_TAG_DESC_HUSBAND;
+
+        assertParseFailure(parser, userInput, "Cannot use ot/ with at/ or rt/ together.");
+    }
+
+    @Test
+    public void parse_replaceAndRemoveTags_failure() {
+        Index targetIndex = INDEX_FIRST_PERSON;
+        String userInput = " " + PREFIX_OWNER_INDEX + targetIndex.getOneBased()
+                + TAG_DESC_FRIEND + REMOVE_TAG_DESC_HUSBAND;
+
+        assertParseFailure(parser, userInput, "Cannot use ot/ with at/ or rt/ together.");
+    }
+
+    @Test
+    public void parse_emptyAddTag_failure() {
+        Index targetIndex = INDEX_FIRST_PERSON;
+        String userInput = " " + PREFIX_OWNER_INDEX + targetIndex.getOneBased() + " " + PREFIX_ADD_TAG;
+
+        assertParseFailure(parser, userInput, Tag.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_emptyRemoveTag_failure() {
+        Index targetIndex = INDEX_FIRST_PERSON;
+        String userInput = " " + PREFIX_OWNER_INDEX + targetIndex.getOneBased() + REMOVE_TAG_EMPTY;
+
+        assertParseFailure(parser, userInput, Tag.MESSAGE_CONSTRAINTS);
     }
 }

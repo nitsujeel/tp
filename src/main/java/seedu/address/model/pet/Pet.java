@@ -2,13 +2,13 @@ package seedu.address.model.pet;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.commons.util.StringUtil.normalizeForComparison;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.session.Session;
 
 /**
@@ -65,6 +65,13 @@ public class Pet {
     }
 
     /**
+     * Removes the session at the given 0-based index from this pet's session list.
+     */
+    public void removeSession(int sessionIndex) {
+        sessions.remove(sessionIndex);
+    }
+
+    /**
      * Returns true if the given session overlaps with any existing session for this pet.
      */
     public boolean hasOverlappingSession(Session session) {
@@ -82,8 +89,9 @@ public class Pet {
         }
 
         return otherPet != null
-                && otherPet.getName().equals(getName())
-                && otherPet.getSpecies().equals(getSpecies());
+                && normalizeForComparison(otherPet.getName().value).equals(normalizeForComparison(getName().value))
+                && normalizeForComparison(otherPet.getSpecies().value)
+                .equals(normalizeForComparison(getSpecies().value));
     }
 
     /**
@@ -123,11 +131,10 @@ public class Pet {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .add("name", name)
-                .add("species", species)
-                .add("remark", remark)
-                .toString();
+        String readableRemark = remark.toString().isBlank() ? "None" : remark.toString();
+        return "Name: " + name
+                + "; Species: " + species
+                + "; Remark: " + readableRemark;
     }
 
 }

@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 public class SpeciesTest {
 
-    private static final String VALID_MAX_LENGTH_SPECIES = "ABCDEFGHIJKLMNO";
-    private static final String INVALID_TOO_LONG_SPECIES = "ABCDEFGHIJKLMNOP";
+    private static final String VALID_MAX_LENGTH_SPECIES = "A".repeat(30);
+    private static final String INVALID_TOO_LONG_SPECIES = "A".repeat(31);
 
     @Test
     public void constructor_null_throwsNullPointerException() {
@@ -27,14 +27,24 @@ public class SpeciesTest {
 
         assertFalse(Species.isValidSpecies(""));
         assertFalse(Species.isValidSpecies(" "));
-        assertFalse(Species.isValidSpecies("Cat-1"));
-        assertFalse(Species.isValidSpecies("Golden_Retriever"));
         assertFalse(Species.isValidSpecies(INVALID_TOO_LONG_SPECIES));
 
         assertTrue(Species.isValidSpecies("C"));
         assertTrue(Species.isValidSpecies("Dog"));
         assertTrue(Species.isValidSpecies("Sea Lion"));
+        assertTrue(Species.isValidSpecies("Cat-1"));
+        assertTrue(Species.isValidSpecies("Golden_Retriever"));
+        assertTrue(Species.isValidSpecies("#@!"));
         assertTrue(Species.isValidSpecies(VALID_MAX_LENGTH_SPECIES));
+        assertTrue(Species.isValidSpecies("  Sea   Lion  "));
+    }
+
+    @Test
+    public void constructor_whitespaceNormalized() {
+        Species withExtraWhitespace = new Species("  Sea   Lion ");
+        Species normalized = new Species("Sea Lion");
+
+        assertTrue(withExtraWhitespace.equals(normalized));
     }
 
     @Test

@@ -24,8 +24,8 @@ public class AddServiceCommand extends Command {
             + PREFIX_SERVICE_NAME + "Fur trim "
             + PREFIX_SERVICE_PRICE + "25.00";
 
-    public static final String MESSAGE_SUCCESS = "New service added: %1$s";
-    public static final String MESSAGE_DUPLICATE_SERVICE = "This service already exists in PetLog";
+    public static final String MESSAGE_SUCCESS = "Added service: %1$s";
+    public static final String MESSAGE_DUPLICATE_SERVICE = "Service already exists.";
 
     private final Service toAdd;
 

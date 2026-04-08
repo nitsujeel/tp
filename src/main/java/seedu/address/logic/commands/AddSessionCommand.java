@@ -1,13 +1,16 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_END_TIME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_OWNER_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PET_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SERVICE_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_START_TIME;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -41,10 +44,12 @@ public class AddSessionCommand extends Command {
             + PREFIX_SERVICE_NAME + "Shampoo "
             + PREFIX_SERVICE_NAME + "Fur trim";
 
-    public static final String MESSAGE_SUCCESS = "Session added for %s's pet %s from %s to %s";
-    public static final String MESSAGE_UNKNOWN_SERVICE = "Unknown service: %1$s";
+    public static final String MESSAGE_SUCCESS = "Added session for %s's pet %s from %s to %s.";
+    public static final String MESSAGE_UNKNOWN_SERVICE = "Unknown service: %1$s.";
     public static final String MESSAGE_OVERLAPPING_SESSION =
-            "This session overlaps with an existing session for the selected pet.";
+            "Session overlaps with an existing session for the selected pet.";
+    public static final String SESSION_PANEL_TITLE_FORMAT = "%s's %s — Sessions";
+
 
     private final Index ownerIndex;
     private final Index petIndex;
@@ -77,9 +82,11 @@ public class AddSessionCommand extends Command {
         requireNonNull(serviceNames);
         this.ownerIndex = ownerIndex;
         this.petIndex = petIndex;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.serviceNames = List.copyOf(serviceNames);
+        this.startTime = normalizeWhitespace(startTime);
+        this.endTime = normalizeWhitespace(endTime);
+        this.serviceNames = serviceNames.stream()
+                .map(AddSessionCommand::normalizeServiceName)
+                .collect(Collectors.toUnmodifiableList());
     }
 
     @Override
@@ -99,10 +106,11 @@ public class AddSessionCommand extends Command {
 
         Pet pet = owner.getPetList().get(petIndex.getZeroBased());
 
-        double totalFee = calculateTotalFee(model.getServiceList());
+        List<Service> selectedServices = resolveServices(model.getServiceList());
+        double totalFee = calculateTotalFee(selectedServices);
         Session newSession;
         try {
-            newSession = new Session(startTime, endTime, totalFee);
+            newSession = new Session(startTime, endTime, totalFee, selectedServices);
         } catch (IllegalArgumentException e) {
             throw new CommandException(e.getMessage(), e);
         }
@@ -115,41 +123,31 @@ public class AddSessionCommand extends Command {
         model.updateDisplayedSessions(model.getFilteredPersonList());
 
         String baseMessage = String.format(MESSAGE_SUCCESS, owner.getName(), pet.getName(), startTime, endTime);
-        return new CommandResult(baseMessage + String.format(". Total fee: $%.2f", totalFee));
+        return new CommandResult(baseMessage + String.format(" Total fee: $%.2f.", totalFee));
     }
 
-    /**
-     * Validates that all requested service names exist in the model.
-     *
-     * @throws CommandException if any service name is not found
-     */
-    private void validateServices(List<Service> availServices) throws CommandException {
-        for (String serviceName : serviceNames) {
-            boolean found = availServices.stream()
-                    .anyMatch(s -> s.getName().equalsIgnoreCase(serviceName));
-            if (!found) {
-                throw new CommandException(String.format(MESSAGE_UNKNOWN_SERVICE, serviceName));
-            }
-        }
-    }
-
-    /**
-     * Calculates the total fee for all services in this session.
-     *
-     * @param availServices Services currently stored in the model
-     * @return Total fee for the selected services
-     * @throws CommandException If any requested service does not exist
-     */
-    private double calculateTotalFee(List<Service> availServices) throws CommandException {
-        double totalFee = 0;
+    private List<Service> resolveServices(List<Service> availServices) throws CommandException {
+        List<Service> resolvedServices = new ArrayList<>();
         for (String serviceName : serviceNames) {
             Service matchedService = findServiceByName(availServices, serviceName);
             if (matchedService == null) {
                 throw new CommandException(String.format(MESSAGE_UNKNOWN_SERVICE, serviceName));
             }
-            totalFee += matchedService.getCost();
+            resolvedServices.add(matchedService);
         }
-        return totalFee;
+        return resolvedServices;
+    }
+
+    /**
+     * Calculates the total fee for all services in this session.
+     *
+     * @param selectedServices Services chosen for this session
+     * @return Total fee for the selected services
+     */
+    private double calculateTotalFee(List<Service> selectedServices) {
+        return selectedServices.stream()
+                .mapToDouble(Service::getCost)
+                .sum();
     }
 
     /**
@@ -157,11 +155,15 @@ public class AddSessionCommand extends Command {
      */
     private Service findServiceByName(List<Service> availServices, String serviceName) {
         for (Service service : availServices) {
-            if (service.getName().equalsIgnoreCase(serviceName)) {
+            if (service.hasSameName(serviceName)) {
                 return service;
             }
         }
         return null;
+    }
+
+    private static String normalizeServiceName(String serviceName) {
+        return normalizeWhitespace(serviceName);
     }
 
     @Override

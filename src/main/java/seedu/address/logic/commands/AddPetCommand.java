@@ -37,8 +37,8 @@ public class AddPetCommand extends Command {
             + PREFIX_SPECIES + "Cat "
             + PREFIX_PET_REMARK + "Feed hourly";
 
-    public static final String MESSAGE_SUCCESS = "New pet added: %1$s";
-    public static final String MESSAGE_DUPLICATE_PET = "This pet already exists in the address book";
+    public static final String MESSAGE_SUCCESS = "Added pet: %1$s";
+    public static final String MESSAGE_DUPLICATE_PET = "Pet already exists for this owner.";
 
     private final Index ownerIndex;
     private final Pet toAdd;

@@ -135,6 +135,62 @@ public class AddOwnerCommandParserTest {
     }
 
     @Test
+    public void parse_nameWithSpecialCharacters_success() {
+        String ownerName = "@lex #1!";
+        Person expectedPerson = new PersonBuilder()
+                .withName(ownerName)
+                .withPhone(VALID_PHONE_BOB)
+                .withEmail(VALID_EMAIL_BOB)
+                .withAddress(VALID_ADDRESS_BOB)
+                .build();
+
+        assertParseSuccess(parser, " on/" + ownerName + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB,
+                new AddOwnerCommand(expectedPerson));
+    }
+
+    @Test
+    public void parse_addressWithSpecialCharacters_success() {
+        String address = "Unit #05-01 @ Pet-Hub / Block A";
+        Person expectedPerson = new PersonBuilder()
+                .withName(VALID_NAME_BOB)
+                .withPhone(VALID_PHONE_BOB)
+                .withEmail(VALID_EMAIL_BOB)
+                .withAddress(address)
+                .build();
+
+        assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + " " + PREFIX_ADDRESS + address,
+                new AddOwnerCommand(expectedPerson));
+    }
+
+    @Test
+    public void parse_tagWithSpecialCharacters_success() {
+        String tag = "#Best_Customer!";
+        Person expectedPerson = new PersonBuilder()
+                .withName(VALID_NAME_BOB)
+                .withPhone(VALID_PHONE_BOB)
+                .withEmail(VALID_EMAIL_BOB)
+                .withAddress(VALID_ADDRESS_BOB)
+                .withTags(tag)
+                .build();
+
+        assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB + " ot/" + tag,
+                new AddOwnerCommand(expectedPerson));
+    }
+
+    @Test
+    public void parse_fieldsWithLongWhitespace_success() {
+        Person expectedPerson = new PersonBuilder()
+                .withName("Bob Choo")
+                .withPhone("1234 5678")
+                .withEmail("bob@example.com")
+                .withAddress("123 Main Street")
+                .build();
+
+        assertParseSuccess(parser, " on/  Bob   Choo  ph/ 1234   5678 em/ bob@example.com  ad/ 123   Main\tStreet ",
+                new AddOwnerCommand(expectedPerson));
+    }
+
+    @Test
     public void parse_compulsoryFieldMissing_failure() {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddOwnerCommand.MESSAGE_USAGE);
 

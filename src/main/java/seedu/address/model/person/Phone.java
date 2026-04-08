@@ -2,6 +2,7 @@ package seedu.address.model.person;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
+import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 
 /**
  * Represents a Person's phone number in the address book.
@@ -11,9 +12,9 @@ public class Phone {
 
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Phone numbers should only contain numbers, \"+\", \"-\" or spaces, and it should be at least 3-15 "
-                    + "characters long";
-    public static final String VALIDATION_REGEX = "[0-9+\\- ]{2,14}[0-9]";
+            "Phone number must be 2 to 30 characters.";
+    private static final int MIN_LENGTH = 2;
+    private static final int MAX_LENGTH = 30;
     public final String value;
 
     /**
@@ -23,15 +24,25 @@ public class Phone {
      */
     public Phone(String phone) {
         requireNonNull(phone);
-        checkArgument(isValidPhone(phone), MESSAGE_CONSTRAINTS);
-        value = phone;
+        String normalizedPhone = normalizeWhitespace(phone);
+        checkArgument(isValidPhone(normalizedPhone), MESSAGE_CONSTRAINTS);
+        value = normalizedPhone;
     }
 
     /**
      * Returns true if a given string is a valid phone number.
      */
     public static boolean isValidPhone(String test) {
-        return test.matches(VALIDATION_REGEX);
+        requireNonNull(test);
+        int normalizedLength = normalizeWhitespace(test).length();
+        return normalizedLength >= MIN_LENGTH && normalizedLength <= MAX_LENGTH;
+    }
+
+    /**
+     * Returns true if the phone number contains only numeric characters.
+     */
+    public boolean hasOnlyDigits() {
+        return value.chars().allMatch(Character::isDigit);
     }
 
     @Override

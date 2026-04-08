@@ -39,6 +39,18 @@ public class AddOwnerCommandIntegrationTest {
     }
 
     @Test
+    public void execute_newPersonWithNonNumericPhone_successWithWarning() {
+        Person validPerson = new PersonBuilder().withPhone("1234-5678").build();
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.addPerson(validPerson);
+
+        assertCommandSuccess(new AddOwnerCommand(validPerson), model,
+                String.format(AddOwnerCommand.MESSAGE_SUCCESS_WITH_PHONE_WARNING, Messages.format(validPerson)),
+                expectedModel);
+    }
+
+    @Test
     public void execute_duplicatePerson_throwsCommandException() {
         Person personInList = model.getAddressBook().getPersonList().get(0);
         assertCommandFailure(new AddOwnerCommand(personInList), model,

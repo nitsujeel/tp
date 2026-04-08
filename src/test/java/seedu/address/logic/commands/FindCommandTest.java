@@ -7,6 +7,7 @@ import static seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalPersons.BENSON;
 import static seedu.address.testutil.TypicalPersons.CARL;
+import static seedu.address.testutil.TypicalPersons.DANIEL;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.Collections;
@@ -67,7 +68,7 @@ public class FindCommandTest {
     public void execute_nonMatchingFilters_noPersonFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
         FieldContainsKeywordsPredicate predicate = new FieldContainsKeywordsPredicate(
-                Optional.of("Carl"), Optional.of("999"), Optional.empty(), Optional.empty(), Collections.emptyList());
+                Optional.of("zzz"), Optional.of("999"), Optional.empty(), Optional.empty(), Collections.emptyList());
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
@@ -75,7 +76,7 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_multipleFieldFilters_onePersonFound() {
+    public void execute_multipleFieldFiltersOrSearch_onePersonFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
         FieldContainsKeywordsPredicate predicate = new FieldContainsKeywordsPredicate(
                 Optional.of("Carl"), Optional.of("9535"), Optional.empty(), Optional.empty(), List.of());
@@ -86,15 +87,27 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_ownerAndPetFilters_onePersonFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+    public void execute_ownerAndPetFiltersOrSearch_twoPersonsFound() {
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 2);
         FieldContainsKeywordsPredicate predicate = new FieldContainsKeywordsPredicate(
-                Optional.of("Carl"), Optional.empty(), Optional.empty(), Optional.empty(), List.of(),
+                Optional.of("Benson"), Optional.empty(), Optional.empty(), Optional.empty(), List.of(),
                 Optional.of("Goldy"), Optional.of("Fish"), Optional.of("Calm"));
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
-        assertEquals(List.of(CARL), model.getFilteredPersonList());
+        assertEquals(List.of(BENSON, CARL), model.getFilteredPersonList());
+    }
+
+    @Test
+    public void execute_eachWordInOwnerNameSearchedSeparately_orSearch() {
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 2);
+        FieldContainsKeywordsPredicate predicate = new FieldContainsKeywordsPredicate(
+                Optional.of("car iel"), Optional.empty(), Optional.empty(), Optional.empty(), List.of(),
+                Optional.empty(), Optional.empty(), Optional.empty());
+        FindCommand command = new FindCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(List.of(CARL, DANIEL), model.getFilteredPersonList());
     }
 
     @Test

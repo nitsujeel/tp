@@ -1,14 +1,18 @@
 package seedu.address.model.session;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
-import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.service.Service;
 
 /**
  * Represents a booked session for a Pet in PetLog.
@@ -26,6 +30,7 @@ public class Session {
     private final LocalDateTime startTime;
     private final LocalDateTime endTime;
     private final double fee;
+    private final List<Service> services;
 
     /**
      * Constructs a {@code Session} with no fee.
@@ -34,7 +39,7 @@ public class Session {
      * @param endTime   The end time string of the session.
      */
     public Session(String startTime, String endTime) {
-        this(parseDateTime(startTime), parseDateTime(endTime), 0.0);
+        this(parseDateTime(startTime), parseDateTime(endTime), 0.0, List.of());
     }
 
     /**
@@ -45,7 +50,19 @@ public class Session {
      * @param fee       The total fee for this session.
      */
     public Session(String startTime, String endTime, double fee) {
-        this(parseDateTime(startTime), parseDateTime(endTime), fee);
+        this(parseDateTime(startTime), parseDateTime(endTime), fee, List.of());
+    }
+
+    /**
+     * Constructs a {@code Session}.
+     *
+     * @param startTime The start time string of the session.
+     * @param endTime   The end time string of the session.
+     * @param fee       The total fee for this session.
+     * @param services  The services performed during this session.
+     */
+    public Session(String startTime, String endTime, double fee, List<Service> services) {
+        this(parseDateTime(startTime), parseDateTime(endTime), fee, services);
     }
 
     /**
@@ -56,14 +73,28 @@ public class Session {
      * @param fee       The total fee for this session.
      */
     public Session(LocalDateTime startTime, LocalDateTime endTime, double fee) {
+        this(startTime, endTime, fee, List.of());
+    }
+
+    /**
+     * Constructs a {@code Session}.
+     *
+     * @param startTime The session start time.
+     * @param endTime   The session end time.
+     * @param fee       The total fee for this session.
+     * @param services  The services performed during this session.
+     */
+    public Session(LocalDateTime startTime, LocalDateTime endTime, double fee, List<Service> services) {
         requireNonNull(startTime);
         requireNonNull(endTime);
+        requireNonNull(services);
         if (!endTime.isAfter(startTime)) {
             throw new IllegalArgumentException(MESSAGE_INVALID_TIME_RANGE);
         }
         this.startTime = startTime;
         this.endTime = endTime;
         this.fee = fee;
+        this.services = List.copyOf(services);
     }
 
     public String getStartTime() {
@@ -93,6 +124,13 @@ public class Session {
     }
 
     /**
+     * Returns an immutable view of services performed during this session.
+     */
+    public List<Service> getServices() {
+        return services;
+    }
+
+    /**
      * Returns true if this session overlaps with the other session.
      * Sessions that touch exactly at the boundary do not overlap.
      */
@@ -107,8 +145,9 @@ public class Session {
      */
     public static boolean isValidDateTime(String dateTime) {
         requireNonNull(dateTime);
+        String normalizedDateTime = normalizeWhitespace(dateTime);
         try {
-            LocalDateTime.parse(dateTime, FORMATTER);
+            LocalDateTime.parse(normalizedDateTime, FORMATTER);
             return true;
         } catch (DateTimeParseException e) {
             return false;
@@ -122,8 +161,9 @@ public class Session {
      */
     public static LocalDateTime parseDateTime(String dateTime) {
         requireNonNull(dateTime);
+        String normalizedDateTime = normalizeWhitespace(dateTime);
         try {
-            return LocalDateTime.parse(dateTime, FORMATTER);
+            return LocalDateTime.parse(normalizedDateTime, FORMATTER);
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException(MESSAGE_DATETIME_CONSTRAINTS, e);
         }
@@ -148,20 +188,28 @@ public class Session {
         Session otherSession = (Session) other;
         return startTime.equals(otherSession.startTime)
                 && endTime.equals(otherSession.endTime)
-                && Double.compare(fee, otherSession.fee) == 0;
+                && Double.compare(fee, otherSession.fee) == 0
+                && services.equals(otherSession.services);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(startTime, endTime, fee);
+        return Objects.hash(startTime, endTime, fee, services);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .add("startTime", startTime)
-                .add("endTime", endTime)
-                .add("fee", fee)
-                .toString();
+        return String.format(Locale.ROOT, "Start: %s; End: %s; Fee: $%.2f; Services: %s",
+                getStartTime(), getEndTime(), fee, formatServices());
+    }
+
+    private String formatServices() {
+        if (services.isEmpty()) {
+            return "None";
+        }
+
+        return services.stream()
+                .map(Service::getName)
+                .collect(Collectors.joining(", "));
     }
 }

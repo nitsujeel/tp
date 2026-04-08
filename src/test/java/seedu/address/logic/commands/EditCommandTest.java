@@ -15,6 +15,8 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
@@ -25,6 +27,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
 
@@ -150,6 +153,16 @@ public class EditCommandTest {
                 new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build());
 
         assertCommandFailure(editCommand, model, Messages.MESSAGE_INVALID_OWNER_DISPLAYED_INDEX);
+    }
+
+    @Test
+    public void execute_removeNonExistentTag_failure() {
+        EditPersonDescriptor descriptor = new EditPersonDescriptor();
+        descriptor.setTagsToRemove(Set.of(new Tag(VALID_TAG_HUSBAND)));
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        assertCommandFailure(editCommand, model,
+                String.format(EditCommand.MESSAGE_TAG_NOT_FOUND, VALID_TAG_HUSBAND));
     }
 
     @Test

@@ -124,13 +124,15 @@ How the parsing works:
 The `Model` component,
 
 * stores the PetLog data in an `AddressBook`, which contains all `Person` objects in a `UniquePersonList` and all `Service` objects in a `UniqueServiceList`.
-* stores each owner's pets inside the corresponding `Person` object. Each `Pet` is made up of its own value objects such as `PetName`, `Species`, and `PetRemark`.
-* stores the currently selected owners as a separate filtered list, exposed as an unmodifiable `ObservableList<Person>`. This allows the UI to observe owner list changes and update automatically.
+* stores each owner's pets inside the corresponding `Person` object. Each `Pet` is made up of its own value objects such as `PetName`, `Species`, and `PetRemark`, and also owns its own list of `Session` objects.
+* stores each `Session` as a time range with a fee and a list of associated `Service` objects, allowing one session to reference multiple services recorded in the `AddressBook`.
+* stores the currently selected owners as a filtered list, exposed as an unmodifiable `ObservableList<Person>`. This allows the UI to observe owner list changes and update automatically.
 * derives and stores a separate filtered pet list, exposed as an unmodifiable `ObservableList<Pet>`, so the UI can display pets independently of the owner cards.
+* derives and stores a displayed session list, exposed as an unmodifiable `ObservableList<SessionEntry>`. Each `SessionEntry` bundles a `Session` together with its owner and pet context for the UI.
 * stores a `UserPrefs` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPrefs` object.
 * does not depend on the `UI`, `Logic`, or `Storage` components, since the `Model` represents the domain entities and their relationships.
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It illustrates how `AddressBook` could store a shared `Tag` list that `Person` objects reference, instead of each `Person` storing its own `Tag` objects. This would reduce duplicate `Tag` instances across owners. For simplicity, the alternative diagram focuses only on the tag-related part of the model and omits the newer `Pet` and `Service` structures.<br>
+<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It illustrates how `AddressBook` could store a shared `Tag` list that `Person` objects reference, instead of each `Person` storing its own `Tag` objects. This would reduce duplicate `Tag` instances across owners. For simplicity, the alternative diagram focuses only on the tag-related part of the model and omits the newer `Pet`, `Session`, and `Service` structures.<br>
 
 <img src="images/BetterModelClassDiagram.png" width="450" />
 
@@ -144,7 +146,7 @@ The `Model` component,
 <img src="images/StorageClassDiagram.png" width="550" />
 
 The `Storage` component,
-* can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
+* can save both PetLog data and user preference data in JSON format, and read them back into corresponding objects.
 * inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
 
@@ -164,31 +166,31 @@ This section describes some noteworthy details on how certain features are imple
 
 The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
 
-* `VersionedAddressBook#commit()` — Saves the current address book state in its history.
-* `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
-* `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
+* `VersionedAddressBook#commit()` — Saves the current PetLog state in its history.
+* `VersionedAddressBook#undo()` — Restores the previous PetLog state from its history.
+* `VersionedAddressBook#redo()` — Restores a previously undone PetLog state from its history.
 
 These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
 
 Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
 
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
+Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial PetLog state, and the `currentStatePointer` pointing to that single PetLog state.
 
 ![UndoRedoState0](images/UndoRedoState0.png)
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Step 2. The user executes `delete 5` command to delete the 5th person in PetLog. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the PetLog after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted PetLog state.
 
 ![UndoRedoState1](images/UndoRedoState1.png)
 
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified PetLog state to be saved into the `addressBookStateList`.
 
 ![UndoRedoState2](images/UndoRedoState2.png)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
+<div markdown="span" class="alert alert-info">:information_source: **Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the PetLog state will not be saved into the `addressBookStateList`.
 
 </div>
 
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
+Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous PetLog state, and restores PetLog to that state.
 
 ![UndoRedoState3](images/UndoRedoState3.png)
 
@@ -209,17 +211,17 @@ Similarly, how an undo operation goes through the `Model` component is shown bel
 
 ![UndoSequenceDiagram](images/UndoSequenceDiagram-Model.png)
 
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
+The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores PetLog to that state.
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+<div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest PetLog state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
 
 </div>
 
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+Step 5. The user then decides to execute the command `list`. Commands that do not modify PetLog, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
 
 ![UndoRedoState4](images/UndoRedoState4.png)
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
+Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all PetLog states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
 
 ![UndoRedoState5](images/UndoRedoState5.png)
 
@@ -231,7 +233,7 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 **Aspect: How undo & redo executes:**
 
-* **Alternative 1 (current choice):** Saves the entire address book.
+* **Alternative 1 (current choice):** Saves the entire state of PetLog.
   * Pros: Easy to implement.
   * Cons: May have performance issues in terms of memory usage.
 
@@ -240,7 +242,6 @@ The following activity diagram summarizes what happens when a user executes a ne
   * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
   * Cons: We must ensure that the implementation of each individual command are correct.
 
-_{more aspects and alternatives to be added}_
 
 ### \[Proposed\] Data archiving
 
@@ -309,7 +310,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 (For all use cases below, the **System** is the `PetLog` and the **Actor** is the `user`, unless specified otherwise)
 
- <!-- The sample format to refer to
 **Use case: Delete a person**
 
 **MSS**
@@ -325,7 +325,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. The list is empty.
 
-  Use case ends.
+    Use case ends.
 
 * 3a. The given index is invalid.
 
@@ -337,63 +337,67 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. User adds owner with relevant details
-2. PetLog adds owner into the list 
+1. User adds an owner with the relevant details
+2. PetLog adds the owner into the owner list
 3. PetLog informs user that the owner was added
-4. PetLog shows a list of owners with details
+4. PetLog shows the updated list of owners
 
     Use case ends.
 
 **Extensions**
 
 * 1a. Missing owner details or invalid entries
-  * 1a1. PetLog shows an error message 
-  
+  * 1a1. PetLog shows a relevant error message
+
     Use case ends.
-* 1b. Duplicate owner 
-  * 1b1. PetLog shows an error message
-  
+
+* 1b. Duplicate owner
+  * 1b1. PetLog shows a relevant error message
+
     Use case ends.
-       
+	       
 **Use case: Add Pet**
 
-**Preconditions: The owner of the pet exists**
+**Preconditions: The owner exists**
 
 **MSS**
 
-1. User adds pet to an owner
+1. User adds a pet to an existing owner
 2. PetLog adds pet to the specified owner
-3. PetLog informs user that the pet was added to the specified user
-4. PetLog shows the new list of owners with pet added 
+3. PetLog informs user that the pet was added
+4. PetLog shows the updated list of owners with the pet added
 
     Use case ends.
 
 **Extensions**
 
-* 1a. Invalid commands, invalid details
-  * 1a1. PetLog shows a relevant error message 
-  
-    Use case ends .
+* 1a. Missing owner index, invalid owner index, malformed command, or invalid pet details
+  * 1a1. PetLog shows a relevant error message
+
+    Use case ends.
+
 * 1b. Duplicate pet
   * 1b1. PetLog shows a relevant error message
-    
+
     Use case ends.
-  
+	  
 **Use case: Update Pet Remarks**
 
-**Preconditions: Pet and Owner exists**
+**Preconditions: Owner exists and pet exists under that owner**
 
 **MSS**
 
-1. User update remarks of an existing pet
+1. User updates the remarks of an existing pet
 2. PetLog updates the remarks
-3. PetLog informs user remark has been updated 
-4. PetLog updates the GUI to show list with added remark
+3. PetLog informs user that the remark has been updated
+4. PetLog displays the updated list with the new remark
+
+    Use case ends.
 
 **Extensions**
 
 * 1a. Missing or invalid indices, unrecognized prefixes, malformed command, repeated prefix
-  * 1a1. PetLog shows relevant error message 
+  * 1a1. PetLog shows a relevant error message
 
     Use case ends.
 
@@ -402,18 +406,22 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 
 1. User requests to delete the owner
-2. PetLog deletes the owner 
-3. PetLog informs user about the successful deletion 
+2. PetLog deletes the owner
+3. PetLog informs user about the successful deletion
 4. PetLog displays new list without the deleted owner
+
+    Use case ends.
 
 **Extensions**
 
 * 1a. Missing, invalid, out-of-range index, malformed command, unrecognized prefixes
-  * 1a1. PetLog shows relevant error message 
+  * 1a1. PetLog shows a relevant error message
 
     Use case ends.
 
 **Use case: Delete Pet**
+
+**Preconditions: Owner exists and pet exists under that owner**
 
 **MSS**
 
@@ -422,54 +430,38 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 3. PetLog informs user about the successful deletion
 4. PetLog displays new list without the deleted pet
 
+    Use case ends.
+
 **Extensions**
 
 * 1a. Missing, invalid, out-of-range index, malformed command, unrecognized prefixes
-    * 1a1. PetLog shows relevant error message
+  * 1a1. PetLog shows a relevant error message
 
-      Use case ends.
+    Use case ends.
 
- **Use case: Find owner** 
+**Use case: Find Owner**
 
 **MSS**
 
-1. User attempts owner search by keywords 
+1. User searches for owners by keywords
 2. PetLog finds matching owners
 3. PetLog displays a list of matching owners
-4. PetLog informs in writing the number of matching owners
+4. PetLog informs user of the number of matching owners
+
+    Use case ends.
 
 **Extensions**
 
 * 1a. No prefixes, unrecognized prefixes, malformed command
-  * 1a1. PetLog displays relevant error 
-    
-    Use case ends.
-  
-* 1b. Invalid field contents entered in search
-  * 1b1. PetLog displays that there is 0 matches
-    
-    Use case ends.
-
-**Use case: Find pet**
-
-**MSS**
-
-1. User attempts pet search by keywords
-2. PetLog finds matching pets
-3. PetLog displays a list of matching pets
-4. PetLog informs in writing the number of matching pets
-
-**Extensions**
-
-* 1a. No prefixes, unrecognized prefixes, malformed command
-    * 1a1. PetLog displays relevant error
+    * 1a1. PetLog shows a relevant error message
 
       Use case ends.
 
+	  
 * 1b. Invalid field contents entered in search
-    * 1b1. PetLog displays that there is 0 matches
+  * 1b1. PetLog displays that there are 0 matches
 
-      Use case ends.
+    Use case ends.
 
 **Use case: List**
 
@@ -477,7 +469,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1. User requests to list all records of owners and pets
 2. PetLog displays the list of owners and pets
-3. PetLog confirms it is showing all records 
+3. PetLog confirms it is showing all records
+
+    Use case ends.
 
 **Extensions**
 
@@ -486,7 +480,111 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case ends.
 
-*{More may be added}*
+**Use case: Add Service**
+
+**MSS**
+
+1. User adds a service with the service name and price
+2. PetLog adds the service into the service list
+3. PetLog informs user that the service was added
+4. PetLog displays the updated service list
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. Missing service details or invalid entries
+  * 1a1. PetLog shows a relevant error message
+
+    Use case ends.
+
+* 1b. Duplicate service
+  * 1b1. PetLog shows a relevant error message
+
+    Use case ends.
+
+**Use case: Add Session**
+
+**Preconditions: Owner exists and pet exists under that owner**
+
+**MSS**
+
+1. User adds a session to a specified pet under a specified owner
+2. PetLog validates the owner, pet, time range, and optional services
+3. PetLog adds the session to the specified pet
+4. PetLog computes the total fee for the session
+5. PetLog informs user that the session was added
+6. PetLog displays the updated session list
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. Missing indices, invalid indices, malformed command, or invalid date-time format
+  * 1a1. PetLog shows a relevant error message
+
+    Use case ends.
+
+* 2a. One or more specified services do not exist
+  * 2a1. PetLog shows a relevant error message
+
+    Use case ends.
+
+* 2b. End time is not after start time
+  * 2b1. PetLog shows a relevant error message
+
+    Use case ends.
+
+* 2c. Session overlaps with an existing session for the selected pet
+  * 2c1. PetLog shows a relevant error message
+
+    Use case ends.
+
+**Use case: Delete Session**
+
+**Preconditions: Owner exists, pet exists under that owner, and the pet has at least one session**
+
+**MSS**
+
+1. User requests to delete a session from a specified pet under a specified owner
+2. PetLog deletes the specified session
+3. PetLog informs user about the successful deletion
+4. PetLog displays the updated session list
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. Missing indices, invalid indices, out-of-range indices, or malformed command
+  * 1a1. PetLog shows a relevant error message
+
+    Use case ends.
+
+**Use case: Delete Service**
+
+**Preconditions: Service exists**
+
+**MSS**
+
+1. User requests to delete a service by service name
+2. PetLog finds the matching service
+3. PetLog deletes the service
+4. PetLog informs user about the successful deletion
+5. PetLog displays the updated service list
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. Missing service name, malformed command, or unrecognized prefixes
+  * 1a1. PetLog shows a relevant error message
+
+    Use case ends.
+
+* 2a. Service name does not match any existing service
+  * 2a1. PetLog shows a relevant error message
+
+    Use case ends.
 
 ### Non-Functional Requirements
 
@@ -541,7 +639,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * **Remarks** - Optional free-text notes attached to a pet or owner record (e.g., special care instructions, dietary needs).
 * **Owner index (`oi/`)** - A 1-based index into the currently displayed owner list.
 * **Pet index (`pi/`)** - A 1-based index into the selected owner's pet list.
-* **Service** - A globally defined care item (e.g., shampoo, nail trim) with a non-negative price.
+* **Service** - A globally defined care item (e.g., shampoo, nail trim) with a price from 0 to 10000 (inclusive),
+  up to 2 decimal places, using only digits and `.`.
 * **Service catalogue** - The full list of services stored in PetLog and reused by sessions.
 * **Session** - A care booking/event attached to one pet, with start/end times and a computed total fee.
 * **Fee** - The monetary total for a session, computed from selected services at session creation.
@@ -570,16 +669,15 @@ testers are expected to do more *exploratory* testing.
 
    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   1. Double-click the jar file. <br>
+      Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
 1. Saving window preferences
 
    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
    1. Re-launch the app by double-clicking the jar file.<br>
-       Expected: The most recent window size and location is retained.
-
-1. _{ more test cases …​ }_
+      Expected: The most recent window size and location is retained.
 
 ### Adding an owner
 
@@ -588,13 +686,73 @@ testers are expected to do more *exploratory* testing.
    1. Prerequisites: App is launched with sample data (contains owner `Alex Yeoh`).
 
    1. Test case: `addowner on/Jane Tan ph/81234567 em/jane.tan@gmail.com ad/12 Tampines Street 11, #03-55 ot/vip`<br>
-      Expected: A new owner is added and shown in the owner list. Success message starts with `New owner added:`.
+      Expected: A new owner is added and shown in the owner list.
+
+   1. Test case: `addowner on/Jane_#VIP! ph/81234568 em/jane.vip@gmail.com ad/13 Tampines Street 12, #03-56`<br>
+      Expected: A new owner is added and shown in the owner list.
+
+   1. Test case: `addowner on/Jane Tan ph/8123-4567 em/jane.alt@gmail.com ad/14 Tampines Street 13, #03-57`<br>
+      Expected: A new owner is added and a warning is shown because the phone contains non-numeric characters.
+
+   1. Test case: `addowner on/Jane Tan ph/81234567 em/jane.special@gmail.com ad/Unit #05-01 @ Pet-Hub / Block A`<br>
+      Expected: A new owner is added and shown in the owner list.
+
+   1. Test case: `addowner on/Jane Tan ph/81234567 em/jane.tags@gmail.com ad/15 Tampines Street 14, #03-58 ot/#VIP-Prime!`<br>
+      Expected: A new owner is added and shown in the owner list.
 
    1. Test case: `addowner on/Alex Yeoh ph/99998888 em/alex.new@example.com ad/1 New Address`<br>
-      Expected: Command fails with `This owner already exists in PetLog`.
+      Expected: Command fails with `Owner already exists.`
 
    1. Test case: `addowner on/Jane Tan ph/81234567 em/jane.tan@gmail.com`<br>
       Expected: Command fails due to invalid format (missing required `ad/` prefix).
+
+   1. Test case: `addowner on/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ph/81234567 em/jane.tan@gmail.com ad/12 Tampines Street 11, #03-55`<br>
+      Expected: Command fails with owner name validation error (owner name must be 1 to 50 characters).
+
+   1. Test case: `addowner on/Jane Tan ph/1 em/jane.tan@gmail.com ad/12 Tampines Street 11, #03-55`<br>
+      Expected: Command fails with phone validation error (phone number must be 2 to 30 characters).
+
+   1. Test case: `addowner on/Jane Tan ph/81234567 em/jane.tan@gmail.com ad/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA`<br>
+      Expected: Command fails with address validation error (address must be 1 to 100 characters).
+
+   1. Test case: `addowner on/Jane Tan ph/81234567 em/jane.tan@gmail.com ad/12 Tampines Street 11, #03-55 ot/AAAAAAAAAAAAAAAAAAAAA`<br>
+      Expected: Command fails with tag validation error (tag must be 1 to 20 characters).
+
+### Adding a pet
+
+1. Adding a pet to an existing owner
+
+   1. Prerequisites: App is launched with sample data (contains owner `Alex Yeoh` at owner index 1).
+
+   1. Test case: `addpet oi/1 pn/Milo ps/Cat pr/Needs medication after meals`<br>
+      Expected: A new pet named `Milo` is added under `Alex Yeoh` and shown in the pet list for that owner.
+
+   1. Test case: `addpet oi/1 pn/@Milo! ps/Cat`<br>
+      Expected: Command succeeds. A new pet named `@Milo!` is added under `Alex Yeoh`.
+
+   1. Test case: `addpet oi/1 pn/Milo ps/D0g-@Home`<br>
+      Expected: Command succeeds. A new pet with species `D0g-@Home` is added under `Alex Yeoh`.
+
+   1. Test case: `addpet oi/1 pn/Buddy ps/Dog pr/Very energetic`<br>
+      Expected: Command fails with `This person already has this pet.`
+
+   1. Test case: `addpet oi/999 pn/Milo ps/Cat pr/Friendly`<br>
+      Expected: Command fails because the owner index is invalid.
+
+   1. Test case: `addpet oi/1 pn/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ps/Cat`<br>
+      Expected: Command fails with pet name validation error (`Pet name must be 1 to 30 characters.`).
+
+   1. Test case: `addpet oi/1 pn/Milo ps/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA`<br>
+      Expected: Command fails with species validation error (`Species must be 1 to 30 characters.`).
+
+   1. Test case: `addpet oi/1 pn/Milo ps/Cat pr/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA`<br>
+      Expected: Command fails with remark validation error (`Remarks for addpet must be 1 to 100 characters.`).
+
+   1. Test case: `addpet oi/1 pn/Milo ps/Cat pr/`<br>
+      Expected: Command fails with remark validation error (`Remarks for addpet must be 1 to 100 characters.`).
+
+   1. Test case: `addpet oi/1 pn/Milo pr/Friendly`<br>
+      Expected: Command fails due to invalid format (missing required `ps/` prefix).
 
 ### Editing an owner
 
@@ -602,11 +760,20 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: Use sample data (contains owner `Alex Yeoh` at index 1).
 
-   1. Test case: `edit oi/1 em/yeohalex@example.com` <br>
+   1. Test case: `editowner oi/1 em/yeohalex@example.com` <br>
       Expected: `Alex Yeoh`'s email updates to `yeohalex@example.com`.
 
-   1. Test case: `edit oi/1 oi/` <br>
-      Expected: `Alex Yeoh`'s existing `friends` tag is removed.
+   1. Test case: `editowner oi/1 rt/friend at/enemy` <br>
+      Expected: `Alex Yeoh`'s `friend` tag is removed, and a `enemy` tag is added.
+
+   1. Test case: `editowner oi/1 at/#VIP-Prime!` <br>
+      Expected: `Alex Yeoh` receives a new tag `#VIP-Prime!`.
+
+   1. Test case: `editowner oi/1 at/AAAAAAAAAAAAAAAAAAAAA` <br>
+      Expected: Command fails with tag validation error (tag must be 1 to 20 characters).
+
+   1. Test case: `editowner oi/1 ot/` <br>
+      Expected: `Alex Yeoh`'s existing tags are removed.
 
 ### Finding an owner
 
@@ -621,7 +788,7 @@ testers are expected to do more *exploratory* testing.
       Expected: Owner list shows only owners whose address contains `ang mo kio`.
 
    1. Test case: `find on/nonexistentowner`<br>
-      Expected: Owner list shows 0 results and status message indicates `0 persons listed!`.
+      Expected: Owner list shows 0 results and status message indicates `Listed 0 owner(s).`
 
 ### Finding a specific pet
 
@@ -633,10 +800,10 @@ testers are expected to do more *exploratory* testing.
       Expected: Owner list shows owners with at least one pet whose name contains `buddy`.
 
    1. Test case: `find pn/buddy ps/dog`<br>
-      Expected: Owner list shows owners with at least one pet matching both pet name and species criteria.
+      Expected: Owner list shows owners with at least one pet matching pet name or species criteria.
 
    1. Test case: `find on/alex pn/buddy`<br>
-      Expected: Owner list shows owners matching both owner and pet criteria.
+      Expected: Owner list shows owners matching owner name or pet name criteria.
 
 ### Adding a service
 
@@ -645,12 +812,24 @@ testers are expected to do more *exploratory* testing.
    1. Prerequisites: Service `Ear cleaning` does not already exist.
 
    1. Test case: `addservice sn/Ear cleaning sp/12.50`<br>
-      Expected: Service is added to the service panel. Success message starts with `New service added:`.
+      Expected: Service is added to the service panel.
+
+   1. Test case: `addservice sn/@wash!* sp/9.90`<br>
+      Expected: Service is added to the service panel.
 
    1. Test case: `addservice sn/Ear cleaning sp/15.00`<br>
-      Expected: Command fails with `This service already exists in PetLog`.
+      Expected: Command fails with `Service already exists.`
+
+   1. Test case: `addservice sn/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA sp/12.50`<br>
+      Expected: Command fails with service name validation error (`Service name must be 1 to 30 characters.`).
 
    1. Test case: `addservice sn/Ear cleaning sp/-1`<br>
+      Expected: Command fails with service price constraint error.
+
+   1. Test case: `addservice sn/Ear cleaning sp/10000.01`<br>
+      Expected: Command fails with service price constraint error.
+
+   1. Test case: `addservice sn/Ear cleaning sp/12a`<br>
       Expected: Command fails with service price constraint error.
 
 ### Deleting a service
@@ -659,31 +838,29 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: Service `Ear cleaning` exists (add it first if needed).
 
-   1. Test case: `deleteservice sn/Ear cleaning`<br>
-      Expected: Service is removed from the service panel. Success message starts with `Deleted Service:`.
+   1. Test case: `delete sn/Ear cleaning`<br>
+      Expected: Service is removed from the service panel.
 
-   1. Test case: `deleteservice sn/Nonexistent Service`<br>
-      Expected: Command fails with `The service name provided is invalid`.
+   1. Test case: `delete sn/Nonexistent Service`<br>
+      Expected: Command fails with `Service name not found.`
 
-   1. Test case: `deleteservice`<br>
+   1. Test case: `delete`<br>
       Expected: Command fails due to invalid format (missing required `sn/` prefix).
 
-### Deleting a person
+### Deleting an owner
 
-1. Deleting a person while all persons are being shown
+1. Deleting an owner while all persons are being shown
 
    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
-   1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+   1. Test case: `delete o/1`<br>
+      Expected: First owner is deleted from the list.
 
-   1. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+   1. Test case: `delete oi/0`<br>
+      Expected: No owner is deleted. Parse error shown with `Index must be a non-zero unsigned integer.`. Status bar remains the same.
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
-
-1. _{ more test cases …​ }_
+   1. Other incorrect delete commands to try: `delete`, `delete oi/x`, `delete oi/999`<br>
+      Expected: For malformed index inputs, parse error is shown. For out-of-range valid indices, command fails with `Owner index is invalid.`.
 
 ### Saving data
 
@@ -691,13 +868,18 @@ testers are expected to do more *exploratory* testing.
 
    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
 
-1. _{ more test cases …​ }_
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Appendix: Effort**
+Difficulty level of our project: medium.
 
-This section aims to elaborate on the difficulty level, challenges faced, effort required, and achievements of this project.
+Compared to AB3, which primarily manages a single core entity type, our project required more effort because it supports multiple related entity types, namely owners, pets, services, and sessions. This introduced additional complexity in both the codebase and the product design, as we had to maintain clear relationships between these entities while keeping commands intuitive for users.
+
+The main challenges faced were in extending the original owner-centric data model to support nested pet records and session tracking, ensuring that commands remained consistent despite operating on different entity types, and keeping the UI and documentation aligned with the evolving feature set. Features such as service-linked sessions and indexed operations on pets and sessions also required more careful handling than the original AB3 workflow.
+
+The team spent about 10 hours per week over 5 weeks, for a team of 5. This gives an estimated overall effort of about 250 person-hours.
+
+Our key achievements were redesigning the model to support richer domain relationships, implementing features for managing pets, services, and care sessions, and producing a coherent user guide and developer guide that reflect the current architecture and feature set.
 
 --------------------------------------------------------------------------------------------------------------------
 

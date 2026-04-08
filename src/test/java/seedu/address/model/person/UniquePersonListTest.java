@@ -66,6 +66,13 @@ public class UniquePersonListTest {
     }
 
     @Test
+    public void add_personWithSameNameIgnoringWhitespaceAndSamePhone_throwsDuplicatePersonException() {
+        uniquePersonList.add(BOB);
+        Person bobWithExtraWhitespaceInName = new PersonBuilder(BOB).withName("  Bob   Choo ").build();
+        assertThrows(DuplicatePersonException.class, () -> uniquePersonList.add(bobWithExtraWhitespaceInName));
+    }
+
+    @Test
     public void setPerson_nullTargetPerson_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> uniquePersonList.setPerson(null, ALICE));
     }

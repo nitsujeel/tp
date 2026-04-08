@@ -362,3 +362,29 @@
     -fx-background-radius: 2;
     -fx-font-size: 11;
 }
+
+.session-section-header {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #9ecff0;
+}
+
+.owner-pet-header {
+    -fx-padding: 6 0 6 0;
+    -fx-border-color: derive(#1d1d1d, 60%);
+    -fx-border-width: 0 0 1 0;
+}
+
+.owner-pet-header-label {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-alignment: center-left;
+}
+
+#ownersHeader, #petsHeader {
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+    -fx-alignment: center-left;
+}

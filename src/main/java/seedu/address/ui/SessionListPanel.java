@@ -4,10 +4,12 @@ import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.session.SessionEntry;
 
@@ -56,7 +58,16 @@ public class SessionListPanel extends UiPart<Region> {
                 setGraphic(null);
                 setText(null);
             } else {
-                setGraphic(new SessionCard(entry, getIndex() + 1).getRoot());
+                VBox section = new VBox();
+                if (entry.sessionIndex() == 1) {
+                    Label sectionHeader = new Label(String.format("%s's %s", entry.ownerName(), entry.petName()));
+                    sectionHeader.getStyleClass().add("session-section-header");
+                    sectionHeader.setWrapText(true);
+                    VBox.setMargin(sectionHeader, new Insets(6, 0, 4, 10));
+                    section.getChildren().add(sectionHeader);
+                }
+                section.getChildren().add(new SessionCard(entry, entry.sessionIndex()).getRoot());
+                setGraphic(section);
             }
         }
     }

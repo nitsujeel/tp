@@ -6,5 +6,6 @@ package seedu.address.model.session;
  * @param session   The session data.
  * @param ownerName The name of the owner the session belongs to.
  * @param petName   The name of the pet the session belongs to.
+ * @param sessionIndex The 1-based session index within the pet's own session list.
  */
-public record SessionEntry(Session session, String ownerName, String petName) {}
+public record SessionEntry(Session session, String ownerName, String petName, int sessionIndex) {}

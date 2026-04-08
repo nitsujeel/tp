@@ -3,6 +3,7 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 
+import java.util.Locale;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +16,6 @@ import seedu.address.logic.commands.AddSessionCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.DeleteCommand;
-import seedu.address.logic.commands.DeleteServiceCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
@@ -50,13 +50,14 @@ public class AddressBookParser {
 
         final String commandWord = matcher.group("commandWord");
         final String arguments = matcher.group("arguments");
+        final String normalizedCommandWord = commandWord.toLowerCase(Locale.ROOT);
 
         // Note to developers: Change the log level in config.json to enable lower level (i.e., FINE, FINER and lower)
         // log messages such as the one below.
         // Lower level log messages are used sparingly to minimize noise in the code.
         logger.fine("Command word: " + commandWord + "; Arguments: " + arguments);
 
-        switch (commandWord) {
+        switch (normalizedCommandWord) {
 
         case AddOwnerCommand.COMMAND_WORD:
             return new AddOwnerCommandParser().parse(arguments);
@@ -90,9 +91,6 @@ public class AddressBookParser {
 
         case AddServiceCommand.COMMAND_WORD:
             return new AddServiceCommandParser().parse(arguments);
-
-        case DeleteServiceCommand.COMMAND_WORD:
-            return new DeleteServiceCommandParser().parse(arguments);
 
         case AddSessionCommand.COMMAND_WORD:
             return new AddSessionCommandParser().parse(arguments);

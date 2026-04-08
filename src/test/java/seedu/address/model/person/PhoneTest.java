@@ -7,6 +7,8 @@ import static seedu.address.testutil.Assert.assertThrows;
 import org.junit.jupiter.api.Test;
 
 public class PhoneTest {
+    private static final String VALID_MAX_LENGTH_PHONE = "1".repeat(30);
+    private static final String INVALID_TOO_LONG_PHONE = "1".repeat(31);
 
     @Test
     public void constructor_null_throwsNullPointerException() {
@@ -27,19 +29,36 @@ public class PhoneTest {
         // invalid phone numbers
         assertFalse(Phone.isValidPhone("")); // empty string
         assertFalse(Phone.isValidPhone(" ")); // spaces only
-        assertFalse(Phone.isValidPhone("91")); // less than 3 numbers
-        assertFalse(Phone.isValidPhone("phone")); // non-numeric
-        assertFalse(Phone.isValidPhone("9011p041")); // alphabets within digits
-        assertFalse(Phone.isValidPhone("9312/1534")); // slash within digits
-        assertFalse(Phone.isValidPhone("123456789123456789")); // too long
+        assertFalse(Phone.isValidPhone("1")); // less than 2 characters
+        assertFalse(Phone.isValidPhone(INVALID_TOO_LONG_PHONE)); // exceeds 30 characters
+        assertFalse(Phone.isValidPhone("  " + INVALID_TOO_LONG_PHONE + "  ")); // still exceeds limit after trim
 
         // valid phone numbers
-        assertTrue(Phone.isValidPhone("911")); // exactly 3 numbers
+        assertTrue(Phone.isValidPhone("12")); // exactly 2 characters
         assertTrue(Phone.isValidPhone("93121534"));
-        assertTrue(Phone.isValidPhone("124293842033123")); // long phone numbers
+        assertTrue(Phone.isValidPhone("phone")); // letters are allowed
+        assertTrue(Phone.isValidPhone("9011p041")); // alphanumeric values are allowed
+        assertTrue(Phone.isValidPhone("9312/1534")); // slash is allowed
+        assertTrue(Phone.isValidPhone(VALID_MAX_LENGTH_PHONE)); // upper bound
         assertTrue(Phone.isValidPhone("+651234567890")); // with +
         assertTrue(Phone.isValidPhone("65-1234-5678")); // with -
         assertTrue(Phone.isValidPhone("1234 5678")); // with space
+        assertTrue(Phone.isValidPhone("  1234   5678  ")); // extra whitespace is normalized
+    }
+
+    @Test
+    public void constructor_whitespaceNormalized() {
+        Phone withExtraWhitespace = new Phone("  1234   5678 ");
+        Phone normalized = new Phone("1234 5678");
+        assertTrue(withExtraWhitespace.equals(normalized));
+    }
+
+    @Test
+    public void hasOnlyDigits() {
+        assertTrue(new Phone("123456").hasOnlyDigits());
+        assertFalse(new Phone("123 456").hasOnlyDigits());
+        assertFalse(new Phone("123-456").hasOnlyDigits());
+        assertFalse(new Phone("phone").hasOnlyDigits());
     }
 
     @Test

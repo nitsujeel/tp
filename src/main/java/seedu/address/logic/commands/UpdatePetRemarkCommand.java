@@ -31,7 +31,7 @@ public class UpdatePetRemarkCommand extends Command {
             + PREFIX_PET_INDEX + "1 "
             + PREFIX_PET_REMARK + "loves to eat ice cream ";
 
-    public static final String MESSAGE_SUCCESS = "You have updated the remark of the pet!";
+    public static final String MESSAGE_SUCCESS = "Updated pet remark.";
 
     private final Index ownerIndex;
 

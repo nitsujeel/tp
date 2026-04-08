@@ -7,6 +7,7 @@ import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -82,14 +83,14 @@ public class FieldContainsKeywordsPredicate implements Predicate<Person> {
     }
 
     private boolean hasAnyCriteria() {
-        return !ownerNameTerms.isEmpty()
-                || !phoneTerms.isEmpty()
-                || !emailTerms.isEmpty()
-                || !addressTerms.isEmpty()
-                || !tagTerms.isEmpty()
-                || !petNameTerms.isEmpty()
-                || !speciesTerms.isEmpty()
-                || !petRemarkTerms.isEmpty();
+        return hasTerms(ownerNameTerms)
+                || hasTerms(phoneTerms)
+                || hasTerms(emailTerms)
+                || hasTerms(addressTerms)
+                || hasTerms(tagTerms)
+                || hasTerms(petNameTerms)
+                || hasTerms(speciesTerms)
+                || hasTerms(petRemarkTerms);
     }
 
     private static boolean matchesField(String fieldValue, List<String> terms) {
@@ -119,38 +120,24 @@ public class FieldContainsKeywordsPredicate implements Predicate<Person> {
     }
 
     private boolean matchesPetNames(Iterable<Pet> pets) {
-        if (petNameTerms.isEmpty()) {
-            return false;
-        }
-
-        for (Pet pet : pets) {
-            if (matchesField(pet.getName().value, petNameTerms)) {
-                return true;
-            }
-        }
-        return false;
+        return matchesPetField(pets, petNameTerms, pet -> pet.getName().value);
     }
 
     private boolean matchesPetSpecies(Iterable<Pet> pets) {
-        if (speciesTerms.isEmpty()) {
-            return false;
-        }
-
-        for (Pet pet : pets) {
-            if (matchesField(pet.getSpecies().value, speciesTerms)) {
-                return true;
-            }
-        }
-        return false;
+        return matchesPetField(pets, speciesTerms, pet -> pet.getSpecies().value);
     }
 
     private boolean matchesPetRemarks(Iterable<Pet> pets) {
-        if (petRemarkTerms.isEmpty()) {
+        return matchesPetField(pets, petRemarkTerms, pet -> pet.getRemark().value);
+    }
+
+    private static boolean matchesPetField(Iterable<Pet> pets, List<String> terms, Function<Pet, String> extractor) {
+        if (terms.isEmpty()) {
             return false;
         }
 
         for (Pet pet : pets) {
-            if (matchesField(pet.getRemark().value, petRemarkTerms)) {
+            if (matchesField(extractor.apply(pet), terms)) {
                 return true;
             }
         }
@@ -159,6 +146,10 @@ public class FieldContainsKeywordsPredicate implements Predicate<Person> {
 
     private static boolean containsIgnoreCase(String fieldValue, String keyword) {
         return normalizeForComparison(fieldValue).contains(normalizeForComparison(keyword));
+    }
+
+    private static boolean hasTerms(List<String> terms) {
+        return !terms.isEmpty();
     }
 
     private static List<String> toTerms(Optional<String> optionalKeyword) {

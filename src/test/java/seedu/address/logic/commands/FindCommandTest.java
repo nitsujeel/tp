@@ -66,7 +66,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_nonMatchingFilters_noPersonFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
+        String expectedMessage = "No owners found.";
         FieldContainsKeywordsPredicate predicate = new FieldContainsKeywordsPredicate(
                 Optional.of("zzz"), Optional.of("999"), Optional.empty(), Optional.empty(), Collections.emptyList());
         FindCommand command = new FindCommand(predicate);
@@ -77,7 +77,8 @@ public class FindCommandTest {
 
     @Test
     public void execute_multipleFieldFiltersOrSearch_onePersonFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1)
+                + String.format("%n1. Carl Kurz — matched: name, phone");
         FieldContainsKeywordsPredicate predicate = new FieldContainsKeywordsPredicate(
                 Optional.of("Carl"), Optional.of("9535"), Optional.empty(), Optional.empty(), List.of());
         FindCommand command = new FindCommand(predicate);
@@ -88,7 +89,10 @@ public class FindCommandTest {
 
     @Test
     public void execute_ownerAndPetFiltersOrSearch_twoPersonsFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 2);
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 2)
+                + String.format("%n1. Benson Meier — matched: name")
+                + String.format("%n2. Carl Kurz — matched: pet \"Goldy\" (name), pet \"Goldy\" (species),"
+                        + " pet \"Goldy\" (remark)");
         FieldContainsKeywordsPredicate predicate = new FieldContainsKeywordsPredicate(
                 Optional.of("Benson"), Optional.empty(), Optional.empty(), Optional.empty(), List.of(),
                 Optional.of("Goldy"), Optional.of("Fish"), Optional.of("Calm"));
@@ -100,7 +104,9 @@ public class FindCommandTest {
 
     @Test
     public void execute_eachWordInOwnerNameSearchedSeparately_orSearch() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 2);
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 2)
+                + String.format("%n1. Carl Kurz — matched: name")
+                + String.format("%n2. Daniel Meier — matched: name");
         FieldContainsKeywordsPredicate predicate = new FieldContainsKeywordsPredicate(
                 Optional.of("car iel"), Optional.empty(), Optional.empty(), Optional.empty(), List.of(),
                 Optional.empty(), Optional.empty(), Optional.empty());
@@ -112,7 +118,8 @@ public class FindCommandTest {
 
     @Test
     public void execute_ownerIndexFilter_onePersonFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1)
+                + String.format("%n1. Benson Meier — matched: ");
         FieldContainsKeywordsPredicate predicate = new FieldContainsKeywordsPredicate(
                 Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), List.of());
         FindCommand command = new FindCommand(predicate, Optional.of(Index.fromOneBased(2)));

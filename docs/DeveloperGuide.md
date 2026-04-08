@@ -94,7 +94,7 @@ Here's a (partial) class diagram of the `Logic` component:
 
 The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete oi/1")` API call as an example.
 
-<img src="images/DeleteSequenceDiagram.png" width="800"/>
+<img src="images/DeleteSequenceDiagram.png" width="1000"/>
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 </div>
@@ -617,7 +617,7 @@ MSS:
 
     Use case ends.
 
-**Use case: UC18 - Adjust the price of a service and recompute the fee of a sessions using that service**
+**Use case: UC19 - Adjust the price of a service and recompute the fee of a sessions using that service**
 
 Preconditions: The session and service already exist, the session uses the service.
 
@@ -629,7 +629,7 @@ MSS:
 
     Use case ends.
 
-**Use case: UC19 - Close PetLog**
+**Use case: UC20 - Close PetLog**
 
 MSS:
 
@@ -686,7 +686,7 @@ MSS:
 
 ### Glossary
 
-* **Prefix** - A short keyword followed by `/` used to identify a parameter in a command (e.g., `n/`, `ph/`).
+* **Prefix** - A short keyword followed by `/` used to identify a parameter in a command (e.g., `on/`, `ph/`).
 * **Owner** - A pet owner who has entrusted their pet(s) to the boarding/day care service.
 * **Tag** - A short label attached to an owner record for categorisation (e.g., regular, VIP).
 * **Pet** - An animal registered under an owner in PetLog.
@@ -734,9 +734,9 @@ It aims to complement the UG by suggesting a simple path for testing and providi
 
    1. Test inputs (copy-paste one by one):
       ```text
-      addowner on/Manual Tester ph/81234567 em/manual.tester@example.com ad/123 Test Avenue, #01-02 ot/vip
+      addowner on/Manual Tester ph/81234567 em/manual.tester@example.com ad/123 Test Avenue, #01-02 ot/VIP
       find on/Manual Tester
-      editowner oi/1 ph/87654321 at/premium rt/vip
+      editowner oi/1 ph/87654321 at/premium rt/VIP
       find on/Manual Tester
       ```
       Expected: owner is added, filtered, edited, and still searchable.
@@ -849,4 +849,4 @@ Our key achievements were redesigning the model to **support richer domain relat
 
 ## **Appendix: Planned Enhancements**
 
-This section lists bugs we are aware of, and fixes that we propose to add in the near future.
+This section will be updated with bugs we are aware of, and fixes that we propose to add in the near future.

@@ -239,9 +239,10 @@ Format: `delete sn/SERVICE_NAME`
 Examples:
 * `delete sn/Ear Cleaning` deletes Ear Cleaning as a service from the list (if it exists).
 
+
 <div markdown="block" class="alert alert-info">
 
-**:information_source: Notes about the `delete` formats:**<br>
+**:information_source: Note about the `delete` formats:**<br>
 
 Using a combination of both formats, e.g. `delete oi/1 sn/Ear cleaning`, is invalid and will not succeed.
 

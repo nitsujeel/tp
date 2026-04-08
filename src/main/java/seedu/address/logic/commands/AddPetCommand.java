@@ -47,7 +47,6 @@ public class AddPetCommand extends Command {
      * Creates an AddPetCommand to add the specified {@code Pet} to the owner at {@code ownerIndex}.
      */
     public AddPetCommand(Index ownerIndex, Pet pet) {
-        assert (ownerIndex.getZeroBased() >= 0 && ownerIndex.getOneBased() >= 1);
         requireNonNull(ownerIndex);
         requireNonNull(pet);
         this.ownerIndex = ownerIndex;

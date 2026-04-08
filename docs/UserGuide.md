@@ -64,6 +64,9 @@ It helps you manage owners, pets, services, and sessions quickly with structured
 * Parameters can be in any order.<br>
   e.g. if the command specifies `on/OWNER_NAME ph/PHONE_NUMBER`, `ph/PHONE_NUMBER on/OWNER_NAME` is also acceptable.
 
+* Command words and prefixes are case-insensitive.<br>
+  e.g. `AdDoWnEr On/John Doe Ph/98765432 Em/j@example.com Ad/123, Street` is accepted.
+
 * Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
 

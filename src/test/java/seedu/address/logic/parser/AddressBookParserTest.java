@@ -81,6 +81,13 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommand_caseInsensitiveCommandWordAndPrefixes_success() throws Exception {
+        Service service = new Service("Fur trim", 25.00);
+        AddServiceCommand command = (AddServiceCommand) parser.parseCommand("AdDsErViCe Sn/Fur trim Sp/25.00");
+        assertEquals(new AddServiceCommand(service), command);
+    }
+
+    @Test
     public void parseCommand_exit() throws Exception {
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD) instanceof ExitCommand);
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD + " 3") instanceof ExitCommand);

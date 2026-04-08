@@ -70,9 +70,23 @@ public class ArgumentTokenizer {
      * {@code fromIndex} = 0, this method returns 5.
      */
     private static int findPrefixPosition(String argsString, String prefix, int fromIndex) {
-        int prefixIndex = argsString.indexOf(" " + prefix, fromIndex);
+        int prefixIndex = indexOfIgnoreCase(argsString, " " + prefix, fromIndex);
         return prefixIndex == -1 ? -1
                 : prefixIndex + 1; // +1 as offset for whitespace
+    }
+
+    /**
+     * Returns the index of the first occurrence of {@code searchString} in {@code inputString}
+     * starting from {@code fromIndex}, ignoring case. Returns {@code -1} if no match is found.
+     */
+    private static int indexOfIgnoreCase(String inputString, String searchString, int fromIndex) {
+        int maxStart = inputString.length() - searchString.length();
+        for (int i = fromIndex; i <= maxStart; i++) {
+            if (inputString.regionMatches(true, i, searchString, 0, searchString.length())) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**

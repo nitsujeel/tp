@@ -1,4 +1,4 @@
-#copyButton, #helpMessage {
+#copyButton, #helpMessage, #commandsLabel {
     -fx-text-fill: white;
 }
 
@@ -15,5 +15,9 @@
 }
 
 #helpMessageContainer {
+    -fx-background-color: derive(#1d1d1d, 20%);
+}
+
+#commandScrollPane, #commandScrollPane > .viewport {
     -fx-background-color: derive(#1d1d1d, 20%);
 }

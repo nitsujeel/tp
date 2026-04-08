@@ -16,7 +16,23 @@ import seedu.address.commons.core.LogsCenter;
 public class HelpWindow extends UiPart<Stage> {
 
     public static final String USERGUIDE_URL = "https://ay2526s2-cs2103t-w14-1.github.io/tp/UserGuide.html";
-    public static final String HELP_MESSAGE = "Refer to the user guide: " + USERGUIDE_URL;
+    public static final String HELP_MESSAGE = "For more detailed guide, refer to the user guide: " + USERGUIDE_URL;
+    public static final String COMMANDS_MESSAGE = "Available Commands:\n"
+            + "• help\n"
+            + "• addowner on/OWNER_NAME ph/PHONE_NUMBER em/EMAIL ad/ADDRESS [ot/TAG]...\n"
+            + "• editowner oi/OWNER_INDEX [on/OWNER_NAME] [ph/PHONE_NUMBER] [em/EMAIL] [ad/ADDRESS]"
+            + " [ot/OVERWRITE_TAG]... [at/ADD_TAG]... [rt/REMOVE_TAG]...\n"
+            + "• addpet oi/OWNER_INDEX pn/PET_NAME ps/SPECIES [pr/REMARKS]\n"
+            + "• update oi/OWNER_INDEX pi/PET_INDEX pr/REMARKS\n"
+            + "• addservice sn/SERVICE_NAME sp/SERVICE_PRICE\n"
+            + "• addsession oi/OWNER_INDEX pi/PET_INDEX st/START_TIME et/END_TIME [sn/SERVICE_NAME]...\n"
+            + "• delete oi/OWNER_INDEX [pi/PET_INDEX [si/SESSION_INDEX]]\n"
+            + "• delete sn/SERVICE_NAME\n"
+            + "• find [on/OWNER_NAME] [ph/PHONE_NUMBER] [em/EMAIL] [ad/ADDRESS]"
+            + " [ot/OWNER_TAG]... [oi/OWNER_INDEX] [pn/PET_NAME] [ps/SPECIES] [pr/REMARKS]\n"
+            + "• list\n"
+            + "• clear\n"
+            + "• exit";
 
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
     private static final String FXML = "HelpWindow.fxml";
@@ -27,6 +43,9 @@ public class HelpWindow extends UiPart<Stage> {
     @FXML
     private Label helpMessage;
 
+    @FXML
+    private Label commandsLabel;
+
     /**
      * Creates a new HelpWindow.
      *
@@ -35,6 +54,7 @@ public class HelpWindow extends UiPart<Stage> {
     public HelpWindow(Stage root) {
         super(FXML, root);
         helpMessage.setText(HELP_MESSAGE);
+        commandsLabel.setText(COMMANDS_MESSAGE);
     }
 
     /**

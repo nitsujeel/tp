@@ -268,7 +268,7 @@ If your changes to the data file makes its format invalid, PetLog will discard a
 Furthermore, certain edits can cause the PetLog to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
 
-### Archiving data files `[Coming Soon]`
+### Undo/Redo `[Coming Soon]`
 
 _Details coming soon ..._
 

@@ -20,6 +20,8 @@ Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
 --------------------------------------------------------------------------------------------------------------------
 
+<div style="page-break-after: always;"></div>
+
 ## **Design**
 
 <div markdown="span" class="alert alert-primary">
@@ -67,6 +69,8 @@ For example, the `Logic` component defines its API in the `Logic.java` interface
 
 The sections below give more details of each component.
 
+<div style="page-break-after: always;"></div>
+
 ### UI component
 
 The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
@@ -83,6 +87,8 @@ The `UI` component,
 * listens for changes to `Model` data so that the UI can be updated with the modified data.
 * keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
 * depends on some classes in the `Model` component, as it displays `Person`, `Pet`, `Session`, and `Service` objects residing in the `Model`.
+
+<div style="page-break-after: always;"></div>
 
 ### Logic component
 
@@ -115,6 +121,8 @@ How the parsing works:
 * When called upon to parse a user command, `AddressBookParser` creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name, e.g., `AddOwnerCommandParser`). That parser uses the supporting classes shown above to parse input and create an `XYZCommand` object (e.g., `AddOwnerCommand`), which `AddressBookParser` returns as a `Command`.
 * All `XYZCommandParser` classes (e.g., `AddOwnerCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible, e.g., during testing.
 
+<div style="page-break-after: always;"></div>
+
 ### Model component
 
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
@@ -142,6 +150,8 @@ The `Model` component,
 
 </div>
 
+<div style="page-break-after: always;"></div>
+
 ### Storage component
 
 **API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
@@ -156,6 +166,8 @@ The `Storage` component,
 * returns `Optional.empty()` when data files are missing, and throws `DataLoadingException` when file contents are malformed or violate model constraints.
 * is invoked by `LogicManager` to save the address book after each successful command, while user preferences are loaded/saved during app startup and shutdown in `MainApp`.
 
+<div style="page-break-after: always;"></div>
+
 ### Common classes
 
 Classes used by multiple components are in the `seedu.address.commons` package.
@@ -163,6 +175,8 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 These include indexes, exceptions and utility classes.
 
 --------------------------------------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 ## **Implementation**
 
@@ -211,6 +225,8 @@ Key implementation points:
 
 Design note:
 * Existing sessions keep their own service snapshots. Deleting a service from the catalogue affects future session creation, but not historical sessions already stored on pets.
+
+<div style="page-break-after: always;"></div>
 
 ### \[Proposed\] Undo/redo feature
 
@@ -323,6 +339,8 @@ The following activity diagram summarizes what happens when a user executes a ne
 * schedule care sessions with optional services and automatically computed total fees
 * keep all operational data in a local JSON file with automatic persistence and no internet dependency
 
+<div style="page-break-after: always;"></div>
+
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
@@ -358,6 +376,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `*`      | pet day care manager | sort owners and pets by name                                                  | organise entries easily when the list becomes large                                  |
 | `*`      | pet day care manager | view an overview of owners, pets and sessions (e.g. count)                    | understand the scale of my operations at a glance                                    |
 | `*`      | pet day care manager | view recently added or updated records                                        | get visual feedback for my most recent commands and track recent operational changes |
+
+<div style="page-break-after: always;"></div>
 
 ### Use cases
 
@@ -643,6 +663,8 @@ MSS:
 
     Use case ends.
 
+<div style="page-break-after: always;"></div>
+
 ### Non-Functional Requirements
 
 **Compatibility and Portability**
@@ -688,6 +710,8 @@ MSS:
 * PetLog should abide by the following file sizes: ≤ 100 MB for JAR file, ≤ 15 MB / file for documents (e.g. PDF files).
 * PetLog's DG and UG should be PDF-friendly.
 
+<div style="page-break-after: always;"></div>
+
 ### Glossary
 
 * **Prefix** - A short keyword followed by `/` used to identify a parameter in a command (e.g., `on/`, `ph/`).
@@ -706,6 +730,8 @@ MSS:
 * **Home folder** - The directory where the JAR runs and where PetLog stores `data/petlog.json`.
 
 --------------------------------------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 ## **Appendix: Instructions for manual testing**
 

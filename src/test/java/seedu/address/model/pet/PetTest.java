@@ -37,17 +37,6 @@ public class PetTest {
     }
 
     @Test
-    public void updateRemark() {
-        Pet pet = new Pet(VALID_NAME, VALID_SPECIES, VALID_REMARK);
-
-        pet.updateRemark("Needs medication");
-        assertEquals(new PetRemark("Needs medication"), pet.getRemark());
-
-        pet.updateRemark("");
-        assertEquals(new PetRemark(""), pet.getRemark());
-    }
-
-    @Test
     public void sessions() {
         Pet pet = new Pet(VALID_NAME, VALID_SPECIES, VALID_REMARK);
         Session session = new Session("2026-04-06 10:00", "2026-04-06 11:00", 25.0);

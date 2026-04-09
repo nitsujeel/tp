@@ -37,8 +37,16 @@ public class UpdatePetRemarkCommandTest {
                 newRemark);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        Person owner = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person updatedOwner = owner.getNewPersonWithNewRemark(INDEX_FIRST_PERSON.getZeroBased(), newRemark);
+        expectedModel.setPerson(owner, updatedOwner);
 
         assertCommandSuccess(command, model, UpdatePetRemarkCommand.MESSAGE_SUCCESS, expectedModel);
+        // Verify the remark actually changed
+        Person actualUpdatedOwner = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        String actualRemark = actualUpdatedOwner.getPetList().get(INDEX_FIRST_PERSON.getZeroBased())
+                .getRemark().toString();
+        assertEquals(newRemark, actualRemark);
     }
 
     @Test
@@ -53,6 +61,9 @@ public class UpdatePetRemarkCommandTest {
                     newRemark);
 
             Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+            Person expectedOwner = expectedModel.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+            Person updatedOwner = expectedOwner.getNewPersonWithNewRemark(INDEX_FIRST_PERSON.getZeroBased(), newRemark);
+            expectedModel.setPerson(expectedOwner, updatedOwner);
 
             assertCommandSuccess(command, model, UpdatePetRemarkCommand.MESSAGE_SUCCESS, expectedModel);
         }
@@ -101,8 +112,16 @@ public class UpdatePetRemarkCommandTest {
                 emptyRemark);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        Person owner = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person updatedOwner = owner.getNewPersonWithNewRemark(INDEX_FIRST_PERSON.getZeroBased(), emptyRemark);
+        expectedModel.setPerson(owner, updatedOwner);
 
         assertCommandSuccess(command, model, UpdatePetRemarkCommand.MESSAGE_SUCCESS, expectedModel);
+        // Verify the remark is now empty
+        Person actualUpdatedOwner = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        String actualRemark = actualUpdatedOwner.getPetList().get(INDEX_FIRST_PERSON.getZeroBased())
+                .getRemark().toString();
+        assertEquals(emptyRemark, actualRemark);
     }
 
     @Test
@@ -117,8 +136,16 @@ public class UpdatePetRemarkCommandTest {
                 longRemark);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        Person owner = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person updatedOwner = owner.getNewPersonWithNewRemark(INDEX_FIRST_PERSON.getZeroBased(), longRemark);
+        expectedModel.setPerson(owner, updatedOwner);
 
         assertCommandSuccess(command, model, UpdatePetRemarkCommand.MESSAGE_SUCCESS, expectedModel);
+        // Verify the long remark was set
+        Person actualUpdatedOwner = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        String actualRemark = actualUpdatedOwner.getPetList().get(INDEX_FIRST_PERSON.getZeroBased())
+                .getRemark().toString();
+        assertEquals(longRemark, actualRemark);
     }
 
     @Test
@@ -130,8 +157,16 @@ public class UpdatePetRemarkCommandTest {
                 specialRemark);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        Person owner = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person updatedOwner = owner.getNewPersonWithNewRemark(INDEX_FIRST_PERSON.getZeroBased(), specialRemark);
+        expectedModel.setPerson(owner, updatedOwner);
 
         assertCommandSuccess(command, model, UpdatePetRemarkCommand.MESSAGE_SUCCESS, expectedModel);
+        // Verify special characters in remark are preserved
+        Person actualUpdatedOwner = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        String actualRemark = actualUpdatedOwner.getPetList().get(INDEX_FIRST_PERSON.getZeroBased())
+                .getRemark().toString();
+        assertEquals(specialRemark, actualRemark);
     }
 
     @Test
@@ -144,6 +179,9 @@ public class UpdatePetRemarkCommandTest {
                 remark1);
 
         Model expectedModel1 = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        Person owner1 = expectedModel1.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person updatedOwner1 = owner1.getNewPersonWithNewRemark(INDEX_FIRST_PERSON.getZeroBased(), remark1);
+        expectedModel1.setPerson(owner1, updatedOwner1);
         assertCommandSuccess(command1, model, UpdatePetRemarkCommand.MESSAGE_SUCCESS, expectedModel1);
 
         // Second update
@@ -152,6 +190,9 @@ public class UpdatePetRemarkCommandTest {
                 remark2);
 
         Model expectedModel2 = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        Person owner2 = expectedModel2.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person updatedOwner2 = owner2.getNewPersonWithNewRemark(INDEX_FIRST_PERSON.getZeroBased(), remark2);
+        expectedModel2.setPerson(owner2, updatedOwner2);
         assertCommandSuccess(command2, model, UpdatePetRemarkCommand.MESSAGE_SUCCESS, expectedModel2);
     }
 
@@ -288,6 +329,9 @@ public class UpdatePetRemarkCommandTest {
                 remarkWithWhitespace);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        Person owner = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person updatedOwner = owner.getNewPersonWithNewRemark(INDEX_FIRST_PERSON.getZeroBased(), remarkWithWhitespace);
+        expectedModel.setPerson(owner, updatedOwner);
 
         assertCommandSuccess(command, model, UpdatePetRemarkCommand.MESSAGE_SUCCESS, expectedModel);
     }
@@ -301,6 +345,9 @@ public class UpdatePetRemarkCommandTest {
                 numericRemark);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        Person owner = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person updatedOwner = owner.getNewPersonWithNewRemark(INDEX_FIRST_PERSON.getZeroBased(), numericRemark);
+        expectedModel.setPerson(owner, updatedOwner);
 
         assertCommandSuccess(command, model, UpdatePetRemarkCommand.MESSAGE_SUCCESS, expectedModel);
     }

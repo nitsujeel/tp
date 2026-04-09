@@ -62,8 +62,10 @@ public class UpdatePetRemarkCommand extends Command {
         if (petIndex.getZeroBased() >= owner.getPetCount()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PET_DISPLAYED_INDEX);
         }
-        owner.updatePetRemark(petIndex.getZeroBased(), newRemark);
-        model.setPerson(owner, owner);
+        // Create a new Person with the updated pet remark
+        Person updatedOwner = owner.getNewPersonWithNewRemark(petIndex.getZeroBased(), newRemark);
+        // Update the model with the new Person
+        model.setPerson(owner, updatedOwner);
         return new CommandResult(String.format(MESSAGE_SUCCESS));
     }
 

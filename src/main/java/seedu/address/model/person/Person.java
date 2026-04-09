@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import seedu.address.model.pet.Pet;
+import seedu.address.model.pet.PetRemark;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -101,13 +102,26 @@ public class Person {
     }
 
     /**
-     * Updates the remark of a pet at specified index
-     * @param petIndex a 0 based petIndex
-     * @param newRemark value of the updated remark
+     * Returns a new Person with the pet's remark updated at the specified index.
+     * Maintains insertion order of pets.
+     * @param petIndex a 0-based pet index
+     * @param newRemark the new remark for the pet
+     * @return a new Person with the updated pet
      */
-    public void updatePetRemark(int petIndex, String newRemark) {
-        Pet petToUpdate = getPetList().get(petIndex);
-        petToUpdate.updateRemark(newRemark);
+    public Person getNewPersonWithNewRemark(int petIndex, String newRemark) {
+        List<Pet> petList = new ArrayList<>(this.getPetList());
+        Set<Pet> updatedPets = new LinkedHashSet<>();
+        int currentIndex = 0;
+        for (Pet pet : petList) {
+            if (currentIndex == petIndex) {
+                // Create new pet with updated remark
+                updatedPets.add(new Pet(pet.getName(), pet.getSpecies(), new PetRemark(newRemark)));
+            } else {
+                updatedPets.add(pet);
+            }
+            currentIndex++;
+        }
+        return new Person(this.name, this.phone, this.email, this.address, this.tags, updatedPets);
     }
 
     /**

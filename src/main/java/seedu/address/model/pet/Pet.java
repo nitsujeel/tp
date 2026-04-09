@@ -95,14 +95,6 @@ public class Pet {
     }
 
     /**
-     * Updates the pet's remark with the specified value
-     * @param remark the value of the new {@code Remark}
-     */
-    public void updateRemark(String remark) {
-        this.remark = new PetRemark(remark);
-    }
-
-    /**
      * Returns true if both pets have the same identity and data fields.
      * This defines a stronger notion of equality between two pets.
      */

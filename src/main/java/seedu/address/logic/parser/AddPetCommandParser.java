@@ -70,5 +70,4 @@ public class AddPetCommandParser implements Parser<AddPetCommand> {
         int length = remark.length();
         return length >= MIN_REMARK_LENGTH && length <= MAX_REMARK_LENGTH;
     }
-
 }

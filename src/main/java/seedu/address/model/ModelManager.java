@@ -152,31 +152,44 @@ public class ModelManager implements Model {
     public void updateDisplayedSessions(List<Person> persons) {
         requireNonNull(persons);
         List<SessionEntry> entries = new ArrayList<>();
-        for (Person owner : persons) {
-            entries.addAll(getSessionEntriesForOwner(owner));
+        for (int ownerIndex = 0; ownerIndex < persons.size(); ownerIndex++) {
+            Person owner = persons.get(ownerIndex);
+            entries.addAll(getSessionEntriesForOwner(owner, ownerIndex));
         }
         displayedSessions.setAll(entries);
     }
 
-    private List<SessionEntry> getSessionEntriesForOwner(Person owner) {
+    private List<SessionEntry> getSessionEntriesForOwner(Person owner, int zeroBasedOwnerIndex) {
         List<SessionEntry> entries = new ArrayList<>();
-        for (Pet pet : owner.getPetList()) {
-            entries.addAll(getSessionEntriesForPet(owner, pet));
+        List<Pet> pets = owner.getPetList();
+        for (int petIndex = 0; petIndex < pets.size(); petIndex++) {
+            Pet pet = pets.get(petIndex);
+            entries.addAll(getSessionEntriesForPet(owner, pet, zeroBasedOwnerIndex, petIndex));
         }
         return entries;
     }
 
-    private List<SessionEntry> getSessionEntriesForPet(Person owner, Pet pet) {
+    private List<SessionEntry> getSessionEntriesForPet(
+            Person owner, Pet pet, int zeroBasedOwnerIndex, int zeroBasedPetIndex) {
         List<SessionEntry> entries = new ArrayList<>();
         List<Session> sessions = pet.getSessions();
         for (int i = 0; i < sessions.size(); i++) {
-            entries.add(createSessionEntry(owner, pet, sessions.get(i), i));
+            entries.add(createSessionEntry(owner, pet, sessions.get(i), zeroBasedOwnerIndex, zeroBasedPetIndex, i));
         }
         return entries;
     }
 
-    private SessionEntry createSessionEntry(Person owner, Pet pet, Session session, int zeroBasedSessionIndex) {
-        return new SessionEntry(session, owner.getName().fullName, pet.getName().value, zeroBasedSessionIndex + 1);
+    private SessionEntry createSessionEntry(
+            Person owner, Pet pet, Session session, int zeroBasedOwnerIndex, int zeroBasedPetIndex,
+            int zeroBasedSessionIndex) {
+        return new SessionEntry(
+                session,
+                owner.getName().fullName,
+                pet.getName().value,
+                zeroBasedOwnerIndex + 1,
+                zeroBasedPetIndex + 1,
+                zeroBasedSessionIndex + 1
+        );
     }
 
     @Override

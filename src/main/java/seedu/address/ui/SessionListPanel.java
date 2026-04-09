@@ -56,7 +56,9 @@ public class SessionListPanel extends UiPart<Region> {
             } else {
                 VBox section = new VBox();
                 if (entry.sessionIndex() == 1) {
-                    Label sectionHeader = new Label(String.format("%s's %s", entry.ownerName(), entry.petName()));
+                    Label sectionHeader = new Label(String.format(
+                            "oi/%d pi/%d — %s's %s",
+                            entry.ownerIndex(), entry.petIndex(), entry.ownerName(), entry.petName()));
                     sectionHeader.getStyleClass().add("session-section-header");
                     sectionHeader.setWrapText(true);
                     VBox.setMargin(sectionHeader, new Insets(6, 0, 4, 10));

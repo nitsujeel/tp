@@ -41,7 +41,7 @@ public class SessionCard extends UiPart<Region> {
     public SessionCard(SessionEntry entry, int displayedIndex) {
         super(FXML);
         this.entry = entry;
-        id.setText("");
+        id.setText(String.format("si/%d", entry.sessionIndex()));
         ownerPet.setText(String.format("Session #%d", displayedIndex));
         startTime.setText("Start: " + entry.session().getStartTime());
         endTime.setText("End:   " + entry.session().getEndTime());

@@ -5,7 +5,9 @@ title: User Guide
 
 PetLog is a **desktop app for managing pet care operations**, optimised for use via a **Command Line Interface** (CLI)
 while keeping the benefits of a **Graphical User Interface** (GUI).
-It helps you manage owners, pets, services, and sessions quickly with structured commands.
+With structured commands, it helps you manage, search and organize the details of owners and their pets efficiently. 
+You can also add and keep track of the services you offer and also specific sessions where a pet will be receiving 
+one of your services. 
 
 * Table of Contents
 {:toc}

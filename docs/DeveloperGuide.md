@@ -166,8 +166,6 @@ The `Storage` component,
 * returns `Optional.empty()` when data files are missing, and throws `DataLoadingException` when file contents are malformed or violate model constraints.
 * is invoked by `LogicManager` to save the address book after each successful command, while user preferences are loaded/saved during app startup and shutdown in `MainApp`.
 
-<div style="page-break-after: always;"></div>
-
 ### Common classes
 
 Classes used by multiple components are in the `seedu.address.commons` package.
@@ -321,6 +319,8 @@ The following activity diagram summarizes what happens when a user executes a ne
 * [DevOps guide](DevOps.md)
 
 --------------------------------------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 ## **Appendix: Requirements**
 

@@ -880,7 +880,7 @@ Our key achievements were redesigning the model to **support richer domain relat
 
 ## **Appendix: Planned Enhancements**
 
-This section describes bugs in PetLog that we, the development team, are aware of, and fixes that we propose to add in the near future.
+This section describes bugs in PetLog that we, the development team, are aware of, and fixes that we propose to implement in the near future.
 
 Team size: 5
 

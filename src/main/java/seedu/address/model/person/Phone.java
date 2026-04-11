@@ -12,8 +12,8 @@ public class Phone {
 
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Phone number must be 2 to 30 characters.";
-    private static final int MIN_LENGTH = 2;
+            "Phone number must be 1 to 30 characters.";
+    private static final int MIN_LENGTH = 1;
     private static final int MAX_LENGTH = 30;
     public final String value;
 

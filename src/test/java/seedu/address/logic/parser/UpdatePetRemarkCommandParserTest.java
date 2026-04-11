@@ -19,8 +19,8 @@ import seedu.address.model.pet.PetRemark;
 public class UpdatePetRemarkCommandParserTest {
 
     private static final String VALID_REMARK = "Needs gentle handling";
-    private static final String VALID_LONG_REMARK = "a".repeat(300);
-    private static final String INVALID_LONG_REMARK = "a".repeat(301);
+    private static final String VALID_LONG_REMARK = "a".repeat(100);
+    private static final String INVALID_LONG_REMARK = "a".repeat(101);
 
     private final UpdatePetRemarkCommandParser parser = new UpdatePetRemarkCommandParser();
 

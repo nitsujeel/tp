@@ -29,7 +29,6 @@ public class PhoneTest {
         // invalid phone numbers
         assertFalse(Phone.isValidPhone("")); // empty string
         assertFalse(Phone.isValidPhone(" ")); // spaces only
-        assertFalse(Phone.isValidPhone("1")); // less than 2 characters
         assertFalse(Phone.isValidPhone(INVALID_TOO_LONG_PHONE)); // exceeds 30 characters
         assertFalse(Phone.isValidPhone("  " + INVALID_TOO_LONG_PHONE + "  ")); // still exceeds limit after trim
 

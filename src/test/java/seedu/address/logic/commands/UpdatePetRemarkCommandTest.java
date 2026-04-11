@@ -127,10 +127,8 @@ public class UpdatePetRemarkCommandTest {
     @Test
     public void execute_longRemark_success() {
         Model model = new ModelManager(TypicalAddressBooks.getTypicalPetLog(), new UserPrefs());
-        String longRemark = "This is a very long remark about the pet. It includes detailed information "
-                + "about the pet's health, behavior, and special needs. The pet is friendly with other dogs "
-                + "and cats. It needs special nutrition for joint health. It should be exercised for at "
-                + "least 2 hours daily.";
+        String longRemark = "This is a long remark about the pet. It includes information about the pet's health and "
+                + "behaviour.";
 
         UpdatePetRemarkCommand command = new UpdatePetRemarkCommand(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON,
                 longRemark);

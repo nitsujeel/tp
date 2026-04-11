@@ -25,7 +25,7 @@ import seedu.address.model.tag.Tag;
 
 public class ParserUtilTest {
     private static final String INVALID_NAME = "A".repeat(51);
-    private static final String INVALID_PHONE = "1";
+    private static final String INVALID_PHONE = "1".repeat(31);
     private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_TOO_LONG_ADDRESS = "A".repeat(101);
     private static final String INVALID_EMAIL = "example.com";

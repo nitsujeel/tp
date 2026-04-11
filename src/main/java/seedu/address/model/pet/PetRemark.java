@@ -11,9 +11,9 @@ import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 public class PetRemark {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Remarks should be at most 300 characters long.";
+            "Remarks should be at most 100 characters long.";
 
-    public static final int MAX_LENGTH = 300;
+    public static final int MAX_LENGTH = 100;
 
     public final String value;
 

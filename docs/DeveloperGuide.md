@@ -39,7 +39,7 @@ Given below is a quick overview of main components and how they interact with ea
 
 **Main components of the architecture**
 
-**`Main`** (consisting of classes [`Main`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of app launch and shutdown.
+**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S2-CS2103T-W14-1/tp/blob/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2526S2-CS2103T-W14-1/tp/blob/master/src/main/java/seedu/address/MainApp.java)) is in charge of app launch and shutdown.
 * At app launch, it initialises the other components in the correct sequence, and connects them up with each other.
 * At shutdown, it shuts down the other components and invokes cleanup methods where necessary.
 
@@ -73,13 +73,13 @@ The sections below give more details of each component.
 
 ### UI component
 
-The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
+The **API** of this component is specified in [`Ui.java`](https://github.com/AY2526S2-CS2103T-W14-1/tp/blob/master/src/main/java/seedu/address/ui/Ui.java)
 
 <img src="images/UiClassDiagram.png" width="1000"/>
 
 The UI consists of a `MainWindow` that is made up of parts, e.g., `CommandBox`, `ResultDisplay`, `OwnerListPanel`, `SessionListPanel`, `ServiceListPanel`, `StatusBarFooter`, etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
-The `UI` component uses the JavaFX UI framework. The layouts of these UI parts are defined in matching `.fxml` files in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml).
+The `UI` component uses the JavaFX UI framework. The layouts of these UI parts are defined in matching `.fxml` files in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S2-CS2103T-W14-1/tp/blob/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S2-CS2103T-W14-1/tp/blob/master/src/main/resources/view/MainWindow.fxml).
 
 The `UI` component,
 
@@ -92,7 +92,7 @@ The `UI` component,
 
 ### Logic component
 
-**API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
+**API** : [`Logic.java`](https://github.com/AY2526S2-CS2103T-W14-1/tp/blob/master/src/main/java/seedu/address/logic/Logic.java)
 
 Here's a (partial) class diagram of the `Logic` component:
 
@@ -125,7 +125,7 @@ How the parsing works:
 
 ### Model component
 
-**API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
+**API** : [`Model.java`](https://github.com/AY2526S2-CS2103T-W14-1/tp/blob/master/src/main/java/seedu/address/model/Model.java)
 
 <img src="images/ModelClassDiagram.png" width="500" />
 
@@ -154,7 +154,7 @@ The `Model` component,
 
 ### Storage component
 
-**API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
+**API** : [`Storage.java`](https://github.com/AY2526S2-CS2103T-W14-1/tp/blob/master/src/main/java/seedu/address/storage/Storage.java)
 
 <img src="images/StorageClassDiagram.png" width="700" />
 
@@ -697,14 +697,13 @@ MSS:
 **Maintainability**
 * PetLog's codebase should utilise relevant Object-Oriented Programming paradigms whenever applicable.
 * PetLog's codebase should abide by all the standards in the [CS2103/T Java coding standard](https://se-education.org/guides/conventions/java/intermediate.html).
-* PetLog's codebase should be of high quality, with ≥ 95% of the lines of code not violating any of the guidelines in the [CS2103/T textbook](https://nus-cs2103-ay2526-s2.github.io/website/se-book-adapted/chapters/codeQuality.html). The violations should be justifiable by the author of the section of code.
+* PetLog's codebase should be of high quality, with ≥ 95% of the lines of code not violating any of the guidelines in the [CS2103/T textbook](https://nus-cs2103-ay2526-s2.github.io/website/se-book-adapted/chapters/codeQuality.html). The violations should be justified by the author of the section of code with comments.
 
 **Professionalism**
 * PetLog should not use any vulgar/offensive language.
 
 **Project Process**
 * PetLog should be developed in a breadth-first incremental manner over the project duration.
-* PetLog's implementation is expected to adhere to a schedule that dynamically shifts and is agreed upon by the majority of members.
 * PetLog's codebase should only use third-party frameworks/libraries/services if they are free, open-source, and have permissive license terms, and do not require any installation by the user.
 * PetLog should be packaged in a single JAR file.
 * PetLog should abide by the following file sizes: ≤ 100 MB for JAR file, ≤ 15 MB / file for documents (e.g. PDF files).
@@ -726,7 +725,6 @@ MSS:
 * **Fee** - The monetary total for a session, computed from selected services at session creation.
 * **CLI** - Command Line Interface; a text-based interface where users interact by typing commands.
 * **GUI** - Graphical User Interface; the visual interface displayed to the user.
-* **Mainstream OS** - Windows, Linux, Unix, macOS.
 * **Home folder** - The directory where the JAR runs and where PetLog stores `data/petlog.json`.
 
 --------------------------------------------------------------------------------------------------------------------

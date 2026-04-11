@@ -3,7 +3,6 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_OWNER_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_OWNER_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PET_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PET_REMARK;
@@ -12,9 +11,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_SPECIES;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.List;
-import java.util.Optional;
 
-import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
@@ -37,7 +34,6 @@ public class FindCommand extends Command {
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
             + "[" + PREFIX_TAG + "OWNER_TAG]... "
-            + "[" + PREFIX_OWNER_INDEX + "OWNER_INDEX] "
             + "[" + PREFIX_PET_NAME + "PET_NAME] "
             + "[" + PREFIX_SPECIES + "SPECIES] "
             + "[" + PREFIX_PET_REMARK + "REMARKS]\n"
@@ -49,30 +45,19 @@ public class FindCommand extends Command {
             + PREFIX_PET_NAME + "sam";
 
     private final FieldContainsKeywordsPredicate predicate;
-    private final Optional<Index> ownerIndex;
 
     /**
-     * Creates a FindCommand without an owner index filter.
+     * Creates a FindCommand with owner-field and pet-field filters.
      */
     public FindCommand(FieldContainsKeywordsPredicate predicate) {
-        this(predicate, Optional.empty());
-    }
-
-    /**
-     * Creates a FindCommand with optional owner index, owner-field and pet-field filters.
-     */
-    public FindCommand(FieldContainsKeywordsPredicate predicate, Optional<Index> ownerIndex) {
         requireNonNull(predicate);
-        requireNonNull(ownerIndex);
         this.predicate = predicate;
-        this.ownerIndex = ownerIndex;
     }
 
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
-        List<Person> baselineOwners = List.copyOf(model.getFilteredPersonList());
-        model.updateFilteredPersonList(person -> predicate.test(person) && matchesOwnerIndex(person, baselineOwners));
+        model.updateFilteredPersonList(predicate);
         model.updateDisplayedSessions(model.getFilteredPersonList());
         List<Person> matched = model.getFilteredPersonList();
         int count = matched.size();
@@ -92,15 +77,6 @@ public class FindCommand extends Command {
         return new CommandResult(sb.toString());
     }
 
-    private boolean matchesOwnerIndex(Person person, List<Person> baselineOwners) {
-        if (ownerIndex.isEmpty()) {
-            return true;
-        }
-
-        int zeroBasedIndex = ownerIndex.get().getZeroBased();
-        return zeroBasedIndex < baselineOwners.size() && baselineOwners.get(zeroBasedIndex).equals(person);
-    }
-
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -113,14 +89,13 @@ public class FindCommand extends Command {
         }
 
         FindCommand otherFindCommand = (FindCommand) other;
-        return predicate.equals(otherFindCommand.predicate) && ownerIndex.equals(otherFindCommand.ownerIndex);
+        return predicate.equals(otherFindCommand.predicate);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .add("predicate", predicate)
-                .add("ownerIndex", ownerIndex)
                 .toString();
     }
 }

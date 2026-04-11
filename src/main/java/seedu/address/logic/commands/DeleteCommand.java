@@ -39,9 +39,9 @@ public class DeleteCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes an owner, a pet, a session, or a service.\n"
             + "Parameters: "
-            + PREFIX_OWNER_INDEX + "OWNER_INDEX ["
+            + PREFIX_OWNER_INDEX + "(OWNER_INDEX ["
             + PREFIX_PET_INDEX + "PET_INDEX ["
-            + PREFIX_SESSION_INDEX + "SESSION_INDEX]] | "
+            + PREFIX_SESSION_INDEX + "SESSION_INDEX]]) OR "
             + PREFIX_SERVICE_NAME + "SERVICE_NAME\n"
             + "Examples:\n"
             + COMMAND_WORD + " " + PREFIX_OWNER_INDEX + "1\n"

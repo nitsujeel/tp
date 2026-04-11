@@ -3,7 +3,6 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_OWNER_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_OWNER_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PET_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PET_REMARK;
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -34,7 +32,7 @@ public class FindCommandParser implements Parser<FindCommand> {
     public FindCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_OWNER_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS,
-                        PREFIX_TAG, PREFIX_OWNER_INDEX, PREFIX_PET_NAME, PREFIX_SPECIES, PREFIX_PET_REMARK);
+                        PREFIX_TAG, PREFIX_PET_NAME, PREFIX_SPECIES, PREFIX_PET_REMARK);
 
         if (!argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(
@@ -42,26 +40,25 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_OWNER_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS,
-                PREFIX_OWNER_INDEX, PREFIX_PET_NAME, PREFIX_SPECIES, PREFIX_PET_REMARK);
+                PREFIX_PET_NAME, PREFIX_SPECIES, PREFIX_PET_REMARK);
 
         Optional<String> ownerNameKeyword = parseOptionalSearchString(argMultimap, PREFIX_OWNER_NAME);
         Optional<String> phoneKeyword = parseOptionalSearchString(argMultimap, PREFIX_PHONE);
         Optional<String> emailKeyword = parseOptionalSearchString(argMultimap, PREFIX_EMAIL);
         Optional<String> addressKeyword = parseOptionalSearchString(argMultimap, PREFIX_ADDRESS);
         List<String> tagKeywords = parseTagSearchStrings(argMultimap.getAllValues(PREFIX_TAG));
-        Optional<Index> ownerIndexKeyword = parseOptionalIndex(argMultimap, PREFIX_OWNER_INDEX);
         Optional<String> petNameKeyword = parseOptionalSearchString(argMultimap, PREFIX_PET_NAME);
         Optional<String> speciesKeyword = parseOptionalSearchString(argMultimap, PREFIX_SPECIES);
         Optional<String> petRemarkKeyword = parseOptionalSearchString(argMultimap, PREFIX_PET_REMARK);
 
         if (ownerNameKeyword.isEmpty() && phoneKeyword.isEmpty() && emailKeyword.isEmpty() && addressKeyword.isEmpty()
-                && tagKeywords.isEmpty() && ownerIndexKeyword.isEmpty() && petNameKeyword.isEmpty()
+                && tagKeywords.isEmpty() && petNameKeyword.isEmpty()
                 && speciesKeyword.isEmpty() && petRemarkKeyword.isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
         return new FindCommand(new FieldContainsKeywordsPredicate(ownerNameKeyword, phoneKeyword, emailKeyword,
-                addressKeyword, tagKeywords, petNameKeyword, speciesKeyword, petRemarkKeyword), ownerIndexKeyword);
+                addressKeyword, tagKeywords, petNameKeyword, speciesKeyword, petRemarkKeyword));
     }
 
     private static Optional<String> parseOptionalSearchString(ArgumentMultimap argMultimap, Prefix prefix)
@@ -73,21 +70,6 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         return value;
-    }
-
-    private static Optional<Index> parseOptionalIndex(ArgumentMultimap argMultimap, Prefix prefix)
-            throws ParseException {
-        Optional<String> value = argMultimap.getValue(prefix).map(StringUtil::normalizeWhitespace);
-
-        if (value.isEmpty()) {
-            return Optional.empty();
-        }
-
-        if (value.get().isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        }
-
-        return Optional.of(ParserUtil.parseIndex(value.get()));
     }
 
     private static List<String> parseTagSearchStrings(List<String> rawTagSearchStrings) throws ParseException {

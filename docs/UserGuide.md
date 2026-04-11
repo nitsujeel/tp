@@ -3,9 +3,9 @@ layout: page
 title: User Guide
 ---
 
-PetLog is a **desktop app for managing pet care operations**, optimised for use via a **Command Line Interface** (CLI)
+PetLog is a **desktop app designed for managers of pet daycares or boarding services**, optimised for use via a **Command Line Interface** (CLI)
 while keeping the benefits of a **Graphical User Interface** (GUI).
-With structured commands, it helps you manage, search and organize the details of owners and their pets efficiently. 
+With structured commands, it helps you manage, search and organise the details of owners and their pets efficiently. 
 You can also add and keep track of the services you offer and also specific sessions where a pet will be receiving 
 one of your services. 
 
@@ -48,6 +48,8 @@ one of your services.
 
 1. Refer to the [Features](#features) below for details of each command.
 
+[Back to ToC](UserGuide.md)
+
 --------------------------------------------------------------------------------------------------------------------
 
 <div style="page-break-after: always;"></div>
@@ -81,11 +83,13 @@ one of your services.
 
 ### Viewing help: `help`
 
-Shows a message explaining how to access the help page:
+Shows a message explaining how to use the available commands and how to access the help page:
 
 ![help message](images/helpMessage.png)
 
 Format: `help`
+
+[Back to ToC](UserGuide.md)
 
 ### Adding an owner: `addowner`
 
@@ -103,6 +107,12 @@ Format: `addowner on/OWNER_NAME ph/PHONE_NUMBER em/EMAIL ad/ADDRESS [ot/TAG]…�
 Examples:
 * `addowner on/John Doe ph/98765432 em/johnd@example.com ad/John street, block 123, #01-01`
 * `addowner on/Betsy Crowe ot/friend em/betsycrowe@example.com ad/Newgate Prison ph/1234567 ot/criminal`
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+PetLog doesn't restrict what types of characters you can enter for `PHONE_NUMBER`. Want to say this new owner's phone number is the `Same as Alice's`? Or perhaps the new owner is `Unwilling to share` their phone number? PetLog is flexible to all these possibilities!
+</div>
+
+[Back to ToC](UserGuide.md)
 
 ### Editing an owner: `editowner`
 
@@ -124,6 +134,8 @@ Examples:
 *  `editowner oi/3 rt/member at/VIP` removes the (assumed existing) `member` tag and adds a `VIP` tag to the 3rd owner.
 *  `editowner oi/2 on/Betsy Crower ot/` edits the name of the 2nd owner to be `Betsy Crower` and clears all existing tags.
 
+[Back to ToC](UserGuide.md)
+
 ### Adding a pet under an owner: `addpet`
 
 Adds a pet belonging to an existing owner in PetLog. A pet has an owner, a name, a species, and may have remarks.
@@ -133,12 +145,19 @@ Format: `addpet oi/OWNER_INDEX pn/PET_NAME ps/SPECIES [pr/REMARKS]`
 * `OWNER_INDEX` refers to the index number shown in the displayed owner list. It must be a positive integer.
 * `PET_NAME` must be 1 to 30 characters.
 * `SPECIES` must be 1 to 30 characters.
-* `REMARKS`, if provided, must be 1 to 100 characters.
+* `REMARKS`, if provided, must be 1 to 100 characters. Simply inputting `pr/` with no remarks provided will add the pet with no remarks.
 * Attempting to add a duplicate pet, if both its name and species match an existing pet for the specified owner, will not succeed.
 
+<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
+A pet's owner, name and species cannot be updated once it has been added. Make sure they are all correct before adding sessions to the pet!
+If not, you can always [`delete`](#deleting-an-owner-pet-session-or-service-delete) the pet and re-add it with the corrected details.
+</div>
+
 Examples:
-* `addpet oi/2 pn/Molly ps/Golden Retriever pr/cuddly` adds a golden retriever called Molly under the 2nd owner in the list of owners; Molly will have a remark that she is cuddly.
-* `addpet oi/1 pn/Dave ps/Great Dane` adds a great dane called Dave under the 1st owner on the list of owners.
+* `addpet oi/2 pn/Molly ps/Golden Retriever pr/cuddly` adds a Golden Retriever called Molly under the 2nd owner in the list of owners; Molly will have a remark that she is cuddly.
+* `addpet oi/1 pn/Dave ps/Great Dane` adds a Great Dane called Dave under the 1st owner on the list of owners.
+
+[Back to ToC](UserGuide.md)
 
 ### Updating the remarks of a pet: `update`
 
@@ -153,11 +172,13 @@ Updates the remarks of a pet.
 Examples:
 * `update oi/1 pi/3 pr/aggressive` updates the remark of the 3rd pet listed under the 1st owner to be "aggressive".
 
+[Back to ToC](UserGuide.md)
+
 ### Searching for owners: `find`
 
 Finds owners whose details match at least one of the given keywords.
 
-Format: `find [on/OWNER_NAME] [ph/PHONE_NUMBER] [em/EMAIL] [ad/ADDRESS] [ot/OWNER_TAG]…​ [oi/OWNER_INDEX] [pn/PET_NAME] [ps/SPECIES] [pr/REMARKS]`
+Format: `find [on/OWNER_NAME] [ph/PHONE_NUMBER] [em/EMAIL] [ad/ADDRESS] [ot/OWNER_TAG]…​ [pn/PET_NAME] [ps/SPECIES] [pr/REMARKS]`
 
 * At least one of the optional fields must be provided.
 * The search is case-insensitive. e.g `hans` will match `Hans`.
@@ -171,6 +192,8 @@ Examples:
 * `find ad/Tampines ot/VIP` returns owners whose address contains `Tampines` OR who are tagged as `VIP`s _(screenshot cropped to show relevant UI elements)_:
 ![[result for 'find ad/Tampines ot/VIP']](images/findAdTampinesOtVip.png)
 
+[Back to ToC](UserGuide.md)
+
 ### Listing all owners: `list`
 
 Shows a list of all owners and pets in PetLog.
@@ -180,6 +203,8 @@ Format: `list`
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Use `list` after using [`find`](#searching-for-owners-find) to go back to displaying all owners and pets.
 </div>
+
+[Back to ToC](UserGuide.md)
 
 ### Adding a service: `addservice`
 
@@ -193,6 +218,8 @@ Format: `addservice sn/SERVICE_NAME sp/SERVICE_PRICE`
 
 Examples:
 * `addservice sn/Ear Cleaning sp/12.50` adds Ear Cleaning as a service to the list with the price of $12.50.
+
+[Back to ToC](UserGuide.md)
 
 ### Adding a session: `addsession`
 
@@ -209,6 +236,16 @@ Format: `addsession oi/OWNER_INDEX pi/PET_INDEX st/START_TIME et/END_TIME [sn/SE
 
 Examples:
 * `addsession oi/1 pi/2 st/2026-05-15 14:30 et/2026-05-15 15:30 sn/Base service charge sn/Shampoo` adds a session for the 2nd pet listed under the 1st owner; it is from 2:30pm to 3:30pm on 15 May 2026; its list of services are `Base service charge` and `Shampoo`.
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+You may add more than one instance of the same service to a single session! This may be useful for longer sessions at care centres that span over several days, where you may need to walk a pet every day, for example.
+</div>
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+PetLog allows you to add sessions that have happened in the past, be it for bookkeeping, tracking customers' loyalty, or simply just for nostalgia!
+</div>
+
+[Back to ToC](UserGuide.md)
 
 ### Deleting an owner, pet, session or service: `delete`
 
@@ -254,6 +291,10 @@ Using a combination of both formats, e.g. `delete oi/1 sn/Ear cleaning`, is inva
 
 </div>
 
+<div style="page-break-after: always;"></div>
+
+[Back to ToC](UserGuide.md)
+
 ### Clearing all owners, pets, services and sessions: `clear`
 
 Deletes all owners, pets, services and sessions from PetLog.
@@ -264,15 +305,21 @@ Format: `clear`
 Use `clear` to remove the sample data when you first run PetLog so you can start putting in your own!
 </div>
 
+[Back to ToC](UserGuide.md)
+
 ### Exiting the program: `exit`
 
 Exits PetLog.
 
 Format: `exit`
 
+[Back to ToC](UserGuide.md)
+
 ### Saving the data
 
 PetLog data is saved in the hard disk automatically after any command that changes the data, and upon exiting. There is no need to save manually.
+
+[Back to ToC](UserGuide.md)
 
 ### Editing the data file
 
@@ -283,9 +330,13 @@ If your changes to the data file make its format invalid, PetLog will discard al
 Furthermore, certain edits can cause PetLog to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
 
+[Back to ToC](UserGuide.md)
+
 ### Undo/Redo `[Coming Soon]`
 
 _Details coming soon ..._
+
+[Back to ToC](UserGuide.md)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -314,6 +365,8 @@ _Details coming soon ..._
 **Q**: Where is my data stored, and how do I reset to sample data?<br>
 **A**: Data is stored at `[JAR location]/data/petlog.json`. Back up that file to migrate data. To reset to sample data, delete `petlog.json` and restart the app.
 
+[Back to ToC](UserGuide.md)
+
 --------------------------------------------------------------------------------------------------------------------
 
 <div style="page-break-after: always;"></div>
@@ -323,6 +376,12 @@ _Details coming soon ..._
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
 
 1. **If you minimise the Help Window** and then run the [`help`](#viewing-help-help) command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimised, and no new Help Window will appear. The remedy is to manually restore the minimised Help Window.
+
+1. **On MacOS, if the Help Window is closed while it is in fullscreen**, the application may become unresponsive. The remedy is to type `Control` + `C` in your Terminal window to close the application, and then re-boot it with `java -jar petlog.jar`. For this reason, it is best to avoid closing the Help Window when it is in fullscreen.
+
+1. **If `petlog.jar` is placed in a write-protected folder**, the application will not work as it requires write permissions to write and update the local storage file `petlog.json`. The remedy is to ensure `petlog.jar` in placed a folder with no write protection before using it.
+
+[Back to ToC](UserGuide.md)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -337,7 +396,7 @@ Action | Format, Examples
 [**Edit Owner**](#editing-an-owner-editowner) | `editowner oi/OWNER_INDEX [on/OWNER_NAME] [ph/PHONE_NUMBER] [em/EMAIL] [ad/ADDRESS] [ot/OVERWRITE_TAG]…​ [at/ADD_TAG]…​ [rt/REMOVE_TAG]…​`<br> e.g., `editowner oi/1 ph/91234567 em/johndoe@example.com`
 [**Add Pet**](#adding-a-pet-under-an-owner-addpet) | `addpet oi/OWNER_INDEX pn/PET_NAME ps/SPECIES [pr/REMARKS]` <br> e.g., `addpet oi/2 pn/Molly ps/Golden Retriever pr/cuddly`
 [**Update Pet Remarks**](#updating-the-remarks-of-a-pet-update) | `update oi/OWNER_INDEX pi/PET_INDEX pr/REMARKS` <br> e.g., `update oi/1 pi/3 pr/aggressive`
-[**Search for Owners**](#searching-for-owners-find) | `find [on/OWNER_NAME] [ph/PHONE_NUMBER] [em/EMAIL] [ad/ADDRESS] [ot/OWNER_TAG]…​ [oi/OWNER_INDEX] [pn/PET_NAME] [ps/SPECIES] [pr/REMARKS]`<br> e.g., `find on/Hans ps/Dog`
+[**Search for Owners**](#searching-for-owners-find) | `find [on/OWNER_NAME] [ph/PHONE_NUMBER] [em/EMAIL] [ad/ADDRESS] [ot/OWNER_TAG]…​ [pn/PET_NAME] [ps/SPECIES] [pr/REMARKS]`<br> e.g., `find on/Hans ps/Dog`
 [**List All Owners and Pets**](#listing-all-owners-list) | `list`
 [**Add Service**](#adding-a-service-addservice) | `addservice sn/SERVICE_NAME sp/SERVICE_PRICE` <br> e.g., `addservice sn/Ear Cleaning sp/12.50`
 [**Add Session**](#adding-a-session-addsession) | `addsession oi/OWNER_INDEX pi/PET_INDEX st/START_TIME et/END_TIME [sn/SERVICE_NAME]…​` <br> e.g., `addsession oi/1 pi/2 st/2026-05-15 14:30 et/2026-05-15 15:30 sn/Base service charge sn/Shampoo`
@@ -345,3 +404,5 @@ Action | Format, Examples
 [**Delete Service**](#deleting-an-owner-pet-session-or-service-delete) | `delete sn/SERVICE_NAME` <br> e.g., `delete sn/Ear Cleaning`
 [**Clear All Entries**](#clearing-all-owners-pets-services-and-sessions-clear) | `clear`
 [**Exit Application**](#exiting-the-program-exit) | `exit`
+
+[Back to ToC](UserGuide.md)

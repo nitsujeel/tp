@@ -242,7 +242,7 @@ You may add more than one instance of the same service to a single session! This
 </div>
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-PetLog allows you to add sessions that have happened in the past, be it for bookkeeping, tracking customers' loyalty, or simply just for nostalgia!
+PetLog allows you to add sessions that have happened in the past, be it for bookkeeping, tracking clients' loyalty, or simply just for nostalgia!
 </div>
 
 [Back to ToC](UserGuide.md)

@@ -48,7 +48,7 @@ one of your services.
 
 1. Refer to the [Features](#features) below for details of each command.
 
-[Back to ToC](UserGuide.md)
+[↑ Back to ToC](UserGuide.md)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -81,15 +81,19 @@ one of your services.
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
+<div style="page-break-after: always;"></div>
+
 ### Viewing help: `help`
 
-Shows a message explaining how to use the available commands and how to access the help page:
+Shows a message explaining how to use the available commands and how to access the user guide:
 
 ![help message](images/helpMessage.png)
 
 Format: `help`
 
-[Back to ToC](UserGuide.md)
+[↑ Back to ToC](UserGuide.md)
+
+<div style="page-break-after: always;"></div>
 
 ### Adding an owner: `addowner`
 
@@ -114,7 +118,9 @@ Examples:
 PetLog doesn't restrict what types of characters you can enter for `PHONE_NUMBER`. Want to say this new owner's phone number is the `Same as Alice's`? Or perhaps use `-` to represent that they don't have a phone number? PetLog is flexible to all these possibilities!
 </div>
 
-[Back to ToC](UserGuide.md)
+[↑ Back to ToC](UserGuide.md)
+
+<div style="page-break-after: always;"></div>
 
 ### Editing an owner: `editowner`
 
@@ -136,7 +142,9 @@ Examples:
 *  `editowner oi/3 rt/member at/VIP` removes the (assumed existing) `member` tag and adds a `VIP` tag to the 3rd owner.
 *  `editowner oi/2 on/Betsy Crower ot/` edits the name of the 2nd owner to be `Betsy Crower` and clears all existing tags.
 
-[Back to ToC](UserGuide.md)
+[↑ Back to ToC](UserGuide.md)
+
+<div style="page-break-after: always;"></div>
 
 ### Adding a pet under an owner: `addpet`
 
@@ -159,7 +167,9 @@ Examples:
 * `addpet oi/2 pn/Molly ps/Golden Retriever pr/cuddly` adds a Golden Retriever called Molly under the 2nd owner in the list of owners; Molly will have a remark that she is cuddly.
 * `addpet oi/1 pn/Dave ps/Great Dane` adds a Great Dane called Dave under the 1st owner on the list of owners.
 
-[Back to ToC](UserGuide.md)
+[↑ Back to ToC](UserGuide.md)
+
+<div style="page-break-after: always;"></div>
 
 ### Updating the remarks of a pet: `update`
 
@@ -174,7 +184,9 @@ Updates the remarks of a pet.
 Examples:
 * `update oi/1 pi/3 pr/aggressive` updates the remark of the 3rd pet listed under the 1st owner to be "aggressive".
 
-[Back to ToC](UserGuide.md)
+[↑ Back to ToC](UserGuide.md)
+
+<div style="page-break-after: always;"></div>
 
 ### Searching for owners: `find`
 
@@ -194,7 +206,9 @@ Examples:
 * `find ad/Tampines ot/VIP` returns owners whose address contains `Tampines` OR who are tagged as `VIP`s _(screenshot cropped to show relevant UI elements)_:
 ![[result for 'find ad/Tampines ot/VIP']](images/findAdTampinesOtVip.png)
 
-[Back to ToC](UserGuide.md)
+[↑ Back to ToC](UserGuide.md)
+
+<div style="page-break-after: always;"></div>
 
 ### Listing all owners: `list`
 
@@ -206,7 +220,9 @@ Format: `list`
 Use `list` after using [`find`](#searching-for-owners-find) to go back to displaying all owners and pets.
 </div>
 
-[Back to ToC](UserGuide.md)
+[↑ Back to ToC](UserGuide.md)
+
+<div style="page-break-after: always;"></div>
 
 ### Adding a service: `addservice`
 
@@ -221,7 +237,9 @@ Format: `addservice sn/SERVICE_NAME sp/SERVICE_PRICE`
 Examples:
 * `addservice sn/Ear Cleaning sp/12.50` adds Ear Cleaning as a service to the list with the price of $12.50.
 
-[Back to ToC](UserGuide.md)
+[↑ Back to ToC](UserGuide.md)
+
+<div style="page-break-after: always;"></div>
 
 ### Adding a session: `addsession`
 
@@ -247,7 +265,9 @@ You may add more than one instance of the same service to a single session! This
 PetLog allows you to add sessions that have happened in the past, be it for bookkeeping, tracking clients' loyalty, or simply just for nostalgia!
 </div>
 
-[Back to ToC](UserGuide.md)
+[↑ Back to ToC](UserGuide.md)
+
+<div style="page-break-after: always;"></div>
 
 ### Deleting an owner, pet, session or service: `delete`
 
@@ -273,6 +293,8 @@ Examples:
 * [`list`](#listing-all-owners-list) followed by `delete oi/2` deletes the 2nd owner listed.
 * [`find on/Betsy`](#searching-for-owners-find) followed by `delete oi/1 pi/2` deletes the 2nd pet of the 1st owner in the results of the [`find`](#searching-for-owners-find) command.
 
+<div style="page-break-after: always;"></div>
+
 **2. Deleting a service**
 
 Deletes a service from the service catalogue.
@@ -293,9 +315,9 @@ Using a combination of both formats, e.g. `delete oi/1 sn/Ear cleaning`, is inva
 
 </div>
 
-<div style="page-break-after: always;"></div>
+[↑ Back to ToC](UserGuide.md)
 
-[Back to ToC](UserGuide.md)
+<div style="page-break-after: always;"></div>
 
 ### Clearing all owners, pets, services and sessions: `clear`
 
@@ -307,7 +329,7 @@ Format: `clear`
 Use `clear` to remove the sample data when you first run PetLog so you can start putting in your own!
 </div>
 
-[Back to ToC](UserGuide.md)
+[↑ Back to ToC](UserGuide.md)
 
 ### Exiting the program: `exit`
 
@@ -315,13 +337,15 @@ Exits PetLog.
 
 Format: `exit`
 
-[Back to ToC](UserGuide.md)
+[↑ Back to ToC](UserGuide.md)
 
 ### Saving the data
 
 PetLog data is saved in the hard disk automatically after any command that changes the data, and upon exiting. There is no need to save manually.
 
-[Back to ToC](UserGuide.md)
+[↑ Back to ToC](UserGuide.md)
+
+<div style="page-break-after: always;"></div>
 
 ### Editing the data file
 
@@ -332,13 +356,13 @@ If your changes to the data file make its format invalid, PetLog will discard al
 Furthermore, certain edits can cause PetLog to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
 
-[Back to ToC](UserGuide.md)
+[↑ Back to ToC](UserGuide.md)
 
 ### Undo/Redo `[Coming Soon]`
 
 _Details coming soon ..._
 
-[Back to ToC](UserGuide.md)
+[↑ Back to ToC](UserGuide.md)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -367,7 +391,7 @@ _Details coming soon ..._
 **Q**: Where is my data stored, and how do I reset to sample data?<br>
 **A**: Data is stored at `[JAR location]/data/petlog.json`. Back up that file to migrate data. To reset to sample data, delete `petlog.json` and restart the app.
 
-[Back to ToC](UserGuide.md)
+[↑ Back to ToC](UserGuide.md)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -383,7 +407,7 @@ _Details coming soon ..._
 
 1. **If `petlog.jar` is placed in a write-protected folder**, the application will not work as it requires write permissions to write and update the local storage file `petlog.json`. The remedy is to ensure `petlog.jar` in placed a folder with no write protection before using it.
 
-[Back to ToC](UserGuide.md)
+[↑ Back to ToC](UserGuide.md)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -407,4 +431,6 @@ Action | Format, Examples
 [**Clear All Entries**](#clearing-all-owners-pets-services-and-sessions-clear) | `clear`
 [**Exit Application**](#exiting-the-program-exit) | `exit`
 
-[Back to ToC](UserGuide.md)
+[↑ Back to ToC](UserGuide.md)
+
+--------------------------------------------------------------------------------------------------------------------

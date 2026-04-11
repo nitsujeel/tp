@@ -7,6 +7,8 @@ title: Developer Guide
 
 --------------------------------------------------------------------------------------------------------------------
 
+<div style="page-break-after: always;"></div>
+
 ## **Acknowledgements**
 
 * This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org). We used that codebase as a starting point for PetLog.
@@ -127,7 +129,7 @@ How the parsing works:
 
 **API** : [`Model.java`](https://github.com/AY2526S2-CS2103T-W14-1/tp/blob/master/src/main/java/seedu/address/model/Model.java)
 
-<img src="images/ModelClassDiagram.png" width="500" />
+<img src="images/ModelClassDiagram.png" width="450" />
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** Lower-level details such as owner and pet fields (e.g. `Address`, `Species`) have been omitted from the diagram.
 
@@ -194,6 +196,8 @@ Key implementation points:
 The sequence diagram below shows the main interaction flow for a successful `addpet` operation.
 
 <img src="images/PetManagementSequenceDiagram.png" width="700" />
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `AddPetCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
+</div>
 
 ### Service catalogue
 
@@ -862,7 +866,12 @@ It aims to complement the UG by suggesting a simple path for testing and providi
 
 --------------------------------------------------------------------------------------------------------------------
 
+<div style="page-break-after: always;"></div>
+
 ## **Appendix: Effort**
+
+This section explains the difficulty level, challenges faced, effort required, and achievements of PetLog's development.
+
 Difficulty level of our project: medium.
 
 Compared to AB3, which primarily manages a single core entity type, our project required more effort because it supports **multiple related entity types**, namely owners, pets, services, and sessions. This introduced additional complexity in both the codebase and the product design, as we had to **maintain clear relationships** between these entities while **keeping commands intuitive** for users.
@@ -874,6 +883,8 @@ The team spent about 10 hours per week over 5 weeks, for a team of 5. This gives
 Our key achievements were redesigning the model to **support richer domain relationships**, implementing features for managing pets, services, and care sessions, and producing a coherent user guide and developer guide that reflect the current architecture and feature set.
 
 --------------------------------------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 ## **Appendix: Planned Enhancements**
 

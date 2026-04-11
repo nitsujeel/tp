@@ -28,7 +28,7 @@ import seedu.address.logic.commands.UpdatePetRemarkCommand;
 public class HelpWindow extends UiPart<Stage> {
 
     public static final String USERGUIDE_URL = "https://ay2526s2-cs2103t-w14-1.github.io/tp/UserGuide.html";
-    public static final String HELP_MESSAGE = "For more detailed guide, refer to the user guide: " + USERGUIDE_URL;
+    public static final String HELP_MESSAGE = "For more detailed guide, refer to the user guide.";
     public static final String COMMANDS_MESSAGE = buildCommandsMessage();
 
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);

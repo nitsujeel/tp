@@ -17,7 +17,7 @@
     <Image url="@/images/help_icon.png" />
   </icons>
   <scene>
-    <Scene>
+    <Scene width="650" height="500">
       <stylesheets>
         <URL value="@DarkTheme.css" />
         <URL value="@Extensions.css" />
@@ -37,8 +37,8 @@
           <padding>
             <Insets top="10" right="10" bottom="10" left="15" />
           </padding>
-          <Label fx:id="helpMessage" styleClass="cell_small_label" text="Label" HBox.hgrow="ALWAYS" wrapText="true" />
-          <Button fx:id="copyButton" mnemonicParsing="false" onAction="#copyUrl" text="Copy URL" />
+          <Label fx:id="helpMessage" maxWidth="Infinity" styleClass="cell_small_label" text="Label" HBox.hgrow="ALWAYS" wrapText="true" />
+          <Button fx:id="copyButton" minWidth="80" mnemonicParsing="false" onAction="#copyUrl" text="Copy URL" />
         </HBox>
       </VBox>
     </Scene>

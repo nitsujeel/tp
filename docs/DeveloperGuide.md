@@ -880,4 +880,32 @@ Our key achievements were redesigning the model to **support richer domain relat
 
 ## **Appendix: Planned Enhancements**
 
-This section will be updated with bugs we are aware of, and fixes that we propose to add in the near future.
+This section describes bugs in PetLog that we, the development team, are aware of, and fixes that we propose to implement in the near future.
+
+Team size: 5
+
+### 1. Improving parsers to detect invalid prefixes
+
+With the current implementation, unexpected behaviours occur when a user inputs an invalid prefix for a command with parameters (i.e. all commands other than `help`, `list`, `clear` and `exit`).
+
+If the invalid prefix is the first prefix provided, the user is shown the error `Invalid command format`. If the invalid prefix is a later prefix, it is unintentionally absorbed into the previous parameter's input.
+
+Examples:
+* _Invalid prefix as first input following command word_: <br>
+  Run `addowner xy/Invalid Prefix on/Example ph/123 em/eg@example.com ad/Some Address`. <br>
+  Expected: User is shown an error that identifies the invalid input `xy/`. <br>
+  Actual: User is shown the `Invalid command format` error.
+*  _Invalid prefix as subsequent input being absorbed into previous argument with no error_: <br> 
+  Run `addowner on/Example xy/Invalid Prefix ph/123 em/eg@example.com ad/Some Address` <br>
+  Expected: User is shown an error that identifies the invalid input `xy/`. <br>
+  Actual: The argument to the `on/` parameter is parsed as `Example xy/Invalid Prefix`, hence an owner with name `Example xy/Invalid Prefix` is added with no error.
+* _Invalid prefix as subsequent input being absorbed into previous argument resulting in an error_: <br> 
+  Run `addowner on/Example ph/123 em/eg@example.com xy/Invalid Prefix ad/Some Address` <br>
+  Expected: User is shown an error that identifies the invalid input `xy/`. <br>
+  Actual: The argument to the `em/` parameter is parsed as `eg@example.com xy/Invalid Prefix`, which does not meet the regex for a valid email, hence the user is shown an error that the email provided is invalid.
+
+The planned enhancement is to improve the parsers to be able to detect invalid prefixes of the form `xx/` following any whitespace, where x is any (case-insensitive) alphabetical character, via regex, so that an error describing the invalid prefix can be shown to the user.
+
+However, this may give rise to new issues in edge cases, e.g. when an owner's address is `123 St/Ave`. This can further be remedied by using a backslash (`\`) to "escape" regex detection, e.g. `ad/123 \St/Ave` will be interpreted as: the argument to `ad/` is `123 St/Ave` and no error is raised.
+
+The User Guide will also be updated to capture all the details above.

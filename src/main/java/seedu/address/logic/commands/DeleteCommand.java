@@ -7,6 +7,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PET_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SERVICE_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SESSION_INDEX;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
@@ -54,10 +55,14 @@ public class DeleteCommand extends Command {
     public static final String MESSAGE_DELETE_PET_SUCCESS = "Deleted pet: %1$s";
     public static final String MESSAGE_DELETE_SESSION_SUCCESS = "Deleted session: %1$s";
     public static final String MESSAGE_DELETE_SERVICE_SUCCESS = "Deleted service: %1$s";
+    public static final String MESSAGE_DELETE_SERVICE_IN_USE_WARNING_HEADER =
+            "Warning: This service is still used in the following session(s):";
     public static final String MESSAGE_INVALID_PET_DISPLAYED_INDEX = Messages.MESSAGE_INVALID_PET_DISPLAYED_INDEX;
     public static final String MESSAGE_INVALID_SESSION_DISPLAYED_INDEX =
             Messages.MESSAGE_INVALID_SESSION_DISPLAYED_INDEX;
     public static final String MESSAGE_INVALID_SERVICE_NAME = "Service name not found.";
+    private static final String MESSAGE_SESSION_SERVICE_USAGE_DETAIL_FORMAT =
+            "Owner: %1$s; Pet: %2$s; Start: %3$s; End: %4$s";
 
     private final DeleteTargetType targetType;
     private final Index ownerIndex;
@@ -175,8 +180,44 @@ public class DeleteCommand extends Command {
             throw new CommandException(MESSAGE_INVALID_SERVICE_NAME);
         }
 
-        model.deleteService(serviceToDelete.get());
-        return new CommandResult(String.format(MESSAGE_DELETE_SERVICE_SUCCESS, serviceToDelete.get()));
+        Service selectedService = serviceToDelete.get();
+        List<String> sessionUsageDetails = findSessionUsageDetails(model, selectedService);
+
+        model.deleteService(selectedService);
+
+        StringBuilder feedback = new StringBuilder(String.format(MESSAGE_DELETE_SERVICE_SUCCESS, selectedService));
+        if (!sessionUsageDetails.isEmpty()) {
+            feedback.append(System.lineSeparator())
+                    .append(MESSAGE_DELETE_SERVICE_IN_USE_WARNING_HEADER);
+            for (String usageDetail : sessionUsageDetails) {
+                feedback.append(System.lineSeparator()).append(usageDetail);
+            }
+        }
+        return new CommandResult(feedback.toString());
+    }
+
+    private List<String> findSessionUsageDetails(Model model, Service deletedService) {
+        List<String> usageDetails = new ArrayList<>();
+        List<Person> owners = model.getAddressBook().getPersonList();
+
+        for (Person owner : owners) {
+            List<Pet> pets = owner.getPetList();
+            for (Pet pet : pets) {
+                for (Session session : pet.getSessions()) {
+                    if (sessionUsesService(session, deletedService)) {
+                        usageDetails.add(String.format(
+                                MESSAGE_SESSION_SERVICE_USAGE_DETAIL_FORMAT,
+                                owner.getName(), pet.getName(), session.getStartTime(), session.getEndTime()));
+                    }
+                }
+            }
+        }
+        return usageDetails;
+    }
+
+    private boolean sessionUsesService(Session session, Service deletedService) {
+        return session.getServices().stream()
+                .anyMatch(service -> service.hasSameName(deletedService.getName()));
     }
 
     private void validateOwnerIndex(List<Person> lastShownList) throws CommandException {

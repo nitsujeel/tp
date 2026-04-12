@@ -239,6 +239,10 @@ Format: `addservice sn/SERVICE_NAME sp/SERVICE_PRICE`
 Examples:
 * `addservice sn/Ear Cleaning sp/12.50` adds Ear Cleaning as a service to the list with the price of $12.50.
 
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+To change a service's name or price after it has been added, simply [`delete`](#deleting-an-owner-pet-session-or-service-delete) it and re-add it.
+</div>
+
 [↑ Back to ToC](UserGuide.md)
 
 <div style="page-break-after: always;"></div>
@@ -308,6 +312,9 @@ Format: `delete sn/SERVICE_NAME`
 Examples:
 * `delete sn/Ear Cleaning` deletes Ear Cleaning as a service from the list (if it exists).
 
+<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
+Deleting a service will not delete the sessions that use that service! If you do so, a warning message detailing the sessions that still use the deleted service will be shown.
+</div>
 
 <div markdown="block" class="alert alert-info">
 

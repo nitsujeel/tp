@@ -906,7 +906,7 @@ Examples:
   Expected: User is shown an error that identifies the invalid input `xy/`. <br>
   Actual: The argument to the `em/` parameter is parsed as `eg@example.com xy/Invalid Prefix`, which does not meet the regex for a valid email, hence the user is shown an error that the email provided is invalid.
 
-The planned enhancement is to improve the parsers to be able to detect invalid prefixes of the form `xx/` following any whitespace, where x is any (case-insensitive) alphabetical character, via regex, so that an error describing the invalid prefix can be shown to the user.
+The planned enhancement is to improve the parsers to be able to detect invalid prefixes of the form `xx/` following any whitespace, where x is any (case-insensitive) alphabetical character, via regex, so that an error identifying the invalid prefix can be shown to the user.
 
 However, this may give rise to new issues in edge cases, e.g. when an owner's address is `123 St/Ave`. This can further be remedied by using a backslash (`\`) to "escape" regex detection, e.g. `ad/123 \St/Ave` will be interpreted as: the argument to `ad/` is `123 St/Ave` and no error is raised.
 

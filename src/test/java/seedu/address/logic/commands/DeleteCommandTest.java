@@ -39,6 +39,8 @@ public class DeleteCommandTest {
     private static final String EXISTING_SERVICE_NAME_DIFFERENT_CASE = "base service charge";
     private static final String EXISTING_SERVICE_NAME_LONG_WHITESPACE = "  Base   service   charge ";
     private static final String NON_EXISTENT_SERVICE_NAME = "Non existent service";
+    private static final String SESSION_WITH_SERVICE_START = "2026-04-01 09:00";
+    private static final String SESSION_WITH_SERVICE_END = "2026-04-01 10:00";
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
@@ -279,6 +281,38 @@ public class DeleteCommandTest {
         expectedModel.deleteService(serviceToDelete);
 
         assertCommandSuccess(deleteCommand, modelWithServices, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_validServiceNameUsedBySession_successWithWarning() throws Exception {
+        Model modelWithServices = new ModelManager(new AddressBook(TypicalAddressBooks.getTypicalPetLog()),
+                new UserPrefs());
+        Service serviceToDelete = modelWithServices.getServiceList().stream()
+                .filter(service -> service.getName().equals(EXISTING_SERVICE_NAME))
+                .findFirst()
+                .orElseThrow();
+
+        Pet firstPet = modelWithServices.getFilteredPersonList()
+                .get(INDEX_FIRST_PERSON.getZeroBased())
+                .getPetList()
+                .get(INDEX_FIRST_PERSON.getZeroBased());
+        firstPet.addSession(new Session(SESSION_WITH_SERVICE_START, SESSION_WITH_SERVICE_END,
+                serviceToDelete.getCost(), List.of(serviceToDelete)));
+        modelWithServices.updateDisplayedSessions(modelWithServices.getFilteredPersonList());
+
+        DeleteCommand deleteCommand = new DeleteCommand(EXISTING_SERVICE_NAME);
+        CommandResult commandResult = deleteCommand.execute(modelWithServices);
+
+        assertTrue(commandResult.getFeedbackToUser().contains(
+                String.format(DeleteCommand.MESSAGE_DELETE_SERVICE_SUCCESS, serviceToDelete)));
+        assertTrue(commandResult.getFeedbackToUser().contains(
+                DeleteCommand.MESSAGE_DELETE_SERVICE_IN_USE_WARNING_HEADER));
+        assertTrue(commandResult.getFeedbackToUser().contains("Owner: Alex Yeoh"));
+        assertTrue(commandResult.getFeedbackToUser().contains("Pet: Buddy"));
+        assertTrue(commandResult.getFeedbackToUser().contains("Start: " + SESSION_WITH_SERVICE_START));
+        assertTrue(commandResult.getFeedbackToUser().contains("End: " + SESSION_WITH_SERVICE_END));
+        assertFalse(modelWithServices.getServiceList().stream()
+                .anyMatch(service -> service.hasSameName(EXISTING_SERVICE_NAME)));
     }
 
     @Test

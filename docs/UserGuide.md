@@ -251,6 +251,7 @@ Format: `addsession oi/OWNER_INDEX pi/PET_INDEX st/START_TIME et/END_TIME [sn/SE
 * `END_TIME` must be chronologically after `START_TIME`.
 * `SERVICE_NAME`, if provided, must match an existing service in the service catalogue.
 * Attempting to add a session whose timing overlaps with an existing session for the specified pet will not succeed.
+* Sessions are displayed in chronological order by start time, earliest first.
 
 Examples:
 * `addsession oi/1 pi/2 st/2026-05-15 14:30 et/2026-05-15 15:30 sn/Base service charge sn/Shampoo` adds a session for the 2nd pet listed under the 1st owner; it is from 2:30pm to 3:30pm on 15 May 2026; its list of services are `Base service charge` and `Shampoo`.
@@ -276,7 +277,7 @@ Format: `delete oi/OWNER_INDEX [pi/PET_INDEX [si/SESSION_INDEX]]`
 
 * `OWNER_INDEX` refers to the index number shown in the displayed owner list. It must be a positive integer.
 * `PET_INDEX` refers to the index number shown in the displayed pet list of the specified owner. It must be a positive integer.
-* `SESSION_INDEX` index refers to the index number shown in the displayed session list of the specified pet. It must be a positive integer.
+* `SESSION_INDEX` refers to the session index shown in the session card's `Delete ref: oi/OWNER_INDEX pi/PET_INDEX si/SESSION_INDEX` line. It must be a positive integer.
 * Using `delete` with the `oi/` prefix only deletes the owner at `OWNER_INDEX`.
 * Using `delete` with the `oi/` and `pi/` prefixes only deletes the pet at `PET_INDEX` of that owner.
 * Using `delete` with the `oi/`, `pi/` and `si/` prefixes deletes the session at `SESSION_INDEX` of that pet.
@@ -284,7 +285,7 @@ Format: `delete oi/OWNER_INDEX [pi/PET_INDEX [si/SESSION_INDEX]]`
 Examples:
 * `delete oi/4` deletes the 4th owner listed.
 * `delete oi/4 pi/2` deletes the 2nd pet listed of the 4th owner.
-* `delete oi/4 pi/2 si/3` deletes the 3rd session listed of the 2nd pet of the 4th owner.
+* `delete oi/4 pi/2 si/3` deletes the session whose card shows `Delete ref: oi/4 pi/2 si/3`.
 * [`list`](#listing-all-owners-list) followed by `delete oi/2` deletes the 2nd owner listed.
 * [`find on/Betsy`](#searching-for-owners-find) followed by `delete oi/1 pi/2` deletes the 2nd pet of the 1st owner in the results of the [`find`](#searching-for-owners-find) command.
 

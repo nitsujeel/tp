@@ -23,8 +23,6 @@ public class SessionCard extends UiPart<Region> {
     @FXML
     private HBox cardPane;
     @FXML
-    private Label id;
-    @FXML
     private Label ownerPet;
     @FXML
     private Label startTime;
@@ -34,19 +32,34 @@ public class SessionCard extends UiPart<Region> {
     private Label fee;
     @FXML
     private Label services;
+    @FXML
+    private Label deleteReference;
 
     /**
-     * Creates a {@code SessionCard} with the given {@code SessionEntry} and index to display.
+     * Creates a {@code SessionCard} with the given {@code SessionEntry}.
      */
-    public SessionCard(SessionEntry entry, int displayedIndex) {
+    public SessionCard(SessionEntry entry) {
         super(FXML);
         this.entry = entry;
-        id.setText(String.format("si/%d", entry.sessionIndex()));
-        ownerPet.setText(String.format("Session #%d", displayedIndex));
+        ownerPet.setText(formatTitle(entry));
         startTime.setText("Start: " + entry.session().getStartTime());
         endTime.setText("End:   " + entry.session().getEndTime());
         services.setText("Service(s): " + formatServices(entry));
         fee.setText(String.format("Total Fee: $%.2f", entry.session().getFee()));
+        deleteReference.setText(formatDeleteReference(entry));
+    }
+
+    private String formatDeleteReference(SessionEntry sessionEntry) {
+        return String.format("Delete ref: oi/%d pi/%d si/%d",
+                sessionEntry.ownerIndex(), sessionEntry.petIndex(), sessionEntry.sessionIndex());
+    }
+
+    private String formatTitle(SessionEntry sessionEntry) {
+        if (sessionEntry.session().getServices().isEmpty()) {
+            return sessionEntry.petName() + "'s session";
+        }
+
+        return sessionEntry.petName() + "'s " + formatServices(sessionEntry) + " session";
     }
 
     private String formatServices(SessionEntry sessionEntry) {

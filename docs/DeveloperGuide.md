@@ -224,6 +224,8 @@ Key implementation points:
 * Overlap prevention is enforced per pet via `Pet#hasOverlappingSession(...)`; sessions that only touch at boundaries are allowed.
 * `delete oi/... pi/... si/...` removes a session by index within that pet’s session list.
 * The UI-facing session list is a derived projection (`SessionEntry`) rebuilt by `Model#updateDisplayedSessions(...)`, so `list`, `find`, `addsession`, and relevant `delete` operations keep the session panel synchronised with the current owner filter.
+* Displayed sessions are sorted globally by start time, earliest first, even though each session is still stored under its own pet.
+* Each session card shows a `Delete ref: oi/... pi/... si/...` line because `si/` refers to the session's index within that pet’s session list, not its row number in the globally sorted session panel.
 
 Design note:
 * Existing sessions keep their own service snapshots. Deleting a service from the catalogue affects future session creation, but not historical sessions already stored on pets.
@@ -806,7 +808,7 @@ It aims to complement the UG by suggesting a simple path for testing and providi
       * `addservice sn/Test Grooming sp/25.00` <br>
       * `addservice sn/Test Nail Trim sp/12.50` <br>
       * `addsession oi/1 pi/1 st/2026-06-01 10:00 et/2026-06-01 11:30 sn/Test Grooming sn/Test Nail Trim` <br>
-      Expected: services appear in service panel; session appears in session panel with computed fee.
+      Expected: services appear in service panel; session appears in the session panel in chronological order with computed fee and a `Delete ref` line.
 
 1. Negative tests
 

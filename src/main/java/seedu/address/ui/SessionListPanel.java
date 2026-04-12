@@ -2,12 +2,10 @@ package seedu.address.ui;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import seedu.address.model.session.SessionEntry;
 
 /**
@@ -31,6 +29,7 @@ public class SessionListPanel extends UiPart<Region> {
         super(FXML);
         sessionListView.setItems(sessionList);
         sessionListView.setCellFactory(listView -> new SessionListViewCell());
+        sessionListView.widthProperty().addListener((observable, oldWidth, newWidth) -> sessionListView.refresh());
         Label placeholder = new Label("No sessions to display.\nUse addsession to add a session.");
         placeholder.getStyleClass().add("cell_small_label");
         sessionListView.setPlaceholder(placeholder);
@@ -54,18 +53,7 @@ public class SessionListPanel extends UiPart<Region> {
                 setGraphic(null);
                 setText(null);
             } else {
-                VBox section = new VBox();
-                if (entry.sessionIndex() == 1) {
-                    Label sectionHeader = new Label(String.format(
-                            "oi/%d pi/%d — %s's %s",
-                            entry.ownerIndex(), entry.petIndex(), entry.ownerName(), entry.petName()));
-                    sectionHeader.getStyleClass().add("session-section-header");
-                    sectionHeader.setWrapText(true);
-                    VBox.setMargin(sectionHeader, new Insets(6, 0, 4, 10));
-                    section.getChildren().add(sectionHeader);
-                }
-                section.getChildren().add(new SessionCard(entry, entry.sessionIndex()).getRoot());
-                setGraphic(section);
+                setGraphic(new SessionCard(entry).getRoot());
             }
         }
     }

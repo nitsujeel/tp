@@ -17,8 +17,13 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.person.FieldContainsKeywordsPredicate;
+import seedu.address.model.person.Person;
+import seedu.address.model.pet.Pet;
 import seedu.address.model.service.Service;
+import seedu.address.model.session.Session;
 import seedu.address.testutil.AddressBookBuilder;
+import seedu.address.testutil.PersonBuilder;
+import seedu.address.testutil.PetBuilder;
 
 public class ModelManagerTest {
 
@@ -115,6 +120,29 @@ public class ModelManagerTest {
     @Test
     public void getServiceList_modifyList_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> modelManager.getServiceList().remove(0));
+    }
+
+    @Test
+    public void updateDisplayedSessions_sessionsOutOfInsertionOrder_sortsByStartTime() {
+        Session latestSession = new Session("2026-04-12 15:00", "2026-04-12 16:00");
+        Session earliestSession = new Session("2026-04-12 09:00", "2026-04-12 10:00");
+        Session middleSession = new Session("2026-04-12 12:00", "2026-04-12 13:00");
+        Pet pet = new PetBuilder().build();
+        pet.addSession(latestSession);
+        pet.addSession(earliestSession);
+        pet.addSession(middleSession);
+        Person owner = new PersonBuilder().withPets(pet).build();
+        ModelManager modelManager = new ModelManager(
+                new AddressBookBuilder().withPerson(owner).build(), new UserPrefs());
+
+        modelManager.updateDisplayedSessions(modelManager.getFilteredPersonList());
+
+        assertEquals(earliestSession, modelManager.getSessionList().get(0).session());
+        assertEquals(middleSession, modelManager.getSessionList().get(1).session());
+        assertEquals(latestSession, modelManager.getSessionList().get(2).session());
+        assertEquals(2, modelManager.getSessionList().get(0).sessionIndex());
+        assertEquals(3, modelManager.getSessionList().get(1).sessionIndex());
+        assertEquals(1, modelManager.getSessionList().get(2).sessionIndex());
     }
 
     @Test

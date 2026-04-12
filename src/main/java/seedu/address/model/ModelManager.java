@@ -5,6 +5,7 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
@@ -156,6 +157,7 @@ public class ModelManager implements Model {
             Person owner = persons.get(ownerIndex);
             entries.addAll(getSessionEntriesForOwner(owner, ownerIndex));
         }
+        entries.sort(Comparator.comparing(entry -> entry.session().getStartDateTime()));
         displayedSessions.setAll(entries);
     }
 

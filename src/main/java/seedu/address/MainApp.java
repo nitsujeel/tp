@@ -190,6 +190,12 @@ public class MainApp extends Application {
     public void stop() {
         logger.info("============================ [ Stopping AddressBook ] =============================");
         try {
+            storage.saveAddressBook(model.getAddressBook());
+        } catch (IOException e) {
+            logger.severe("Failed to save address book " + StringUtil.getDetails(e));
+        }
+
+        try {
             storage.saveUserPrefs(model.getUserPrefs());
         } catch (IOException e) {
             logger.severe("Failed to save preferences " + StringUtil.getDetails(e));

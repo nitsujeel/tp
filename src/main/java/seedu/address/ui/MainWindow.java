@@ -2,9 +2,11 @@ package seedu.address.ui;
 
 import java.util.logging.Logger;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
@@ -24,6 +26,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 public class MainWindow extends UiPart<Stage> {
 
     private static final String FXML = "MainWindow.fxml";
+    private static final double MAX_MAIN_DIVIDER_POSITION = 0.72;
 
     private final Logger logger = LogsCenter.getLogger(getClass());
 
@@ -58,6 +61,9 @@ public class MainWindow extends UiPart<Stage> {
     @FXML
     private StackPane statusbarPlaceholder;
 
+    @FXML
+    private SplitPane mainContentSplitPane;
+
     /**
      * Creates a {@code MainWindow} with the given {@code Stage} and {@code Logic}.
      */
@@ -72,6 +78,7 @@ public class MainWindow extends UiPart<Stage> {
         setWindowDefaultSize(logic.getGuiSettings());
 
         setAccelerators();
+        constrainMainDividerRange();
 
         helpWindow = new HelpWindow();
     }
@@ -82,6 +89,25 @@ public class MainWindow extends UiPart<Stage> {
 
     private void setAccelerators() {
         setAccelerator(helpMenuItem, KeyCombination.valueOf("F1"));
+    }
+
+    /**
+     * Ensures the owner/pet vs session divider cannot be dragged too far right.
+     */
+    private void constrainMainDividerRange() {
+        if (mainContentSplitPane.getDividers().isEmpty()) {
+            return;
+        }
+
+        SplitPane.Divider divider = mainContentSplitPane.getDividers().get(0);
+        divider.positionProperty().addListener((obs, oldValue, newValue) -> {
+            double clampedPosition = Math.min(newValue.doubleValue(), MAX_MAIN_DIVIDER_POSITION);
+            if (Double.compare(newValue.doubleValue(), clampedPosition) != 0) {
+                divider.setPosition(clampedPosition);
+            }
+        });
+
+        Platform.runLater(() -> divider.setPosition(Math.min(divider.getPosition(), MAX_MAIN_DIVIDER_POSITION)));
     }
 
     /**

@@ -51,7 +51,7 @@
                      minHeight="150" prefHeight="150" maxHeight="150" />
         </HBox>
 
-        <SplitPane VBox.vgrow="ALWAYS" dividerPositions="0.55">
+        <SplitPane fx:id="mainContentSplitPane" VBox.vgrow="ALWAYS" dividerPositions="0.55">
           <VBox styleClass="pane-with-border" minWidth="340" SplitPane.resizableWithParent="true">
             <padding>
               <Insets top="10" right="10" bottom="10" left="10" />

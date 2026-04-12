@@ -96,6 +96,7 @@ public class EditCommand extends Command {
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        model.updateDisplayedSessions(model.getFilteredPersonList());
         String messageTemplate = editedPerson.getPhone().hasOnlyDigits()
             ? MESSAGE_EDIT_PERSON_SUCCESS
             : EDIT_SUCCESS_WARNING;

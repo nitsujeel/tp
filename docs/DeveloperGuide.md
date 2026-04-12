@@ -222,8 +222,10 @@ Key implementation points:
 * Optional repeated `sn/` prefixes are allowed to attach multiple services from the service catalogue.
 * Total session fee is computed from the sum of selected service prices.
 * Overlap prevention is enforced per pet via `Pet#hasOverlappingSession(...)`; sessions that only touch at boundaries are allowed.
+* `Pet#addSession(...)` keeps each pet's sessions in chronological order by start time.
 * `delete oi/... pi/... si/...` removes a session by index within that pet’s session list.
-* The UI-facing session list is a derived projection (`SessionEntry`) rebuilt by `Model#updateDisplayedSessions(...)`, so `list`, `find`, `addsession`, and relevant `delete` operations keep the session panel synchronised with the current owner filter.
+* The UI-facing session list is a derived projection (`SessionEntry`) rebuilt by `Model#updateDisplayedSessions(...)`.
+* `LogicManager#execute(...)` triggers that rebuild after every successful command, so owner/pet/session indices in the session panel remain consistent after index-changing operations such as `find`, `list`, `addowner`, `addpet`, `addsession`, and `delete`.
 
 Design note:
 * Existing sessions keep their own service snapshots. Deleting a service from the catalogue affects future session creation, but not historical sessions already stored on pets.

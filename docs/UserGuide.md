@@ -251,6 +251,8 @@ Format: `addsession oi/OWNER_INDEX pi/PET_INDEX st/START_TIME et/END_TIME [sn/SE
 * `END_TIME` must be chronologically after `START_TIME`.
 * `SERVICE_NAME`, if provided, must match an existing service in the service catalogue.
 * Attempting to add a session whose timing overlaps with an existing session for the specified pet will not succeed.
+* Sessions for each pet are automatically sorted by `START_TIME` (earliest to latest) after each successful `addsession`.
+* The session panel is refreshed after every successful command, so owner/pet/session indices shown in the UI always match the current displayed owner list (e.g. after `find`, `list`, `addsession`, `delete`, etc.).
 
 Examples:
 * `addsession oi/1 pi/2 st/2026-05-15 14:30 et/2026-05-15 15:30 sn/Base service charge sn/Shampoo` adds a session for the 2nd pet listed under the 1st owner; it is from 2:30pm to 3:30pm on 15 May 2026; its list of services are `Base service charge` and `Shampoo`.
@@ -277,6 +279,7 @@ Format: `delete oi/OWNER_INDEX [pi/PET_INDEX [si/SESSION_INDEX]]`
 * `OWNER_INDEX` refers to the index number shown in the displayed owner list. It must be a positive integer.
 * `PET_INDEX` refers to the index number shown in the displayed pet list of the specified owner. It must be a positive integer.
 * `SESSION_INDEX` index refers to the index number shown in the displayed session list of the specified pet. It must be a positive integer.
+* `SESSION_INDEX` values are based on the current displayed lists and can change after commands that alter visible owners/pets/sessions (e.g. `find`, `list`, `addsession`, `delete`).
 * Using `delete` with the `oi/` prefix only deletes the owner at `OWNER_INDEX`.
 * Using `delete` with the `oi/` and `pi/` prefixes only deletes the pet at `PET_INDEX` of that owner.
 * Using `delete` with the `oi/`, `pi/` and `si/` prefixes deletes the session at `SESSION_INDEX` of that pet.

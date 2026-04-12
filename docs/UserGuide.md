@@ -3,10 +3,10 @@ layout: page
 title: User Guide
 ---
 
-PetLog is a **desktop app designed for managers of pet daycares or boarding services**, optimised for use via a **Command Line Interface** (CLI)
+PetLog is a **desktop app designed for managers of pet day care centres or boarding services**, optimised for use via a **Command Line Interface** (CLI)
 while keeping the benefits of a **Graphical User Interface** (GUI).
 With structured commands, it helps you manage, search and organise the details of owners and their pets efficiently. 
-You can also add and keep track of the services you offer and also specific sessions where a pet will be receiving 
+You can add and keep track of the services you offer, and also specific sessions where a pet will be receiving 
 one of your services. 
 
 * Table of Contents
@@ -102,7 +102,7 @@ Adds an owner to PetLog. An owner has a name, a phone number, an email, an addre
 Format: `addowner on/OWNER_NAME ph/PHONE_NUMBER em/EMAIL ad/ADDRESS [ot/TAG]…​`
 
 * `OWNER_NAME` must be 1 to 50 characters.
-* `PHONE_NUMBER` must be 2 to 30 characters.
+* `PHONE_NUMBER` must be 1 to 30 characters.
 * If `PHONE_NUMBER` contains any non-numeric characters, the command succeeds but shows a warning in case it was not intentional.
 * `EMAIL` must be of the form `local-part@domain`.
   The `local-part` must be 1 to 30 characters long. It may contain alphanumeric characters and these special characters: ``!#$%&'*+-=?^_`{|}~/.``. It must start and end with an alphanumeric character, and it cannot contain consecutive periods (`..`).
@@ -276,7 +276,7 @@ You may also add sessions that have happened in the past, be it for bookkeeping,
 
 ### Deleting an owner, pet, session or service: `delete`
 
-`delete` has two usages with their own respective formats.
+`delete` has two usages, each with its own formats.
 
 **1. Deleting an owner, pet or session**
 
@@ -286,7 +286,7 @@ Format: `delete oi/OWNER_INDEX [pi/PET_INDEX [si/SESSION_INDEX]]`
 
 * `OWNER_INDEX` refers to the index number shown in the displayed owner list. It must be a positive integer.
 * `PET_INDEX` refers to the index number shown in the displayed pet list of the specified owner. It must be a positive integer.
-* `SESSION_INDEX` index refers to the index number shown in the displayed session list of the specified pet. It must be a positive integer.
+* `SESSION_INDEX` refers to the index number shown in the displayed session list of the specified pet. It must be a positive integer.
 * `SESSION_INDEX` values are based on the current displayed lists and can change after commands that alter visible owners/pets/sessions (e.g. `find`, `list`, `addsession`, `delete`).
 * Using `delete` with the `oi/` prefix only deletes the owner at `OWNER_INDEX`.
 * Using `delete` with the `oi/` and `pi/` prefixes only deletes the pet at `PET_INDEX` of that owner.
@@ -410,9 +410,9 @@ _Details coming soon ..._
 
 1. **If you minimise the Help Window** and then run the [`help`](#viewing-help-help) command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimised, and no new Help Window will appear. The remedy is to manually restore the minimised Help Window.
 
-1. **On MacOS, if the Help Window is closed while it is in fullscreen**, the application may become unresponsive. The remedy is to type `Control` + `C` in your Terminal window to close the application, and then re-boot it with `java -jar petlog.jar`. For this reason, it is best to avoid closing the Help Window when it is in fullscreen.
+1. **On macOS, if the Help Window is closed while it is in fullscreen**, the application may become unresponsive. The remedy is to type `Control` + `C` in your Terminal window to close the application, and then re-launch it with `java -jar petlog.jar`. For this reason, it is best to avoid closing the Help Window when it is in fullscreen.
 
-1. **If `petlog.jar` is placed in a write-protected folder**, the application will not work as it requires write permissions to write and update the local storage file `petlog.json`. The remedy is to ensure `petlog.jar` in placed a folder with no write protection before using it.
+1. **If `petlog.jar` is placed in a write-protected folder**, the application will not work as it requires write permissions to write and update the local storage file `petlog.json`. The remedy is to ensure `petlog.jar` is placed a folder with no write protection before using it.
 
 [↑ Back to ToC](UserGuide.md)
 

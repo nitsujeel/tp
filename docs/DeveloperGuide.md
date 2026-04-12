@@ -191,7 +191,6 @@ Key implementation points:
 * Pet identity is checked per owner via `Person#hasPet(Pet)`, which compares pet name + species after normalisation (case-insensitive, whitespace-normalised).
 * On successful `addpet`, the command rebuilds that owner with an updated pet set and applies it through `Model#setPerson(...)`.
 * Pet remarks are updated through `update oi/... pi/... pr/...` (`UpdatePetRemarkCommand`), which edits the selected pet and writes the owner back via `Model#setPerson(...)`.
-* The model also maintains a derived filtered pet list (`Model#getFilteredPetList`) so the UI can render pets directly without recalculating from owners.
 
 The sequence diagram below shows the main interaction flow for a successful `addpet` operation.
 
@@ -362,17 +361,17 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | pet day care manager | view all pets belonging to a specific owner                                   | see all the pets of a client quickly during communication                            |
 | `* * *`  | pet day care manager | add a new service                                                             | update my list of available services offered when new ones are introduced            |
 | `* * *`  | pet day care manager | delete a service                                                              | update my list of available services offered when old ones are no longer offered     |
-| `* * *`  | pet day care manager | view all services                                                             | see what services are in my most updated service catalogue at a glance               |
+| `* * *`  | pet day care manager | view all services                                                             | see what services are in my latest service catalogue at a glance                     |
 | `* * *`  | pet day care manager | add a session for an existing pet                                             | record appointment timings, services and fees of various pets                        |
 | `* * *`  | pet day care manager | delete a session                                                              | remove past or cancelled appointments                                                |
 | `* * *`  | pet day care manager | view all sessions                                                             | see what appointments are scheduled at a glance                                      |
 | `* * *`  | pet day care manager | view records (owners, pets, services, sessions) in a compact, readable format | scan for information efficiently during busy hours                                   |
-| `* *`    | pet day care manager | view usage instructions                                                       | refer to command formats quickly and conveniently when I forget them                 |
-| `* *`    | pet day care manager | filter owners by name, phone, or email                                        | find owners by their details of the specific fields quickly                          |
-| `* *`    | pet day care manager | filter pets by name, species, or remarks                                      | find a pet’s information quickly                                                     |
+| `* *`    | pet day care manager | view command usage instructions                                               | refer to command formats quickly and conveniently when I forget them                 |
+| `* *`    | pet day care manager | filter owners by name, phone, or email                                        | find owners quickly using specific fields such as name, phone, or email              |
+| `* *`    | pet day care manager | filter pets by name, species, or remarks                                      | find pet information quickly                                                         |
 | `* *`    | pet day care manager | update an owner's contact details                                             | keep phone numbers and emails accurate and up-to-date for urgent communication       |
 | `* *`    | pet day care manager | update a pet's details                                                        | keep critical details accurate and up-to-date in case of emergencies                 |
-| `* *`    | pet day care manager | update a pet’s remarks                                                        | keep feeding instructions and special notes are accurate and up-to-date              |
+| `* *`    | pet day care manager | update a pet's remarks                                                        | keep feeding instructions and special notes accurate and up-to-date                  |
 | `* *`    | pet day care manager | update a service's price                                                      | keep the price of my services up to date without having to delete and re-add them    |
 | `* *`    | pet day care manager | update a session's start/end time and services                                | keep the details of appointments up to date without having to delete and re-add them |
 | `* *`    | pet day care manager | receive clear error messages for invalid commands                             | quickly correct mistakes without disrupting daily operations                         |
@@ -380,7 +379,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `*`      | pet day care manager | be warned before I delete an owner with existing pets                         | avoid accidentally losing linked pet and session records                             |
 | `*`      | pet day care manager | be warned before I delete a pet with existing sessions                        | avoid accidentally losing linked session records                                     |
 | `*`      | pet day care manager | sort owners and pets by name                                                  | organise entries easily when the list becomes large                                  |
-| `*`      | pet day care manager | view an overview of owners, pets and sessions (e.g. count)                    | understand the scale of my operations at a glance                                    |
+| `*`      | pet day care manager | view an overview of owners, pets and sessions (e.g. counts)                   | understand the scale of my operations at a glance                                    |
 | `*`      | pet day care manager | view recently added or updated records                                        | get visual feedback for my most recent commands and track recent operational changes |
 
 <div style="page-break-after: always;"></div>
@@ -590,7 +589,7 @@ MSS:
 
 1. User requests to edit the provided fields of the specified owner.
 2. PetLog overwrites the fields of the owner with the provided inputs.
-3. PetLog informs the user that the edit was successful and displays the updated list of owners with the updated owner.
+3. PetLog informs the user that the edit was successful and displays the list of owners with the updated owner.
 
    Use case ends.
 
@@ -600,7 +599,7 @@ MSS:
 
 1. User requests to clear all records (owners, pets, services, sessions).
 2. PetLog deletes all records.
-3. PetLog informs the user that the deletion was successful and displays the updated blank lists.
+3. PetLog informs the user that the deletion was successful and displays the now-empty lists.
 
    Use case ends.
 
@@ -610,7 +609,7 @@ MSS:
 
 1. User requests for help with commands.
 2. PetLog displays a list of all available commands and their formats, and provides the user with a link to the user guide.
-3. PetLog informs the user that the help was provided successfully.
+3. PetLog informs the user that the help information was shown.
 
    Use case ends.
 
@@ -688,7 +687,7 @@ MSS:
 * A user with typing speed above 50 words per minute for regular English text (i.e. not code, not system admin commands) should be able to accomplish their tasks faster using commands than they would using the mouse on a GUI application.
 * Command error messages should be understandable to the user, by displaying the field/prefix at fault or the constraint violated.
 * Success and error messages should be consistent to the user, by following a consistent template across commands.
-* New users should be able to add an owner, add a pet, add a service and add a session in ≤ 5 minutes after reading the quickstart guide.
+* New users should be able to add an owner, add a pet, add a service and add a session in ≤ 5 minutes after reading the quick start guide.
 
 **Reliability and Data Integrity**
 * When exiting PetLog via the `exit` command, 100% of data should persist across the app restarts.
@@ -710,7 +709,7 @@ MSS:
 
 **Project Process**
 * PetLog should be developed in a breadth-first incremental manner over the project duration.
-* PetLog's codebase should only use third-party frameworks/libraries/services if they are free, open-source, and have permissive license terms, and do not require any installation by the user.
+* PetLog's codebase should only use third-party frameworks/libraries/services if they are free, open-source, and have permissive licence terms, and do not require any installation by the user.
 * PetLog should be packaged in a single JAR file.
 * PetLog should abide by the following file sizes: ≤ 100 MB for JAR file, ≤ 15 MB / file for documents (e.g. PDF files).
 * PetLog's DG and UG should be PDF-friendly.
@@ -838,10 +837,10 @@ It aims to complement the UG by suggesting a simple path for testing and providi
 
    1. Test inputs:
       * `find on/Manual Tester` <br>
-      * `delete sn/Test Grooming` <br>
       * `delete oi/1 pi/1 si/1` <br>
       * `delete oi/1 pi/1` <br>
       * `delete oi/1` <br>
+      * `delete sn/Test Grooming` <br>
       Expected: each delete mode succeeds (service, session, pet, owner).
 
 1. Negative test:

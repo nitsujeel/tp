@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import seedu.address.model.pet.Pet;
 import seedu.address.model.pet.PetRemark;
+import seedu.address.model.session.Session;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -115,7 +116,11 @@ public class Person {
         for (Pet pet : petList) {
             if (currentIndex == petIndex) {
                 // Create new pet with updated remark
-                updatedPets.add(new Pet(pet.getName(), pet.getSpecies(), new PetRemark(newRemark)));
+                Pet tmp = new Pet(pet.getName(), pet.getSpecies(), new PetRemark(newRemark));
+                for (Session session: pet.getSessions()) {
+                    tmp.addSession(session); 
+                }
+                updatedPets.add(tmp);
             } else {
                 updatedPets.add(pet);
             }

@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
 <HBox id="cardPane" fx:id="cardPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
@@ -11,14 +10,7 @@
     <padding>
       <Insets top="5" right="10" bottom="5" left="15" />
     </padding>
-    <HBox spacing="4" alignment="CENTER_LEFT">
-      <Label fx:id="id" styleClass="cell_big_label">
-        <minWidth>
-          <Region fx:constant="USE_PREF_SIZE" />
-        </minWidth>
-      </Label>
-      <Label fx:id="ownerPet" styleClass="cell_big_label" />
-    </HBox>
+    <Label fx:id="ownerPet" styleClass="cell_big_label" />
     <Label fx:id="startTime" styleClass="cell_small_label">
       <padding>
         <Insets left="20" />
@@ -35,6 +27,11 @@
       </padding>
     </Label>
     <Label fx:id="fee" styleClass="cell_small_label">
+      <padding>
+        <Insets left="20" />
+      </padding>
+    </Label>
+    <Label fx:id="deleteReference" styleClass="cell_small_label">
       <padding>
         <Insets left="20" />
       </padding>

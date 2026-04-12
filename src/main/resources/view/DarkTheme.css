@@ -345,6 +345,10 @@
     -fx-padding: 8 1 8 1;
 }
 
+.list-view > .virtual-flow > .corner {
+    -fx-background-color: #ffdab9;
+}
+
 #cardPane {
     -fx-background-color: transparent;
     -fx-border-width: 0;

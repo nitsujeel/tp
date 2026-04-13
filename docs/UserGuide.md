@@ -8,6 +8,7 @@ With structured commands, it helps you manage, search, and organise owners and t
 You can also add and keep track of the services you offer, as well as specific sessions where a pet receives one of your services.
 
 ## Table of Contents
+* Table of Contents
 {:toc}
 
 --------------------------------------------------------------------------------------------------------------------

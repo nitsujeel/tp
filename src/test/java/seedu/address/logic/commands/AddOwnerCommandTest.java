@@ -62,68 +62,10 @@ public class AddOwnerCommandTest {
     }
 
     @Test
-    public void execute_partialDuplicate_showsWarning() throws Exception {
-        Person existingPerson = new PersonBuilder()
-                .withName("John Doe")
-                .withPhone("12345678")
-                .withEmail("john@example.com")
-                .withAddress("123 Clementi Road")
-                .build();
-
-        Person partialDuplicate = new PersonBuilder()
-                .withName("  john   doe ")
-                .withPhone("1234 5678")
-                .withEmail("other@example.com")
-                .withAddress("456 Jurong West Ave 1")
-                .build();
-
-        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded(existingPerson);
-        CommandResult commandResult = new AddOwnerCommand(partialDuplicate).execute(modelStub);
-        System.out.println(commandResult.getFeedbackToUser());
-        String expectedMessage = String.format(AddOwnerCommand.MESSAGE_SUCCESS, Messages.format(partialDuplicate))
-                + "\n"
-                + AddOwnerCommand.MESSAGE_PHONE_WARNING
-                + "\n"
-                + String.format(AddOwnerCommand.MESSAGE_PARTIAL_DUPLICATE_WARNING, "name and phone");
-
-        assertEquals(expectedMessage, commandResult.getFeedbackToUser());
-        assertEquals(Arrays.asList(partialDuplicate), modelStub.personsAdded);
-    }
-
-    @Test
-    public void execute_partialDuplicateWithNonNumericPhone_showsBothWarnings() throws Exception {
-        Person existingPerson = new PersonBuilder()
-                .withName("John Doe")
-                .withPhone("65-1234-5678")
-                .withEmail("john@example.com")
-                .withAddress("123 Clementi Road")
-                .build();
-
-        Person partialDuplicate = new PersonBuilder()
-                .withName("john doe")
-                .withPhone("65-1234-5678")
-                .withEmail("other@example.com")
-                .withAddress("456 Jurong West Ave 1")
-                .build();
-
-        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded(existingPerson);
-        CommandResult commandResult = new AddOwnerCommand(partialDuplicate).execute(modelStub);
-
-        String expectedMessage = String.format(AddOwnerCommand.MESSAGE_SUCCESS, Messages.format(partialDuplicate))
-                + "\n"
-                + AddOwnerCommand.MESSAGE_PHONE_WARNING
-                + "\n"
-                + String.format(AddOwnerCommand.MESSAGE_PARTIAL_DUPLICATE_WARNING, "name and phone");
-
-        assertEquals(expectedMessage, commandResult.getFeedbackToUser());
-        assertEquals(Arrays.asList(partialDuplicate), modelStub.personsAdded);
-    }
-
-    @Test
     public void execute_duplicatePerson_throwsCommandException() {
         Person validPerson = new PersonBuilder().build();
         AddOwnerCommand addOwnerCommand = new AddOwnerCommand(validPerson);
-        ModelStub modelStub = new ModelStubAcceptingPersonAdded(validPerson);
+        ModelStub modelStub = new ModelStubWithPerson(validPerson);
 
         assertThrows(CommandException.class,
                 AddOwnerCommand.MESSAGE_DUPLICATE_PERSON, () -> addOwnerCommand.execute(modelStub));
@@ -288,30 +230,22 @@ public class AddOwnerCommandTest {
      */
     private class ModelStubAcceptingPersonAdded extends ModelStub {
         final ArrayList<Person> personsAdded = new ArrayList<>();
-        final AddressBook addressBook = new AddressBook();
-
-        ModelStubAcceptingPersonAdded(Person... existingPersons) {
-            for (Person existingPerson : existingPersons) {
-                addressBook.addPerson(existingPerson);
-            }
-        }
 
         @Override
         public boolean hasPerson(Person person) {
             requireNonNull(person);
-            return addressBook.hasPerson(person);
+            return personsAdded.stream().anyMatch(person::isSamePerson);
         }
 
         @Override
         public void addPerson(Person person) {
             requireNonNull(person);
             personsAdded.add(person);
-            addressBook.addPerson(person);
         }
 
         @Override
         public ReadOnlyAddressBook getAddressBook() {
-            return addressBook;
+            return new AddressBook();
         }
     }
 

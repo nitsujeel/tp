@@ -212,7 +212,7 @@ Examples:
 ![[result for 'find ad/Tampines ot/VIP']](images/findAdTampinesOtVip.png)
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-Use `list` after using [`find`](#searching-for-owners-find) to go back to displaying all owners.
+Use `list` after using [`find`](#searching-for-owners-find) return to the list of all owners.
 Successfully [adding an owner](#adding-an-owner-addowner) will also reset the view and display all owners.
 </div>
 

@@ -3,11 +3,9 @@ layout: page
 title: User Guide
 ---
 
-PetLog is a **desktop app designed for managers of pet day care centres or boarding services**, optimised for use via a **Command Line Interface** (CLI)
-while keeping the benefits of a **Graphical User Interface** (GUI).
-With structured commands, it helps you manage, search and organise the details of owners and their pets efficiently. 
-You can add and keep track of the services you offer, and also specific sessions where a pet will be receiving 
-one of your services. 
+PetLog is a **desktop app designed for managers of pet day care centres or boarding services**. It is optimised for use via a **Command Line Interface** (CLI), while retaining the benefits of a **Graphical User Interface** (GUI).
+With structured commands, it helps you manage, search, and organise owners and their pets efficiently.
+You can also add and keep track of the services you offer, as well as specific sessions where a pet receives one of your services.
 
 * Table of Contents
 {:toc}
@@ -32,7 +30,7 @@ one of your services.
 1. Type the command in the command box and press Enter to execute it. e.g. typing [`help`](#viewing-help-help) and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
-   * [`list`](#listing-all-owners-list) : Lists all owners and pets.
+   * [`list`](#listing-all-owners-list) : Lists all owners, pets, and sessions.
 
    * [`addowner on/John Doe ph/98765432 em/johnd@example.com ad/John street, block 123, #01-01`](#adding-an-owner-addowner) : Adds an owner.
 
@@ -201,19 +199,19 @@ Displays owners whose details match at least one of the given keywords.
 Format: `find [on/OWNER_NAME] [ph/PHONE_NUMBER] [em/EMAIL] [ad/ADDRESS] [ot/OWNER_TAG]…​ [pn/PET_NAME] [ps/SPECIES] [pr/REMARKS]`
 
 * At least one of the optional fields must be provided.
-* The search is case-insensitive. e.g `hans` will match `Hans`.
-* Partial matches are displayed e.g. `Han` will match `Hans`.
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Owners matching at least one keyword will be returned (i.e. `OR` search) e.g. `Hans Bo` will match `Hans Gruber`, `Bo Yang`
+* The search is case-insensitive. e.g. `hans` will match `Hans`.
+* Partial matches are displayed. e.g. `Han` will match `Hans`.
+* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`.
+* Owners matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans Bo` will match both `Hans Gruber` and `Bo Yang`.
 
 Examples:
 * `find ps/Dog` returns owners who own pets that are `Dog`s.
 * `find on/avi jon` returns owners whose names contain `avi` OR `jon`, e.g. `Avi`, `Xavier`, `Jonathan`.
 * `find ad/Tampines ot/VIP` returns owners whose address contains `Tampines` OR who are tagged as `VIP`s _(screenshot cropped to show relevant UI elements)_:
-![[result for 'find ad/Tampines ot/VIP']](images/findAdTampinesOtVip.png)
+![result for 'find ad/Tampines ot/VIP'](images/findAdTampinesOtVip.png)
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-Use `list` after using [`find`](#searching-for-owners-find) return to the list of all owners.
+Use `list` after using [`find`](#searching-for-owners-find) to return to the list of all owners.
 Successfully [adding an owner](#adding-an-owner-addowner) will also reset the view and display all owners.
 </div>
 
@@ -279,7 +277,7 @@ You may also add sessions that have happened in the past, be it for bookkeeping,
 
 ### Deleting an owner, pet, session or service: `delete`
 
-`delete` has two usages, each with its own formats.
+`delete` has two usages, each with its own format.
 
 **1. Deleting an owner, pet or session**
 
@@ -323,7 +321,7 @@ Deleting a service will not delete the sessions that use that service! If you do
 
 **:information_source: Note about the `delete` formats:**<br>
 
-Using a combination of both formats, e.g. `delete oi/1 sn/Ear cleaning`, is invalid and will not succeed.
+Using a combination of both formats, e.g. `delete oi/1 sn/Ear Cleaning`, is invalid and will not succeed.
 
 </div>
 
@@ -384,7 +382,7 @@ _Details coming soon ..._
 **A**: Install PetLog on the other computer, and overwrite the empty data file it creates with the file that contains the data from your previous PetLog home folder.
 
 **Q**: Why do indexes become invalid after I run [`find`](#searching-for-owners-find)?<br>
-**A**: Indexes always refer to the current displayed list. After filtering, either use the new filtered indexes or run [`list`](#listing-all-owners-list) to reset the indexes, before deleting/updating.
+**A**: Indexes always refer to the current displayed list. After filtering, either use the new filtered indexes or run [`list`](#listing-all-owners-list) to reset the indexes before deleting or updating.
 
 **Q**: How do I clear a pet’s remark?<br>
 **A**: Use an empty remark value: [`update oi/OWNER_INDEX pi/PET_INDEX pr/`](#updating-the-remarks-of-a-pet-update).
@@ -393,7 +391,7 @@ _Details coming soon ..._
 **A**: Yes. `sn/` is optional in [`addsession`](#adding-a-session-addsession). If no services are provided, the session fee is `0.00`.
 
 **Q**: How is a session’s total fee calculated?<br>
-**A**: It is the sum of all services provided in the [`addsession`](#adding-a-session-addsession) command, using the current service prices in PetLog.
+**A**: It is the sum of all services provided in the [`addsession`](#adding-a-session-addsession) command, based on service prices at the time the session is created.
 
 **Q**: Why does [`addsession`](#adding-a-session-addsession) fail with “Unknown service”?<br>
 **A**: At least one `sn/SERVICE_NAME` does not exist in your current service list. Add it first with [`addservice`](#adding-a-service-addservice), or correct the name.
@@ -418,7 +416,7 @@ _Details coming soon ..._
 
 1. **On macOS, if the Help Window is closed while it is in fullscreen**, the application may become unresponsive. The remedy is to type `Control` + `C` in your Terminal window to close the application, and then re-launch it with `java -jar petlog.jar`. For this reason, it is best to avoid closing the Help Window when it is in fullscreen.
 
-1. **If `petlog.jar` is placed in a write-protected folder**, the application will not work as it requires write permissions to write and update the local storage file `petlog.json`. The remedy is to ensure `petlog.jar` is placed a folder with no write protection before using it.
+1. **If `petlog.jar` is placed in a write-protected folder**, the application will not work as it requires write permissions to write and update the local storage file `petlog.json`. The remedy is to ensure `petlog.jar` is placed in a folder with no write protection before using it.
 
 [↑ Back to ToC](UserGuide.md)
 
@@ -436,7 +434,7 @@ Action | Format, Examples
 [**Add Pet**](#adding-a-pet-under-an-owner-addpet) | `addpet oi/OWNER_INDEX pn/PET_NAME ps/SPECIES [pr/REMARKS]` <br> e.g., `addpet oi/2 pn/Molly ps/Golden Retriever pr/cuddly`
 [**Update Pet Remarks**](#updating-the-remarks-of-a-pet-update) | `update oi/OWNER_INDEX pi/PET_INDEX pr/REMARKS` <br> e.g., `update oi/1 pi/3 pr/aggressive`
 [**Search for Owners**](#searching-for-owners-find) | `find [on/OWNER_NAME] [ph/PHONE_NUMBER] [em/EMAIL] [ad/ADDRESS] [ot/OWNER_TAG]…​ [pn/PET_NAME] [ps/SPECIES] [pr/REMARKS]`<br> e.g., `find on/Hans ps/Dog`
-[**List All Owners and Pets**](#listing-all-owners-list) | `list`
+[**List All Owners, Pets and Sessions**](#listing-all-owners-list) | `list`
 [**Add Service**](#adding-a-service-addservice) | `addservice sn/SERVICE_NAME sp/SERVICE_PRICE` <br> e.g., `addservice sn/Ear Cleaning sp/12.50`
 [**Add Session**](#adding-a-session-addsession) | `addsession oi/OWNER_INDEX pi/PET_INDEX st/START_TIME et/END_TIME [sn/SERVICE_NAME]…​` <br> e.g., `addsession oi/1 pi/2 st/2026-05-15 14:30 et/2026-05-15 15:30 sn/Base service charge sn/Shampoo`
 [**Delete Owner, Pet or Session**](#deleting-an-owner-pet-session-or-service-delete) | `delete oi/OWNER_INDEX [pi/PET_INDEX [si/SESSION_INDEX]]`<br> e.g., `delete oi/4 pi/2`

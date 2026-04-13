@@ -7,8 +7,6 @@ title: Developer Guide
 
 --------------------------------------------------------------------------------------------------------------------
 
-<div style="page-break-after: always;"></div>
-
 ## **Acknowledgements**
 
 * This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org). We used that codebase as a starting point for PetLog.
@@ -28,7 +26,7 @@ Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
 <div markdown="span" class="alert alert-primary">
 
-:bulb: **Tip:** The `.puml` files used to create diagrams are in this document `docs/diagrams` folder. Refer to the [_PlantUML Tutorial_ at se-edu/guides](https://se-education.org/guides/tutorials/plantUml.html) to learn how to create and edit diagrams.
+:bulb: **Tip:** The `.puml` files used to create diagrams are in this document's `docs/diagrams` folder. Refer to the [_PlantUML Tutorial_ at se-edu/guides](https://se-education.org/guides/tutorials/plantUml.html) to learn how to create and edit diagrams.
 </div>
 
 ### Architecture
@@ -37,7 +35,7 @@ Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
 The ***Architecture Diagram*** given above explains the high-level design of the App.
 
-Given below is a quick overview of main components and how they interact with each other.
+Given below is a quick overview of the main components and how they interact with each other.
 
 **Main components of the architecture**
 
@@ -104,7 +102,7 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 
 <img src="images/DeleteSequenceDiagram.png" width="1000"/>
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
 </div>
 
 How the `Logic` component works:
@@ -172,7 +170,7 @@ The `Storage` component,
 
 Classes used by multiple components are in the `seedu.address.commons` package.
 
-These include indexes, exceptions and utility classes.
+These include indexes, exceptions, and utility classes.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -190,12 +188,12 @@ Key implementation points:
 * `AddPetCommand` targets an owner from the current filtered owner list using `oi/`.
 * Pet identity is checked per owner via `Person#hasPet(Pet)`, which compares pet name + species after normalisation (case-insensitive, whitespace-normalised).
 * On successful `addpet`, the command rebuilds that owner with an updated pet set and applies it through `Model#setPerson(...)`.
-* Pet remarks are updated through `update oi/... pi/... pr/...` (`UpdatePetRemarkCommand`), which edits the selected pet and writes the owner back via `Model#setPerson(...)`.
+* Pet remarks are updated through `update oi/... pi/... pr/...` (`UpdatePetRemarkCommand`), which creates a copy of the selected pet with the new remarks, copies its sessions, and writes the owner back via `Model#setPerson(...)`.
 
 The sequence diagram below shows the main interaction flow for a successful `addpet` operation.
 
 <img src="images/PetManagementSequenceDiagram.png" width="700" />
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `AddPetCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `AddPetCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
 </div>
 
 ### Service catalogue
@@ -228,8 +226,6 @@ Key implementation points:
 
 Design note:
 * Existing sessions keep their own service snapshots. Deleting a service from the catalogue affects future session creation, but not historical sessions already stored on pets.
-
-<div style="page-break-after: always;"></div>
 
 ### \[Proposed\] Undo/redo feature
 
@@ -274,7 +270,7 @@ The following sequence diagram shows how an undo operation goes through the `Log
 
 ![UndoSequenceDiagram](images/UndoSequenceDiagram-Logic.png)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of the diagram.
 
 </div>
 
@@ -311,11 +307,11 @@ The following activity diagram summarizes what happens when a user executes a ne
 * **Alternative 2:** Individual command knows how to undo/redo by
   itself.
   * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
+  * Cons: We must ensure that the implementation of each individual command is correct.
 
 --------------------------------------------------------------------------------------------------------------------
 
-## **Documentation, logging, testing, configuration, dev-ops**
+## **Documentation, logging, testing, configuration, and DevOps**
 
 * [Documentation guide](Documentation.md)
 * [Testing guide](Testing.md)
@@ -390,9 +386,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions for all use cases**
 
-1. User requests PetLog to do something with provided inputs.
+1. User requests PetLog to do something with the provided inputs.
 
-* 1a. PetLog detects that there are missing or invalid inputs (e.g. missing required prefixes, invalid index, inputs that are too long).
+* 1a. PetLog detects that there are missing or invalid inputs (e.g. missing required prefixes, invalid indices, inputs that are too long).
   * 1a1. PetLog informs the user of the missing or invalid inputs.
 
 **Use case: UC01 - Add an owner**
@@ -407,14 +403,14 @@ MSS:
 
 Extensions:
 
-* 1a. PetLog detects that the details match that of an existing owner.
+* 1a. PetLog detects that the details match those of an existing owner.
   * 1a1. PetLog informs the user that the owner already exists.
 
     Use case ends.
 
 
-* 1b. PetLog detects that the provided phone number contains non-numerical characters.
-  * 1b1. PetLog notes this and gives a warning to the user in step 3 that the phone number contains non-numerical characters.
+* 1b. PetLog detects that the provided phone number contains non-numeric characters.
+  * 1b1. PetLog notes this and gives a warning to the user in step 3 that the phone number contains non-numeric characters.
 
     Use case resumes from step 2.
 
@@ -680,17 +676,17 @@ MSS:
 
 **Performance and Responsiveness**
 * PetLog should start and show the main window within 1.0 s on initial launch on a baseline machine (8 GB RAM, SSD).
-* Commands should complete and update UI within 500 ms for a maximal dataset size (up to 500 owners + 1000 pets + 50 services + 2000 sessions) on a baseline machine.
+* Commands should complete and update the UI within 500 ms for a maximal dataset size (up to 500 owners + 1000 pets + 50 services + 2000 sessions) on a baseline machine.
 * Subsequent launches that open an existing data file of a maximal data set should complete and show the main window within 2.5 s on a baseline machine.
 
 **Usability and Learnability**
 * A user with typing speed above 50 words per minute for regular English text (i.e. not code, not system admin commands) should be able to accomplish their tasks faster using commands than they would using the mouse on a GUI application.
 * Command error messages should be understandable to the user, by displaying the field/prefix at fault or the constraint violated.
-* Success and error messages should be consistent to the user, by following a consistent template across commands.
+* Success and error messages should be consistent for the user, by following a consistent template across commands.
 * New users should be able to add an owner, add a pet, add a service and add a session in ≤ 5 minutes after reading the quick start guide.
 
 **Reliability and Data Integrity**
-* When exiting PetLog via the `exit` command, 100% of data should persist across the app restarts.
+* When exiting PetLog via the `exit` command, 100% of data should persist across app restarts.
 * The data should be stored locally and should be in a human-editable text file.
 * The data should not be stored in a database management system.
 * On file load, invalid/corrupted data should be detected and reported to the user without PetLog crashing.
@@ -841,7 +837,7 @@ It aims to complement the UG by suggesting a simple path for testing and providi
       * `delete oi/1 pi/1` <br>
       * `delete oi/1` <br>
       * `delete sn/Test Grooming` <br>
-      Expected: each delete mode succeeds (service, session, pet, owner).
+      Expected: each delete mode succeeds (session, pet, owner, service).
 
 1. Negative test:
 
@@ -896,11 +892,11 @@ Examples:
   Run `addowner xy/Invalid Prefix on/Example ph/123 em/eg@example.com ad/Some Address`. <br>
   Expected: User is shown an error that identifies the invalid prefix `xy/`. <br>
   Actual: User is shown the `Invalid command format` error.
-*  _Invalid prefix as subsequent input being absorbed into previous argument with no error_: <br> 
+* _Invalid prefix as subsequent input being absorbed into previous argument with no error_: <br>
   Run `addowner on/Example xy/Invalid Prefix ph/123 em/eg@example.com ad/Some Address`. <br>
   Expected: User is shown an error that identifies the invalid prefix `xy/`. <br>
   Actual: The argument to the `on/` parameter is parsed as `Example xy/Invalid Prefix`, hence an owner with name `Example xy/Invalid Prefix` is added with no error.
-* _Invalid prefix as subsequent input being absorbed into previous argument resulting in an error_: <br> 
+* _Invalid prefix as subsequent input being absorbed into previous argument resulting in an error_: <br>
   Run `addowner on/Example ph/123 em/eg@example.com xy/Invalid Prefix ad/Some Address`. <br>
   Expected: User is shown an error that identifies the invalid prefix `xy/`. <br>
   Actual: The argument to the `em/` parameter is parsed as `eg@example.com xy/Invalid Prefix`, which does not meet the regex for a valid email, hence the user is shown an error that the email provided is invalid.
@@ -926,7 +922,7 @@ The planned enhancement is to redefine the duplicate criteria for owners. PetLog
 
 The User Guide will also be updated to capture all the details above.
 
-### 3. Displaying warnings when provided arguments to `addowner` match an existing owner
+### 3. Displaying warnings when arguments provided to `addowner` match an existing owner
 
 In addition to Planned Enhancement 2, we will also modify the behaviour of `addowner` to show warnings for partial owner-detail matches.
 
@@ -972,8 +968,8 @@ With the current implementation, `find` treats inputs as keyword tokens, which c
 
 Example:
 * Run `find ad/"123 Test Avenue"`. <br>
-  Expected: Owners whose address exact-phrase search `123 Test Avenue` are returned. <br>
-  Actual: Owners whose address contain the words `"123`, `Test` or `Avenue"` are returned.
+  Expected: Owners whose addresses contain the exact phrase `123 Test Avenue` are returned. <br>
+  Actual: Owners whose addresses contain the words `123`, `Test`, or `Avenue` are returned.
 
 The planned enhancement is to support quoted exact-phrase matching in `find` while retaining current keyword search behaviour.
 
@@ -1030,3 +1026,5 @@ Example:
 The planned enhancement is to require an explicit confirmation step before executing `clear`, to reduce the risk of irreversible accidental data loss.
 
 The User Guide will also be updated to capture all the details above.
+
+--------------------------------------------------------------------------------------------------------------------

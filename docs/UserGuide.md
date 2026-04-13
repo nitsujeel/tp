@@ -400,6 +400,9 @@ _Details coming soon ..._
 **Q**: Where is my data stored, and how do I reset to sample data?<br>
 **A**: Data is stored at `[JAR location]/data/petlog.json`. Back up that file to migrate data. To reset to sample data, delete `petlog.json` and restart the app.
 
+**Q**: I used [`editowner`](#editing-an-owner-editowner)/[`update`](#updating-the-remarks-of-a-pet-update) after [`find`](#searching-for-owners-find), and the owner disappeared from the list!<br>
+**A**: This is because the change you made resulted in the removal of that owner from the filtered list presented by [`find`](#searching-for-owners-find). Simply use [`list`](#listing-all-owners-list) to display all owners again!
+
 [↑ Back to ToC](UserGuide.md)
 
 --------------------------------------------------------------------------------------------------------------------

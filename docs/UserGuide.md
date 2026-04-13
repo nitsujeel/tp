@@ -7,7 +7,7 @@ PetLog is a **desktop app designed for managers of pet day care centres or board
 With structured commands, it helps you manage, search, and organise owners and their pets efficiently.
 You can also add and keep track of the services you offer, as well as specific sessions where a pet receives one of your services.
 
-* Table of Contents
+## Table of Contents
 {:toc}
 
 --------------------------------------------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ You can also add and keep track of the services you offer, as well as specific s
 
 1. Refer to the [Features](#features) below for details of each command.
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -89,7 +89,7 @@ Shows a message explaining how to use the available commands and how to access t
 
 Format: `help`
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 <div style="page-break-after: always;"></div>
 
@@ -118,7 +118,7 @@ Examples:
 You can use any types of characters for `PHONE_NUMBER`. Want to indicate that this new owner's phone number is the `Same as Alice's`? Or perhaps use `-` to represent that they don't have a phone number? PetLog is flexible to all these possibilities!
 </div>
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 <div style="page-break-after: always;"></div>
 
@@ -146,7 +146,7 @@ Examples:
 Having one invalid input will cause your entire command to fail! For example: Assuming the 1st owner does not have a `member` tag, running `editowner oi/1 at/VIP rt/member` will fail entirely, and hence a `VIP` tag will **not** be added to that owner.
 </div>
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 <div style="page-break-after: always;"></div>
 
@@ -171,7 +171,7 @@ Examples:
 * `addpet oi/2 pn/Molly ps/Golden Retriever pr/cuddly` adds a Golden Retriever called Molly under the 2nd owner in the list of owners; Molly will have a remark that she is cuddly.
 * `addpet oi/1 pn/Dave ps/Great Dane` adds a Great Dane called Dave under the 1st owner on the list of owners.
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 <div style="page-break-after: always;"></div>
 
@@ -188,7 +188,7 @@ Updates the remarks of a pet.
 Examples:
 * `update oi/1 pi/3 pr/aggressive` updates the remark of the 3rd pet listed under the 1st owner to be "aggressive".
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 <div style="page-break-after: always;"></div>
 
@@ -215,7 +215,7 @@ Use `list` after using [`find`](#searching-for-owners-find) to return to the lis
 Successfully [adding an owner](#adding-an-owner-addowner) will also reset the view and display all owners.
 </div>
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 <div style="page-break-after: always;"></div>
 
@@ -225,7 +225,7 @@ Shows all owners, pets and sessions in PetLog.
 
 Format: `list`
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 ### Adding a service: `addservice`
 
@@ -244,7 +244,7 @@ Examples:
 To change a service's name or price after it has been added, simply [`delete`](#deleting-an-owner-pet-session-or-service-delete) it and re-add it.
 </div>
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 <div style="page-break-after: always;"></div>
 
@@ -271,7 +271,7 @@ You may add more than one instance of the same service to a single session! This
 You may also add sessions that have happened in the past, be it for bookkeeping, tracking clients' loyalty, or simply just for nostalgia!
 </div>
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 <div style="page-break-after: always;"></div>
 
@@ -325,7 +325,7 @@ Using a combination of both formats, e.g. `delete oi/1 sn/Ear Cleaning`, is inva
 
 </div>
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 ### Clearing all owners, pets, services and sessions: `clear`
 
@@ -337,7 +337,7 @@ Format: `clear`
 Use `clear` to remove the sample data when you first run PetLog so you can start putting in your own!
 </div>
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 ### Exiting the program: `exit`
 
@@ -345,7 +345,7 @@ Exits PetLog.
 
 Format: `exit`
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 <div style="page-break-after: always;"></div>
 
@@ -353,7 +353,7 @@ Format: `exit`
 
 PetLog data is saved in the hard disk automatically after any command that changes the data, and upon exiting. There is no need to save manually.
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 ### Editing the data file
 
@@ -364,13 +364,13 @@ If your changes to the data file make its format invalid, PetLog will discard al
 Furthermore, certain edits can cause PetLog to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 ### Undo/Redo `[Coming Soon]`
 
 _Details coming soon ..._
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -402,7 +402,7 @@ _Details coming soon ..._
 **Q**: I used [`editowner`](#editing-an-owner-editowner)/[`update`](#updating-the-remarks-of-a-pet-update) after [`find`](#searching-for-owners-find), and the owner disappeared from the list!<br>
 **A**: This is because the change you made resulted in the removal of that owner from the filtered list presented by [`find`](#searching-for-owners-find). Simply use [`list`](#listing-all-owners-list) to display all owners again!
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -418,7 +418,7 @@ _Details coming soon ..._
 
 1. **If `petlog.jar` is placed in a write-protected folder**, the application will not work as it requires write permissions to write and update the local storage file `petlog.json`. The remedy is to ensure `petlog.jar` is placed in a folder with no write protection before using it.
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -442,6 +442,6 @@ Action | Format, Examples
 [**Clear All Entries**](#clearing-all-owners-pets-services-and-sessions-clear) | `clear`
 [**Exit Application**](#exiting-the-program-exit) | `exit`
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 --------------------------------------------------------------------------------------------------------------------

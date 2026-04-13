@@ -205,6 +205,10 @@ public class MainWindow extends UiPart<Stage> {
             logger.info("Result: " + commandResult.getFeedbackToUser());
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
 
+            if (isAddOwnerCommand(commandText) && ownerListPanel != null) {
+                Platform.runLater(ownerListPanel::scrollToLastOwner);
+            }
+
             if (commandResult.isShowHelp()) {
                 handleHelp();
             }
@@ -219,5 +223,14 @@ public class MainWindow extends UiPart<Stage> {
             resultDisplay.setFeedbackToUser(e.getMessage());
             throw e;
         }
+    }
+
+    private static boolean isAddOwnerCommand(String commandText) {
+        String trimmedCommand = commandText.trim();
+        if (trimmedCommand.isEmpty()) {
+            return false;
+        }
+        String commandWord = trimmedCommand.split("\\s+", 2)[0];
+        return commandWord.equals("addowner");
     }
 }

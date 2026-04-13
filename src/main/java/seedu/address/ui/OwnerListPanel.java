@@ -27,6 +27,16 @@ public class OwnerListPanel extends UiPart<Region> {
     }
 
     /**
+     * Scrolls the owner list to the final row if the list is non-empty.
+     */
+    public void scrollToLastOwner() {
+        int lastOwnerIndex = personListView.getItems().size() - 1;
+        if (lastOwnerIndex >= 0) {
+            personListView.scrollTo(lastOwnerIndex);
+        }
+    }
+
+    /**
      * Custom {@code ListCell} that displays the graphics of a {@code Person} using a {@code OwnerCard}.
      */
     class OwnerListViewCell extends ListCell<Person> {

@@ -194,7 +194,7 @@ Examples:
 
 ### Searching for owners: `find`
 
-Finds owners whose details match at least one of the given keywords.
+Displays owners whose details match at least one of the given keywords.
 
 Format: `find [on/OWNER_NAME] [ph/PHONE_NUMBER] [em/EMAIL] [ad/ADDRESS] [ot/OWNER_TAG]…​ [pn/PET_NAME] [ps/SPECIES] [pr/REMARKS]`
 
@@ -210,19 +210,20 @@ Examples:
 * `find ad/Tampines ot/VIP` returns owners whose address contains `Tampines` OR who are tagged as `VIP`s _(screenshot cropped to show relevant UI elements)_:
 ![[result for 'find ad/Tampines ot/VIP']](images/findAdTampinesOtVip.png)
 
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Use `list` after using [`find`](#searching-for-owners-find) to go back to displaying all owners.
+Successfully [adding an owner](#adding-an-owner-addowner) will also reset the view and display all owners, allowing you to see the newly added owner.
+</div>
+
 [↑ Back to ToC](UserGuide.md)
 
 <div style="page-break-after: always;"></div>
 
 ### Listing all owners: `list`
 
-Shows a list of all owners and pets in PetLog.
+Shows all owners, pets and sessions in PetLog.
 
 Format: `list`
-
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-Use `list` after using [`find`](#searching-for-owners-find) to go back to displaying all owners and pets.
-</div>
 
 [↑ Back to ToC](UserGuide.md)
 

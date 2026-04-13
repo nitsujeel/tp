@@ -212,7 +212,7 @@ Examples:
 ![result for 'find ad/Tampines ot/VIP'](images/findAdTampinesOtVip.png)
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-Use `list` after using [`find`](#searching-for-owners-find) to return to the list of all owners.
+Use [`list`](#listing-all-owners-list) after using `find` to return to the list of all owners. <br>
 Successfully [adding an owner](#adding-an-owner-addowner) will also reset the view and display all owners.
 </div>
 
@@ -358,7 +358,7 @@ PetLog data is saved to the hard disk automatically after any command that chang
 
 ### Editing the data file
 
-PetLog data is saved automatically as a JSON file `[JAR file location]/data/petlog.json`. Advanced users are welcome to update data directly by editing that data file.
+PetLog data is saved automatically as a JSON file: <br> `[JAR file location]/data/petlog.json`. Advanced users are welcome to update data directly by editing that data file.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
 If your changes to the data file make its format invalid, PetLog will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
@@ -435,7 +435,7 @@ Action | Format, Examples
 [**Add Pet**](#adding-a-pet-under-an-owner-addpet) | `addpet oi/OWNER_INDEX pn/PET_NAME ps/SPECIES [pr/REMARKS]` <br> e.g., `addpet oi/2 pn/Molly ps/Golden Retriever pr/cuddly`
 [**Update Pet Remarks**](#updating-the-remarks-of-a-pet-update) | `update oi/OWNER_INDEX pi/PET_INDEX pr/REMARKS` <br> e.g., `update oi/1 pi/3 pr/aggressive`
 [**Search for Owners**](#searching-for-owners-find) | `find [on/OWNER_NAME] [ph/PHONE_NUMBER] [em/EMAIL] [ad/ADDRESS] [ot/OWNER_TAG]…​ [pn/PET_NAME] [ps/SPECIES] [pr/REMARKS]`<br> e.g., `find on/Hans ps/Dog`
-[**List All Owners, Pets and Sessions**](#listing-all-owners-list) | `list`
+[**List All Owners**](#listing-all-owners-list) | `list`
 [**Add Service**](#adding-a-service-addservice) | `addservice sn/SERVICE_NAME sp/SERVICE_PRICE` <br> e.g., `addservice sn/Ear Cleaning sp/12.50`
 [**Add Session**](#adding-a-session-addsession) | `addsession oi/OWNER_INDEX pi/PET_INDEX st/START_TIME et/END_TIME [sn/SERVICE_NAME]…​` <br> e.g., `addsession oi/1 pi/2 st/2026-05-15 14:30 et/2026-05-15 15:30 sn/Base service charge sn/Shampoo`
 [**Delete Owner, Pet or Session**](#deleting-an-owner-pet-session-or-service-delete) | `delete oi/OWNER_INDEX [pi/PET_INDEX [si/SESSION_INDEX]]`<br> e.g., `delete oi/4 pi/2`

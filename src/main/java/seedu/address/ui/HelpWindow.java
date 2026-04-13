@@ -1,12 +1,16 @@
 package seedu.address.ui;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.AddOwnerCommand;
@@ -29,10 +33,25 @@ public class HelpWindow extends UiPart<Stage> {
 
     public static final String USERGUIDE_URL = "https://ay2526s2-cs2103t-w14-1.github.io/tp/UserGuide.html";
     public static final String HELP_MESSAGE = "For more detailed guide, refer to the user guide.";
-    public static final String COMMANDS_MESSAGE = buildCommandsMessage();
 
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
     private static final String FXML = "HelpWindow.fxml";
+
+    /** Each entry is [commandWord, fullUsageText]. */
+    private static final List<String[]> COMMAND_ENTRIES = List.of(
+            new String[]{HelpCommand.COMMAND_WORD, HelpCommand.MESSAGE_USAGE},
+            new String[]{AddOwnerCommand.COMMAND_WORD, AddOwnerCommand.MESSAGE_USAGE},
+            new String[]{EditCommand.COMMAND_WORD, EditCommand.MESSAGE_USAGE},
+            new String[]{AddPetCommand.COMMAND_WORD, AddPetCommand.MESSAGE_USAGE},
+            new String[]{UpdatePetRemarkCommand.COMMAND_WORD, UpdatePetRemarkCommand.MESSAGE_USAGE},
+            new String[]{AddServiceCommand.COMMAND_WORD, AddServiceCommand.MESSAGE_USAGE},
+            new String[]{AddSessionCommand.COMMAND_WORD, AddSessionCommand.MESSAGE_USAGE},
+            new String[]{DeleteCommand.COMMAND_WORD, DeleteCommand.MESSAGE_USAGE},
+            new String[]{FindCommand.COMMAND_WORD, FindCommand.MESSAGE_USAGE},
+            new String[]{ListCommand.COMMAND_WORD, ListCommand.MESSAGE_USAGE},
+            new String[]{ClearCommand.COMMAND_WORD, ClearCommand.MESSAGE_USAGE},
+            new String[]{ExitCommand.COMMAND_WORD, ExitCommand.MESSAGE_USAGE}
+    );
 
     @FXML
     private Button copyButton;
@@ -41,7 +60,7 @@ public class HelpWindow extends UiPart<Stage> {
     private Label helpMessage;
 
     @FXML
-    private Label commandsLabel;
+    private Accordion commandsAccordion;
 
     /**
      * Creates a new HelpWindow.
@@ -51,7 +70,7 @@ public class HelpWindow extends UiPart<Stage> {
     public HelpWindow(Stage root) {
         super(FXML, root);
         helpMessage.setText(HELP_MESSAGE);
-        commandsLabel.setText(COMMANDS_MESSAGE);
+        buildCommandsAccordion();
     }
 
     /**
@@ -61,21 +80,22 @@ public class HelpWindow extends UiPart<Stage> {
         this(new Stage());
     }
 
-    private static String buildCommandsMessage() {
-        return String.join("\n\n",
-                "Available Commands:",
-                HelpCommand.MESSAGE_USAGE,
-                AddOwnerCommand.MESSAGE_USAGE,
-                EditCommand.MESSAGE_USAGE,
-                AddPetCommand.MESSAGE_USAGE,
-                UpdatePetRemarkCommand.MESSAGE_USAGE,
-                AddServiceCommand.MESSAGE_USAGE,
-                AddSessionCommand.MESSAGE_USAGE,
-                DeleteCommand.MESSAGE_USAGE,
-                FindCommand.MESSAGE_USAGE,
-                ListCommand.MESSAGE_USAGE,
-                ClearCommand.MESSAGE_USAGE,
-                ExitCommand.MESSAGE_USAGE);
+    private void buildCommandsAccordion() {
+        for (String[] entry : COMMAND_ENTRIES) {
+            String commandWord = entry[0];
+            String usageText = entry[1];
+
+            Label contentLabel = new Label(usageText);
+            contentLabel.setWrapText(true);
+            contentLabel.getStyleClass().add("command-content-label");
+
+            VBox contentBox = new VBox(contentLabel);
+            contentBox.getStyleClass().add("command-content-box");
+
+            TitledPane pane = new TitledPane(commandWord, contentBox);
+            pane.getStyleClass().add("command-pane");
+            commandsAccordion.getPanes().add(pane);
+        }
     }
 
     /**

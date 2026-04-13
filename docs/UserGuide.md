@@ -358,7 +358,7 @@ PetLog data is saved to the hard disk automatically after any command that chang
 
 ### Editing the data file
 
-PetLog data is saved automatically as a JSON file `[JAR file location]/data/petlog.json`. Advanced users are welcome to update data directly by editing that data file.
+PetLog data is saved automatically as a JSON file: <br> `[JAR file location]/data/petlog.json`. Advanced users are welcome to update data directly by editing that data file.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
 If your changes to the data file make its format invalid, PetLog will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>

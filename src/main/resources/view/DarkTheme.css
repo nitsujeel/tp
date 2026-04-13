@@ -345,7 +345,8 @@
     -fx-padding: 8 1 8 1;
 }
 
-.list-view > .virtual-flow > .corner {
+.list-view > .virtual-flow > .corner,
+.scroll-pane > .corner {
     -fx-background-color: #ffdab9;
 }
 
@@ -368,6 +369,10 @@
 #commandTypeLabel {
     -fx-font-size: 11px;
     -fx-text-fill: #8b0000;
+}
+
+.text-input {
+    -fx-highlight-fill: #e8a070;
 }
 
 #commandTextField {

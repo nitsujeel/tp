@@ -42,9 +42,24 @@ public class UniquePersonListTest {
     @Test
     public void contains_personWithSameIdentityFieldsInList_returnsTrue() {
         uniquePersonList.add(ALICE);
-        Person editedAlice = new PersonBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_HUSBAND)
+        Person editedAlice = new PersonBuilder(ALICE)
+                .withName("  " + ALICE.getName().fullName.toUpperCase() + " ")
+                .withPhone(addWhitespaceToPhone(ALICE.getPhone().toString()))
+                .withEmail(ALICE.getEmail().toString().toUpperCase())
+                .withAddress(" " + ALICE.getAddress().toString().toUpperCase() + " ")
+                .withTags(VALID_TAG_HUSBAND)
                 .build();
+
         assertTrue(uniquePersonList.contains(editedAlice));
+    }
+
+    private String addWhitespaceToPhone(String phone) {
+        if (phone.length() < 2) {
+            return phone;
+        }
+
+        int splitIndex = phone.length() / 2;
+        return phone.substring(0, splitIndex) + " " + phone.substring(splitIndex);
     }
 
     @Test
@@ -59,17 +74,21 @@ public class UniquePersonListTest {
     }
 
     @Test
-    public void add_personWithSameNameIgnoringCaseAndSamePhone_throwsDuplicatePersonException() {
+    public void add_personWithSameNameAndPhoneButDifferentEmailAndAddress_success() {
         uniquePersonList.add(BOB);
-        Person bobWithLowercaseName = new PersonBuilder(BOB).withName("bob choo").build();
-        assertThrows(DuplicatePersonException.class, () -> uniquePersonList.add(bobWithLowercaseName));
-    }
+        Person partialDuplicateBob = new PersonBuilder(BOB)
+                .withName("bob choo")
+                .withPhone(BOB.getPhone().toString())
+                .withEmail("different@example.com")
+                .withAddress("123 Different Street")
+                .build();
 
-    @Test
-    public void add_personWithSameNameIgnoringWhitespaceAndSamePhone_throwsDuplicatePersonException() {
-        uniquePersonList.add(BOB);
-        Person bobWithExtraWhitespaceInName = new PersonBuilder(BOB).withName("  Bob   Choo ").build();
-        assertThrows(DuplicatePersonException.class, () -> uniquePersonList.add(bobWithExtraWhitespaceInName));
+        uniquePersonList.add(partialDuplicateBob);
+
+        UniquePersonList expectedUniquePersonList = new UniquePersonList();
+        expectedUniquePersonList.add(BOB);
+        expectedUniquePersonList.add(partialDuplicateBob);
+        assertEquals(expectedUniquePersonList, uniquePersonList);
     }
 
     @Test

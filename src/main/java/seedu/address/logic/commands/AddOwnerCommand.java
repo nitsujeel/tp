@@ -7,6 +7,11 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_OWNER_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -36,9 +41,14 @@ public class AddOwnerCommand extends Command {
             + PREFIX_TAG + "VIP";
 
     public static final String MESSAGE_SUCCESS = "Added owner: %1$s";
+    public static final String MESSAGE_PHONE_WARNING =
+            "Warning: Phone contains non-numeric characters. Use editowner to amend if necessary.";
     public static final String MESSAGE_SUCCESS_WITH_PHONE_WARNING = "Added owner: %1$s\n"
             + "Warning: Phone contains non-numeric characters. Use editowner to amend if necessary.";
+    public static final String MESSAGE_PARTIAL_DUPLICATE_WARNING =
+            "Warning: %1$s match existing owner records. Use editowner to amend if necessary.";
     public static final String MESSAGE_DUPLICATE_PERSON = "Owner already exists.";
+    private static final int NUMBER_OF_IDENTITY_FIELDS = 4;
 
     private final Person toAdd;
 
@@ -54,15 +64,85 @@ public class AddOwnerCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        if (model.hasPerson(toAdd)) {
+        boolean isFullDuplicate = model.getAddressBook().getPersonList().stream()
+                .anyMatch(existing -> existing.getMatchingIdentityFields(toAdd).size() == 4);
+
+        if (isFullDuplicate) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
+        Set<String> matchedFields = collectPartialMatchFields(model);
         model.addPerson(toAdd);
-        String messageTemplate = toAdd.getPhone().hasOnlyDigits()
-                ? MESSAGE_SUCCESS
-                : MESSAGE_SUCCESS_WITH_PHONE_WARNING;
-        return new CommandResult(String.format(messageTemplate, Messages.format(toAdd)));
+
+        boolean hasPhoneWarning = !toAdd.getPhone().hasOnlyDigits();
+        boolean hasPartialWarning = !matchedFields.isEmpty();
+
+        String message;
+
+        if (hasPhoneWarning && !hasPartialWarning) {
+            message = String.format(MESSAGE_SUCCESS_WITH_PHONE_WARNING, Messages.format(toAdd));
+        } else if (!hasPhoneWarning && hasPartialWarning) {
+            message = String.format(MESSAGE_SUCCESS, Messages.format(toAdd))
+                    + "\n"
+                    + String.format(MESSAGE_PARTIAL_DUPLICATE_WARNING,
+                    formatMatchedFields(matchedFields));
+        } else if (hasPhoneWarning && hasPartialWarning) {
+            message = String.format(MESSAGE_SUCCESS, Messages.format(toAdd))
+                    + "\n"
+                    + MESSAGE_PHONE_WARNING
+                    + "\n"
+                    + String.format(MESSAGE_PARTIAL_DUPLICATE_WARNING,
+                    formatMatchedFields(matchedFields));
+        } else {
+            message = String.format(MESSAGE_SUCCESS, Messages.format(toAdd));
+        }
+
+        return new CommandResult(message);
+    }
+
+    private Set<String> collectPartialMatchFields(Model model) {
+        Set<String> matchedFields = new LinkedHashSet<>();
+
+        for (Person existingPerson : model.getAddressBook().getPersonList()) {
+            List<String> matchingFields = existingPerson.getMatchingIdentityFields(toAdd);
+
+            if (matchingFields.size() >= 2 && matchingFields.size() < NUMBER_OF_IDENTITY_FIELDS) {
+                matchedFields.addAll(matchingFields);
+            }
+        }
+
+        return matchedFields;
+    }
+
+    private void appendWarning(StringBuilder feedback, String warning) {
+        feedback.append("\n").append(warning);
+    }
+
+    private String formatMatchedFields(Set<String> matchedFields) {
+        List<String> ordered = new ArrayList<>();
+
+        if (matchedFields.contains("name")) {
+            ordered.add("name");
+        }
+        if (matchedFields.contains("phone")) {
+            ordered.add("phone");
+        }
+        if (matchedFields.contains("email")) {
+            ordered.add("email");
+        }
+        if (matchedFields.contains("address")) {
+            ordered.add("address");
+        }
+
+        if (ordered.size() == 1) {
+            return ordered.get(0);
+        }
+        if (ordered.size() == 2) {
+            return ordered.get(0) + " and " + ordered.get(1);
+        }
+
+        String allButLast = String.join(", ", ordered.subList(0, ordered.size() - 1));
+        return allButLast + ", and " + ordered.get(ordered.size() - 1);
     }
 
     @Override

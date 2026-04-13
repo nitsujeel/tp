@@ -42,7 +42,10 @@ public class UniquePersonList implements Iterable<Person> {
      */
     public void add(Person toAdd) {
         requireNonNull(toAdd);
-        if (contains(toAdd)) {
+        boolean isFullDuplicate = internalList.stream()
+                .anyMatch(existing -> existing.getMatchingIdentityFields(toAdd).size() == 4);
+
+        if (isFullDuplicate) {
             throw new DuplicatePersonException();
         }
         internalList.add(toAdd);

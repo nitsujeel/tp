@@ -2,7 +2,6 @@ package seedu.address.model.person;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.address.commons.util.StringUtil.normalizeForComparison;
-import static seedu.address.commons.util.StringUtil.normalizeWhitespace;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -144,12 +143,45 @@ public class Person {
                 && normalizePhone(otherPerson.getPhone()).equals(normalizePhone(getPhone()));
     }
 
+    /**
+     * Returns the owner identity fields that match between this person and {@code otherPerson}
+     * after normalisation, in the order name, phone, email, address.
+     */
+    public List<String> getMatchingIdentityFields(Person otherPerson) {
+        requireAllNonNull(otherPerson);
+
+        List<String> matchingFields = new ArrayList<>();
+
+        if (normalizeName(otherPerson.getName()).equals(normalizeName(getName()))) {
+            matchingFields.add("name");
+        }
+        if (normalizePhone(otherPerson.getPhone()).equals(normalizePhone(getPhone()))) {
+            matchingFields.add("phone");
+        }
+        if (normalizeEmail(otherPerson.getEmail()).equals(normalizeEmail(getEmail()))) {
+            matchingFields.add("email");
+        }
+        if (normalizeAddress(otherPerson.getAddress()).equals(normalizeAddress(getAddress()))) {
+            matchingFields.add("address");
+        }
+
+        return Collections.unmodifiableList(matchingFields);
+    }
+
     private String normalizeName(Name name) {
         return normalizeForComparison(name.fullName);
     }
 
     private String normalizePhone(Phone phone) {
-        return normalizeWhitespace(phone.value);
+        return phone.value.replaceAll("[^0-9]", "");
+    }
+
+    private String normalizeEmail(Email email) {
+        return normalizeForComparison(email.value);
+    }
+
+    private String normalizeAddress(Address address) {
+        return normalizeForComparison(address.value);
     }
 
     private String normalizePetName(Pet pet) {

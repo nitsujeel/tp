@@ -58,14 +58,22 @@ public class AddOwnerCommandIntegrationTest {
     }
 
     @Test
-    public void execute_sameNameIgnoringCaseAndSamePhone_throwsCommandException() {
+    public void execute_sameNameIgnoringCaseAndSamePhoneDifferentEmailAndAddress_successWithWarning() {
         Person personInList = model.getAddressBook().getPersonList().get(0);
-        Person duplicatePerson = new PersonBuilder(personInList)
+        Person partialDuplicate = new PersonBuilder(personInList)
                 .withName(personInList.getName().fullName.toLowerCase())
+                .withEmail("different@example.com")
+                .withAddress("Different Address 123")
                 .build();
 
-        assertCommandFailure(new AddOwnerCommand(duplicatePerson), model,
-                AddOwnerCommand.MESSAGE_DUPLICATE_PERSON);
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.addPerson(partialDuplicate);
+
+        String expectedMessage = String.format(AddOwnerCommand.MESSAGE_SUCCESS, Messages.format(partialDuplicate))
+                + "\n"
+                + String.format(AddOwnerCommand.MESSAGE_PARTIAL_DUPLICATE_WARNING, "name and phone");
+
+        assertCommandSuccess(new AddOwnerCommand(partialDuplicate), model, expectedMessage, expectedModel);
     }
 
 }

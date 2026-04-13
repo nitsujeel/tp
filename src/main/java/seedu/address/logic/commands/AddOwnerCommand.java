@@ -37,7 +37,7 @@ public class AddOwnerCommand extends Command {
 
     public static final String MESSAGE_SUCCESS = "Added owner: %1$s";
     public static final String MESSAGE_SUCCESS_WITH_PHONE_WARNING = "Added owner: %1$s\n"
-            + "Warning: Phone contains non-numeric characters. nUse editowner to amend if necessary.";
+            + "Warning: Phone contains non-numeric characters. Use editowner to amend if necessary.";
     public static final String MESSAGE_DUPLICATE_PERSON = "Owner already exists.";
 
     private final Person toAdd;

@@ -1,127 +1,56 @@
-# PetLog User Guide
-
-> Hi! I'm Fluffy, and I'll be your guide through PetLog. I know you're busy — there are pets to feed, owners to call, and a dozen things happening at once. So let's keep this quick and get you set up fast.
-
-## Welcome to PetLog
-
-**Your pets are in good hands. Your records should be too.**
-
-Running a pet daycare or boarding service means juggling a lot — which owner is picking up Biscuit today? Does Mochi have any dietary notes? What's the contact number for Luna's owner again?
-
-PetLog is a **desktop app** that keeps all of this organised in one place, so you can spend less time searching through notebooks and chat messages, and more time with the animals in your care.
-
-It works through simple typed commands — no clicking through menus, no complicated software to learn. If you can type, you're ready to use PetLog.
- 
+---
+layout: page
+title: User Guide
 ---
 
-## What PetLog Can Do For You
+PetLog is a **desktop app designed for managers of pet day care centres or boarding services**. It is optimised for use via a **Command Line Interface** (CLI), while retaining the benefits of a **Graphical User Interface** (GUI).
+With structured commands, it helps you manage, search, and organise owners and their pets efficiently.
+You can also add and keep track of the services you offer, as well as specific sessions where a pet receives one of your services.
 
-- 📋 **Store owner contacts** — name, phone, email, and address, all in one record
-- 🐶 **Track pets and their owners** — link each pet to their owner, with species and special care notes
-- 🔍 **Find anyone instantly** — search by owner name, email, pet name, species, or tag
-- ✏️ **Update care notes on the fly** — record feeding instructions, medical reminders, or behavioural notes
-- 📅 **Manage services and sessions** — add the services you offer and track specific sessions for each pet
-- 🗑️ **Keep your records clean** — remove owners and pets when they leave your service
-
----
-
-## Who Is This Guide For?
-
-PetLog is built for pet daycare and boarding service staff who want a fast, no-fuss way to manage their contacts and pet records.
-
-We assume:
-- You're comfortable typing on a keyboard
-- You have no coding or technical background — and you don't need one
-- You're using a Windows, Mac, or Linux computer
-
-> 🐾 Don't worry if you've never typed a command before. I'll walk you through every step — paw by paw!
- 
----
-
-## How to Read This Guide
-
-| Symbol | Meaning |
-|--------|---------|
-| 🐾 Fluffy's Tip | A helpful shortcut or best practice |
-| ⚠️ Warning | Important — read before you act |
-| 💡 Did You Know | Extra context to help you understand |
-| `monospace text` | Something you type into PetLog or terminals exactly as shown |
- 
-
----
-
+## Table of Contents
 * Table of Contents
-  {:toc}
+{:toc}
 
----
+--------------------------------------------------------------------------------------------------------------------
 
-## Quick Start
+<div style="page-break-after: always;"></div>
 
-> 🐾 Follow these steps and you'll have PetLog running in under 5 minutes. I promise it's easier than it looks!
+## Quick start
 
-### Step 1 — Make sure Java is installed.
+1. Ensure you have Java `17` or above installed on your computer.<br>
+   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-PetLog runs on something called Java — a free program that lets apps like PetLog work on any computer, whether it's Windows, Mac, or Linux. Think of it like a universal engine under the hood. You only need to install it once, and many computers already have it.
+1. Download the latest `petlog.jar` file from the [releases page](https://github.com/AY2526S2-CS2103T-W14-1/tp/releases).
 
-To check, open your Terminal (Mac or Linux) or Command Prompt (Windows) and type:
+1. Copy the file to the folder you want to use as the _home folder_ for PetLog.
 
-```
-java -version
-```
+1. Open a command terminal, `cd` into the folder you put the jar file in, and run `java -jar petlog.jar`.<br>
+   A GUI similar to the one below should appear in a few seconds. Note how the app contains some sample data.<br>
+   ![Ui](images/Ui.png)
 
-If you see a version number of **17 or higher** — great, move on to Step 2!
+1. Type the command in the command box and press Enter to execute it. e.g. typing [`help`](#viewing-help-help) and pressing Enter will open the help window.<br>
+   Some example commands you can try:
 
-If not, install it using the guide for your system:
-- [Windows: Java installation guide for Windows](https://se-education.org/guides/tutorials/javaInstallationWindows.html)
-- [Mac: Java installation guide for Mac](https://se-education.org/guides/tutorials/javaInstallationMac.html)
-- [Linux: Java installation guide for Linux](https://se-education.org/guides/tutorials/javaInstallationLinux.html)
+   * [`list`](#listing-all-owners-list) : Lists all owners, pets, and sessions.
 
-> 💡 Not sure how to open Terminal or Command Prompt? On Windows, press the Windows key, type `cmd` and hit Enter. On Mac, press `Cmd + Space`, type `Terminal` and hit Enter.
+   * [`addowner on/John Doe ph/98765432 em/johnd@example.com ad/John street, block 123, #01-01`](#adding-an-owner-addowner) : Adds an owner.
 
-### Step 2 — Download PetLog.
+   * [`addpet oi/1 pn/Molly ps/Golden Retriever pr/cuddly`](#adding-a-pet-under-an-owner-addpet) : Adds a pet.
 
-Download the latest `petlog.jar` file from the [releases page](https://github.com/AY2526S2-CS2103T-W14-1/tp/releases). Look for the **Assets** section and save the file somewhere easy to find, like your Desktop or a folder called `PetLog`.
+   * [`addservice sn/Nail trim sp/10.00`](#adding-a-service-addservice) : Adds a new available service.
 
-### Step 3 — Launch PetLog.
+   * [`addsession oi/1 pi/1 st/2026-04-06 10:00 et/2026-04-06 11:00 sn/Nail trim`](#adding-a-session-addsession) : Adds a session for a pet.
 
-Open your Terminal or Command Prompt, navigate to the folder where you saved PetLog by typing:
+   * [`clear`](#clearing-all-owners-pets-services-and-sessions-clear) : Clears all owners, pets, services, and sessions.
 
-```
-cd YOUR_FOLDER_PATH
-```
+   * [`exit`](#exiting-the-program-exit) : Exits the app.
 
-For example, if you saved it in a folder called `PetLog` on your Desktop:
+1. Refer to the [Features](#features) below for details of each command.
 
-```
-cd Desktop/PetLog
-```
+[↑ Back to ToC](#table-of-contents)
 
-> 💡 `cd` stands for "change directory" — it's just your way of telling the computer which folder to look in. Think of it like opening a folder by typing its name instead of clicking on it.
+--------------------------------------------------------------------------------------------------------------------
 
-Then launch PetLog by typing:
-
-```
-java -jar petlog.jar
-```
-
-PetLog will open in a few seconds with some sample data loaded.
-
-### Step 4 — Try your first commands.
-
-PetLog loads with some sample data so you can explore right away. Type any of these into the command box and press Enter:
-
-> ⚠️ **Warning:** `clear` permanently deletes everything. There is no undo. Use with care!
-
-| Command | What it does |
-|---------|-------------|
-| `list` | Shows all owners and their pets |
-| `delete oi/3` | Removes the 3rd owner and all their pets |
-| `clear` | Removes all owners, pets, services, and sessions |
-| `exit` | Closes PetLog |
-
-> 🐾 Ready to explore everything PetLog can do? Head to the Features or Command Summary section — Fluffy will be there too!
- 
----
 <div style="page-break-after: always;"></div>
 
 ## Features
@@ -161,7 +90,7 @@ Shows a message explaining how to use the available commands and how to access t
 
 Format: `help`
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 <div style="page-break-after: always;"></div>
 
@@ -179,6 +108,8 @@ Format: `addowner on/OWNER_NAME ph/PHONE_NUMBER em/EMAIL ad/ADDRESS [ot/TAG]…�
   The `domain` must be 2 to 30 characters long. Each domain label must start and end with an alphanumeric character, and may contain hyphens only in the middle. The final domain label must be at least 2 characters long.
 * `ADDRESS` must be 1 to 100 characters.
 * Each `TAG`, if provided, must be 1 to 20 characters.
+* Attempting to add a duplicate owner, if both their name and phone number match an existing owner, will not succeed.
+* Upon successful addition of an owner, PetLog will display all owners (as if [`list`](#listing-all-owners-list) was run) and automatically scroll to the bottom of the list for you to see the newly added owner.
 
 Examples:
 * `addowner on/John Doe ph/98765432 em/johnd@example.com ad/John street, block 123, #01-01`
@@ -188,7 +119,7 @@ Examples:
 You can use any types of characters for `PHONE_NUMBER`. Want to indicate that this new owner's phone number is the `Same as Alice's`? Or perhaps use `-` to represent that they don't have a phone number? PetLog is flexible to all these possibilities!
 </div>
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 <div style="page-break-after: always;"></div>
 
@@ -216,7 +147,7 @@ Examples:
 Having one invalid input will cause your entire command to fail! For example: Assuming the 1st owner does not have a `member` tag, running `editowner oi/1 at/VIP rt/member` will fail entirely, and hence a `VIP` tag will **not** be added to that owner.
 </div>
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 <div style="page-break-after: always;"></div>
 
@@ -241,7 +172,7 @@ Examples:
 * `addpet oi/2 pn/Molly ps/Golden Retriever pr/cuddly` adds a Golden Retriever called Molly under the 2nd owner in the list of owners; Molly will have a remark that she is cuddly.
 * `addpet oi/1 pn/Dave ps/Great Dane` adds a Great Dane called Dave under the 1st owner on the list of owners.
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 <div style="page-break-after: always;"></div>
 
@@ -258,43 +189,44 @@ Updates the remarks of a pet.
 Examples:
 * `update oi/1 pi/3 pr/aggressive` updates the remark of the 3rd pet listed under the 1st owner to be "aggressive".
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 <div style="page-break-after: always;"></div>
 
 ### Searching for owners: `find`
 
-Finds owners whose details match at least one of the given keywords.
+Displays owners whose details match at least one of the given keywords.
 
 Format: `find [on/OWNER_NAME] [ph/PHONE_NUMBER] [em/EMAIL] [ad/ADDRESS] [ot/OWNER_TAG]…​ [pn/PET_NAME] [ps/SPECIES] [pr/REMARKS]`
 
 * At least one of the optional fields must be provided.
-* The search is case-insensitive. e.g `hans` will match `Hans`.
-* Partial matches are displayed e.g. `Han` will match `Hans`.
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Owners matching at least one keyword will be returned (i.e. `OR` search) e.g. `Hans Bo` will match `Hans Gruber`, `Bo Yang`
+* The search is case-insensitive. e.g. `hans` will match `Hans`.
+* Partial matches are displayed. e.g. `Han` will match `Hans`.
+* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`.
+* Owners matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans Bo` will match both `Hans Gruber` and `Bo Yang`.
 
 Examples:
 * `find ps/Dog` returns owners who own pets that are `Dog`s.
 * `find on/avi jon` returns owners whose names contain `avi` OR `jon`, e.g. `Avi`, `Xavier`, `Jonathan`.
 * `find ad/Tampines ot/VIP` returns owners whose address contains `Tampines` OR who are tagged as `VIP`s _(screenshot cropped to show relevant UI elements)_:
-![[result for 'find ad/Tampines ot/VIP']](images/findAdTampinesOtVip.png)
+![result for 'find ad/Tampines ot/VIP'](images/findAdTampinesOtVip.png)
 
-[↑ Back to ToC](UserGuide.md)
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Use [`list`](#listing-all-owners-list) after using `find` to return to the list of all owners. <br>
+Successfully [adding an owner](#adding-an-owner-addowner) will also reset the view and display all owners.
+</div>
+
+[↑ Back to ToC](#table-of-contents)
 
 <div style="page-break-after: always;"></div>
 
 ### Listing all owners: `list`
 
-Shows a list of all owners and pets in PetLog.
+Shows all owners, pets and sessions in PetLog.
 
 Format: `list`
 
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-Use `list` after using [`find`](#searching-for-owners-find) to go back to displaying all owners and pets.
-</div>
-
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 ### Adding a service: `addservice`
 
@@ -313,7 +245,7 @@ Examples:
 To change a service's name or price after it has been added, simply [`delete`](#deleting-an-owner-pet-session-or-service-delete) it and re-add it.
 </div>
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 <div style="page-break-after: always;"></div>
 
@@ -340,13 +272,13 @@ You may add more than one instance of the same service to a single session! This
 You may also add sessions that have happened in the past, be it for bookkeeping, tracking clients' loyalty, or simply just for nostalgia!
 </div>
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 <div style="page-break-after: always;"></div>
 
 ### Deleting an owner, pet, session or service: `delete`
 
-`delete` has two usages, each with its own formats.
+`delete` has two usages, each with its own format.
 
 **1. Deleting an owner, pet or session**
 
@@ -390,11 +322,11 @@ Deleting a service will not delete the sessions that use that service! If you do
 
 **:information_source: Note about the `delete` formats:**<br>
 
-Using a combination of both formats, e.g. `delete oi/1 sn/Ear cleaning`, is invalid and will not succeed.
+Using a combination of both formats, e.g. `delete oi/1 sn/Ear Cleaning`, is invalid and will not succeed.
 
 </div>
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 ### Clearing all owners, pets, services and sessions: `clear`
 
@@ -406,7 +338,7 @@ Format: `clear`
 Use `clear` to remove the sample data when you first run PetLog so you can start putting in your own!
 </div>
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 ### Exiting the program: `exit`
 
@@ -414,32 +346,32 @@ Exits PetLog.
 
 Format: `exit`
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 <div style="page-break-after: always;"></div>
 
 ### Saving the data
 
-PetLog data is saved in the hard disk automatically after any command that changes the data, and upon exiting. There is no need to save manually.
+PetLog data is saved to the hard disk automatically after any command that changes the data, and upon exiting. There is no need to save manually.
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 ### Editing the data file
 
-PetLog data is saved automatically as a JSON file `[JAR file location]/data/petlog.json`. Advanced users are welcome to update data directly by editing that data file.
+PetLog data is saved automatically as a JSON file: <br> `[JAR file location]/data/petlog.json`. Advanced users are welcome to update data directly by editing that data file.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
 If your changes to the data file make its format invalid, PetLog will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
 Furthermore, certain edits can cause PetLog to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 ### Undo/Redo `[Coming Soon]`
 
 _Details coming soon ..._
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -451,7 +383,7 @@ _Details coming soon ..._
 **A**: Install PetLog on the other computer, and overwrite the empty data file it creates with the file that contains the data from your previous PetLog home folder.
 
 **Q**: Why do indexes become invalid after I run [`find`](#searching-for-owners-find)?<br>
-**A**: Indexes always refer to the current displayed list. After filtering, either use the new filtered indexes or run [`list`](#listing-all-owners-list) to reset the indexes, before deleting/updating.
+**A**: Indexes always refer to the current displayed list. After filtering, either use the new filtered indexes or run [`list`](#listing-all-owners-list) to reset the indexes before deleting or updating.
 
 **Q**: How do I clear a pet’s remark?<br>
 **A**: Use an empty remark value: [`update oi/OWNER_INDEX pi/PET_INDEX pr/`](#updating-the-remarks-of-a-pet-update).
@@ -460,7 +392,7 @@ _Details coming soon ..._
 **A**: Yes. `sn/` is optional in [`addsession`](#adding-a-session-addsession). If no services are provided, the session fee is `0.00`.
 
 **Q**: How is a session’s total fee calculated?<br>
-**A**: It is the sum of all services provided in the [`addsession`](#adding-a-session-addsession) command, using the current service prices in PetLog.
+**A**: It is the sum of all services provided in the [`addsession`](#adding-a-session-addsession) command, based on service prices at the time the session is created.
 
 **Q**: Why does [`addsession`](#adding-a-session-addsession) fail with “Unknown service”?<br>
 **A**: At least one `sn/SERVICE_NAME` does not exist in your current service list. Add it first with [`addservice`](#adding-a-service-addservice), or correct the name.
@@ -468,7 +400,10 @@ _Details coming soon ..._
 **Q**: Where is my data stored, and how do I reset to sample data?<br>
 **A**: Data is stored at `[JAR location]/data/petlog.json`. Back up that file to migrate data. To reset to sample data, delete `petlog.json` and restart the app.
 
-[↑ Back to ToC](UserGuide.md)
+**Q**: I used [`editowner`](#editing-an-owner-editowner)/[`update`](#updating-the-remarks-of-a-pet-update) after [`find`](#searching-for-owners-find), and the owner disappeared from the list!<br>
+**A**: This is because the change you made resulted in the removal of that owner from the filtered list presented by [`find`](#searching-for-owners-find). Simply use [`list`](#listing-all-owners-list) to display all owners again!
+
+[↑ Back to ToC](#table-of-contents)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -482,9 +417,9 @@ _Details coming soon ..._
 
 1. **On macOS, if the Help Window is closed while it is in fullscreen**, the application may become unresponsive. The remedy is to type `Control` + `C` in your Terminal window to close the application, and then re-launch it with `java -jar petlog.jar`. For this reason, it is best to avoid closing the Help Window when it is in fullscreen.
 
-1. **If `petlog.jar` is placed in a write-protected folder**, the application will not work as it requires write permissions to write and update the local storage file `petlog.json`. The remedy is to ensure `petlog.jar` is placed a folder with no write protection before using it.
+1. **If `petlog.jar` is placed in a write-protected folder**, the application will not work as it requires write permissions to write and update the local storage file `petlog.json`. The remedy is to ensure `petlog.jar` is placed in a folder with no write protection before using it.
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -500,7 +435,7 @@ Action | Format, Examples
 [**Add Pet**](#adding-a-pet-under-an-owner-addpet) | `addpet oi/OWNER_INDEX pn/PET_NAME ps/SPECIES [pr/REMARKS]` <br> e.g., `addpet oi/2 pn/Molly ps/Golden Retriever pr/cuddly`
 [**Update Pet Remarks**](#updating-the-remarks-of-a-pet-update) | `update oi/OWNER_INDEX pi/PET_INDEX pr/REMARKS` <br> e.g., `update oi/1 pi/3 pr/aggressive`
 [**Search for Owners**](#searching-for-owners-find) | `find [on/OWNER_NAME] [ph/PHONE_NUMBER] [em/EMAIL] [ad/ADDRESS] [ot/OWNER_TAG]…​ [pn/PET_NAME] [ps/SPECIES] [pr/REMARKS]`<br> e.g., `find on/Hans ps/Dog`
-[**List All Owners and Pets**](#listing-all-owners-list) | `list`
+[**List All Owners**](#listing-all-owners-list) | `list`
 [**Add Service**](#adding-a-service-addservice) | `addservice sn/SERVICE_NAME sp/SERVICE_PRICE` <br> e.g., `addservice sn/Ear Cleaning sp/12.50`
 [**Add Session**](#adding-a-session-addsession) | `addsession oi/OWNER_INDEX pi/PET_INDEX st/START_TIME et/END_TIME [sn/SERVICE_NAME]…​` <br> e.g., `addsession oi/1 pi/2 st/2026-05-15 14:30 et/2026-05-15 15:30 sn/Base service charge sn/Shampoo`
 [**Delete Owner, Pet or Session**](#deleting-an-owner-pet-session-or-service-delete) | `delete oi/OWNER_INDEX [pi/PET_INDEX [si/SESSION_INDEX]]`<br> e.g., `delete oi/4 pi/2`
@@ -508,6 +443,6 @@ Action | Format, Examples
 [**Clear All Entries**](#clearing-all-owners-pets-services-and-sessions-clear) | `clear`
 [**Exit Application**](#exiting-the-program-exit) | `exit`
 
-[↑ Back to ToC](UserGuide.md)
+[↑ Back to ToC](#table-of-contents)
 
 --------------------------------------------------------------------------------------------------------------------

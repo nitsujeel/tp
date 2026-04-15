@@ -43,11 +43,15 @@ We assume:
 
 ## How to Read This Guide
 
-| Symbol           | Meaning |
-|------------------|---------|
-| ⚠️ Caution       | Important — read before you act |
-| 💡 Tip           | Extra context to help you understand |
-| `monospace text` | Something you type into PetLog or terminals exactly as shown |
+<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
+Important — read before you act.
+</div>
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Extra context to help you understand.
+</div>
+
+`monospace text` — Something you type into PetLog or terminals exactly as shown.
 
 --------------------------------------------------------------------------------------------------------------------
 

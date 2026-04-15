@@ -57,6 +57,14 @@ Extra context to help you understand.
 
 <div style="page-break-after: always;"></div>
 
+## Where to Type Commands
+
+All commands in PetLog should be written in the area highlighted by the red box shown in the picture below:
+
+![Commands.png](images/Commands.png)
+
+<div style="page-break-after: always;"></div>"
+
 ## Table of Contents
 * Table of Contents
 {:toc}
@@ -115,7 +123,7 @@ Then launch PetLog by typing:
 java -jar petlog.jar
 ```
 
-PetLog will open in a few seconds with some sample data loaded.
+PetLog will open in a few seconds with some sample data loaded. Don't worry! You can change or clear this data later. 
    
 ![Ui](images/Ui.png)
 
@@ -141,7 +149,7 @@ PetLog loads with some sample data so you can explore right away. Type any of th
 
    * [`exit`](#exiting-the-program-exit) : Exits the app.
 
-1. Refer to the [Features](#features) below for details of each command.
+Refer to the [Features](#features) below for details of each command.
 
 [↑ Back to ToC](#table-of-contents)
 
